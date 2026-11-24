@@ -5,6 +5,7 @@ import { Banknote, Check, Crosshair, MapPin, Plus, StickyNote } from 'lucide-rea
 import { useAppStore } from '@/store/useAppStore';
 import { cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryApi } from '@/services/deliveryService';
+import { enablePush } from '@/services/pushClient';
 import { bs, deliveryFeeFor, roadKm, isStore, MAX_NOTE, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, GoldButton, Photo, QtyStepper, motion, useStagger } from './ui';
@@ -65,6 +66,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
   const place = async () => {
     if (!r || !here || busy) return;
     setBusy(true); setError('');
+    void enablePush();
     const res = await deliveryApi('create', {
       restaurantId: r.id,
       items: lines.map((l) => ({ itemId: l.itemId, qty: l.qty, sizeId: l.sizeId, extraIds: l.extraIds, sauceIds: l.sauceIds, notes: l.notes })),

@@ -1,6 +1,7 @@
 import 'server-only';
 import { FieldValue, type Firestore } from 'firebase-admin/firestore';
 import { notifyAdmin } from '@/lib/safety';
+import { driverUids, sendPush } from '@/lib/push';
 import {
   ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, bs, deliveryFeeFor, roadKm, unitPriceFor,
   type DeliveryOrder, type MenuItem, type OpenOrder, type Restaurant,
@@ -11,6 +12,9 @@ const fail = (error: string): Res => ({ ok: false, error });
 const clean = (v: unknown, max: number) => String(v ?? '').replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, max);
 const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : NaN);
 const round3 = (n: number) => Math.round(n * 1000) / 1000;
+
+/** Aviso push sin frenar la respuesta más de 4 s (en el servidor, esperar es necesario para que salga). */
+const pushSafe = (p: Promise<unknown>) => Promise.race([p.catch(() => {}), new Promise((r) => setTimeout(r, 4000))]);
 
 /** Pedidos que aún no terminan de una persona (cliente o repartidor). */
 async function activeOrdersOf(db: Firestore, field: 'customerId' | 'driverId', uid: string) {
@@ -90,6 +94,7 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
   await batch.commit();
 
   void notifyAdmin(`🍔 Nuevo pedido de delivery\n${rest.name}\n${order.customerName} · ${bs(order.total)} (${payment === 'QR' ? 'QR' : 'efectivo'})\n${text}`);
+  await pushSafe((async () => sendPush(await driverUids(), { title: '🍔 Nuevo pedido de delivery', body: `${rest.name} · ganas ${bs(fee)}`, tag: `del-${id}`, urgent: true }))());
   return { ok: true, id };
 }
 
@@ -122,6 +127,10 @@ export async function acceptOrder(db: Firestore, uid: string, orderId: string): 
   } catch (e: any) {
     return fail(e?.message || 'No se pudo tomar el pedido.');
   }
+  await pushSafe((async () => {
+    const o = (await ref.get()).data();
+    if (o) await sendPush([o.customerId], { title: '¡Tu pedido fue aceptado! 🛵', body: `${o.driverName || 'Un repartidor'} está yendo a ${o.restaurantName}.`, tag: `del-${orderId}`, urgent: true });
+  })());
   return { ok: true };
 }
 
@@ -161,6 +170,10 @@ export async function pickupOrder(db: Firestore, uid: string, orderId: string): 
   } catch (e: any) {
     return fail(e?.message || 'No se pudo actualizar.');
   }
+  await pushSafe((async () => {
+    const o = (await ref.get()).data();
+    if (o) await sendPush([o.customerId], { title: 'Tu pedido va en camino 🛵', body: `${o.driverName || 'Tu repartidor'} ya recogió tu pedido.`, tag: `del-${orderId}`, urgent: true });
+  })());
   return { ok: true };
 }
 
@@ -203,6 +216,10 @@ export async function deliverOrder(db: Firestore, uid: string, orderId: string):
   } catch (e: any) {
     return fail(e?.message || 'No se pudo cerrar el pedido.');
   }
+  await pushSafe((async () => {
+    const o = (await ref.get()).data();
+    if (o) await sendPush([o.customerId], { title: '¡Pedido entregado! ✅', body: 'Que lo disfrutes. Gracias por pedir con LlamaGO.', tag: `del-${orderId}`, urgent: true });
+  })());
   return { ok: true };
 }
 
@@ -220,6 +237,10 @@ export async function cancelOrder(db: Firestore, uid: string, orderId: string, r
   } catch (e: any) {
     return fail(e?.message || 'No se pudo cancelar.');
   }
+  await pushSafe((async () => {
+    const o = (await ref.get()).data();
+    if (o?.driverId) await sendPush([o.driverId], { title: 'Pedido cancelado', body: `El cliente canceló el pedido de ${o.restaurantName}.`, tag: `del-${orderId}`, urgent: true });
+  })());
   return { ok: true };
 }
 

@@ -4,6 +4,7 @@ import {
 } from '@/store/useAppStore';
 import { DriverData, VehicleType } from './mockData';
 import { db, auth, isFirebaseConfigured } from '@/lib/firebase';
+import { enablePush, pushEvent } from '@/services/pushClient';
 import { 
   collection, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, onSnapshot, query, where, orderBy, serverTimestamp, runTransaction 
 } from 'firebase/firestore';
@@ -952,6 +953,7 @@ export const apiService = {
   ): Promise<ActiveTripInfo> {
     const rideId = 'ride-' + Date.now();
     const nowMs = Date.now();
+    void enablePush(); // pide permiso de avisos la primera vez (viene de un toque)
 
     const tripData: ActiveTripInfo = {
       id: rideId,
@@ -991,6 +993,7 @@ export const apiService = {
         });
         // 2. Espejo opcional en 'active_requests'
         setDoc(doc(db, 'active_requests', rideId), payload).catch(() => {});
+        pushEvent('ride_new', rideId);
       } catch (err) {
         console.warn('Firestore Request Ride Error:', err);
       }
@@ -1021,6 +1024,7 @@ export const apiService = {
           updatedAt: serverTimestamp(),
         }).catch(() => {});
         await deleteDoc(doc(db, 'active_requests', rideId)).catch(() => {});
+        pushEvent('ride_update', rideId);
       } catch (err) {
         console.warn('Firestore autodestroy error:', err);
       }
@@ -1288,6 +1292,7 @@ export const apiService = {
           completedAt: serverTimestamp(),
           completedAtMs: Date.now(),
         }).catch(() => {});
+        pushEvent('ride_update', rideId);
 
         // Cerrar la copia de "pedidos esperando conductor": el viaje ya terminó
         const { deleteDoc } = await import('firebase/firestore');
@@ -1551,6 +1556,7 @@ export const apiService = {
         };
         realtimeSyncBus.saveRide({ id: rideId, ...driverFields, status: 'GOING_TO_PASSENGER', fareAgreed: true, price: outcome.price, acceptedAtMs: Date.now() });
         await updateDoc(doc(db, 'active_requests', rideId), mirror).catch(() => {});
+        pushEvent('ride_update', rideId);
       }
       return outcome;
     } catch (err) {
@@ -1831,6 +1837,7 @@ export const apiService = {
           status,
           updatedAt: serverTimestamp(),
         }).catch(() => {});
+        pushEvent('ride_update', rideId);
       } catch (err) {
         console.warn('Firestore Update Ride Status Error:', err);
       }
@@ -1871,7 +1878,7 @@ export const apiService = {
         text,
         createdAtMs: nowMs,
         createdAt: serverTimestamp(),
-      }).catch((err) => {
+      }).then(() => pushEvent('ride_chat', rideId, msgId)).catch((err) => {
         console.warn('Firestore setDoc chat error:', err?.message || err);
       });
     }

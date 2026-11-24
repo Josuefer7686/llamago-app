@@ -11,6 +11,7 @@ import { motion } from 'motion/react';
 import { haptics } from '@/utils/haptics';
 import { audio } from '@/utils/audio';
 import { notifications } from '@/utils/notifications';
+import { enablePush } from '@/services/pushClient';
 import { usePwa } from '@/utils/pwa';
 import { APP_VERSION } from '@/lib/appVersion';
 import { DriverVehicleModal } from '@/components/modals/DriverVehicleModal';
@@ -157,7 +158,7 @@ export const ProfileView = () => {
             <button
               onClick={async () => {
                 haptics.impact();
-                const granted = await notifications.requestPermission();
+                const granted = await enablePush();
                 if (granted) {
                   setNotifPermission('granted');
                   audio.messageReceived();

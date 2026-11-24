@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebaseAdmin';
+import { sendPush } from '@/lib/push';
 import {
   TELEGRAM_TOKEN,
   TELEGRAM_ADMIN_CHAT_ID,
@@ -86,6 +87,7 @@ export async function POST(req: NextRequest) {
       const rechargeRef = adminDb.collection('wallet_recharges').doc(rechargeId);
       const approving = action === 'approve';
       let amount = 0;
+      let rechargeDriver = '';
 
       try {
         await adminDb.runTransaction(async (tx) => {
@@ -96,6 +98,7 @@ export async function POST(req: NextRequest) {
 
           amount = Number(recharge.amount);
           const driverId = String(recharge.driverId || '');
+          rechargeDriver = driverId;
           if (approving && (!Number.isFinite(amount) || amount <= 0 || amount > 1000 || !driverId)) {
             throw new Error('INVALID_RECHARGE');
           }
@@ -136,6 +139,13 @@ export async function POST(req: NextRequest) {
         }
         return NextResponse.json({ ok: true });
       }
+
+      await Promise.race([
+        sendPush([rechargeDriver], approving
+          ? { title: '¡Recarga aprobada! 💰', body: `Se acreditaron ${amount} Bs a tu billetera.`, tag: 'wallet' }
+          : { title: 'Recarga rechazada', body: 'Tu comprobante no fue aprobado. Revisa y vuelve a intentar.', tag: 'wallet' }).catch(() => {}),
+        new Promise((r) => setTimeout(r, 4000)),
+      ]);
 
       const timeStr = new Date().toLocaleTimeString('es-BO', {
         timeZone: 'America/La_Paz',

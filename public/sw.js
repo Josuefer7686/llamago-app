@@ -1,4 +1,4 @@
-const CACHE_NAME = 'llamago-v4.2';
+const CACHE_NAME = 'llamago-v4.3';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
@@ -136,4 +136,39 @@ self.addEventListener('fetch', (event) => {
       return response || fetchPromise;
     })
   );
+});
+
+
+// ---- Avisos push: llegan aunque la app esté cerrada ----
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = { title: 'LlamaGO', body: event.data ? event.data.text() : '' }; }
+  const title = data.title || 'LlamaGO';
+  event.waitUntil((async () => {
+    // Si la app está abierta y a la vista, ya suena dentro: no duplicar.
+    const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    if (wins.some((w) => w.visibilityState === 'visible')) return;
+    await self.registration.showNotification(title, {
+      body: data.body || '',
+      icon: data.icon || '/icon-192.png',
+      badge: data.badge || '/icon-192.png',
+      tag: data.tag || 'llamago',
+      renotify: true,
+      vibrate: data.urgent ? [200, 100, 200, 100, 400] : [120, 60, 120],
+      requireInteraction: !!data.urgent,
+      data: { url: data.url || '/' },
+    });
+  })());
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || '/';
+  event.waitUntil((async () => {
+    const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const w of wins) {
+      if ('focus' in w) { await w.focus(); return; }
+    }
+    await self.clients.openWindow(url);
+  })());
 });

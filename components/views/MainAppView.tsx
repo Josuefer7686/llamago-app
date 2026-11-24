@@ -17,9 +17,11 @@ import { IosLocationPermissionModal } from '@/components/modals/IosLocationPermi
 import { useAutoLocation } from '@/hooks/useAutoLocation';
 import { useWalletNotificationListener } from '@/hooks/useWalletNotificationListener';
 import { apiService } from '@/services/apiService';
+import { syncPush } from '@/services/pushClient';
 import { DriverVerificationGate } from '@/components/driver/DriverVerificationGate';
 
 function MainAppInner() {
+  useEffect(() => { void syncPush(); }, []);
   const { role, activeTab, setActiveTab, activeTrip, assignedDriver, passengerState, driverState } = useAppStore();
   const [activeToast, setActiveToast] = useState<ToastMessageData | null>(null);
   const { activeBanner, handleCloseBanner } = useWalletNotificationListener();

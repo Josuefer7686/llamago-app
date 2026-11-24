@@ -1,5 +1,6 @@
 'use client';
 
+import { enablePush } from '@/services/pushClient';
 import { useState, useEffect, useRef } from 'react';
 import { useAppStore, LocationPoint } from '@/store/useAppStore';
 import { MapView } from '@/components/map/MapView';
@@ -144,6 +145,7 @@ export const DriverHome = () => {
   };
 
   const toggleOnline = async () => {
+    void enablePush(); // pide permiso de avisos la primera vez para recibir viajes con la app cerrada
     haptics.impact();
     const nextOnlineState = !isOnline;
 

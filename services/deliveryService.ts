@@ -4,6 +4,7 @@ import {
   addDoc, collection, doc, onSnapshot, query, serverTimestamp, where, type Unsubscribe,
 } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
+import { pushEvent } from '@/services/pushClient';
 import type { DeliveryOrder, MenuItem, OpenOrder, Restaurant } from '@/lib/delivery';
 
 export interface DeliveryMessage {
@@ -97,9 +98,10 @@ export const deliveryService = {
     const clean = text.trim().slice(0, 300);
     if (!uid || !clean) return false;
     try {
-      await addDoc(collection(db, 'delivery_orders', orderId, 'messages'), {
+      const ref = await addDoc(collection(db, 'delivery_orders', orderId, 'messages'), {
         sender, senderId: uid, text: clean, createdAtMs: Date.now(), createdAt: serverTimestamp(),
       });
+      pushEvent('delivery_chat', orderId, ref.id);
       return true;
     } catch {
       return false;
