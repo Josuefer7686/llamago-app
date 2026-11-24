@@ -61,7 +61,7 @@ function OrdersView({ orders, onBack, onOpen }: { orders: DeliveryOrder[]; onBac
   );
 }
 
-/** Pestaña "Delivery" del pasajero: lista → menú → carrito → seguimiento. */
+/** Pestaña "Delivery" del pasajero: lista → menú → confirmar pedido → seguimiento. */
 export function DeliveryHome() {
   const { active, mine } = useDeliveryAlerts();
   const cartRestaurant = useDeliveryStore((s) => s.restaurantId);

@@ -10,7 +10,8 @@ import { EASE_OUT, GoldButton, Photo, QtyStepper, motion, useLockScroll } from '
 interface Props {
   item: MenuItem | null;
   onClose: () => void;
-  onAdd: (line: CartLine) => void;
+  /** `now`: ir directo a confirmar el pedido; si no, vuelve al menú para elegir otro plato */
+  onAdd: (line: CartLine, now: boolean) => void;
 }
 
 function OptionGroup({
@@ -56,7 +57,7 @@ export function ProductSheet({ item, onClose, onAdd }: Props) {
   );
 }
 
-function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; onAdd: (l: CartLine) => void }) {
+function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; onAdd: (l: CartLine, now: boolean) => void }) {
   const reduce = useReducedMotion();
   const controls = useDragControls();
   useLockScroll();
@@ -70,13 +71,13 @@ function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; 
   const toggle = (set: (f: (a: string[]) => string[]) => void) => (id: string) =>
     set((a) => (a.includes(id) ? a.filter((x) => x !== id) : [...a, id]));
 
-  const add = () => {
+  const add = (now: boolean) => {
     haptics.success();
     onAdd({
       key: `${item.id}|${price.sizeId || ''}|${[...price.extraIds].sort().join(',')}|${[...price.sauceIds].sort().join(',')}|${notes.trim()}`,
       itemId: item.id, name: item.name, photo: item.photo, qty, unitPrice: price.unit,
       sizeId: price.sizeId, extraIds: price.extraIds, sauceIds: price.sauceIds, optionsLabel: price.label, notes: notes.trim(),
-    });
+    }, now);
     onClose();
   };
 
@@ -134,24 +135,31 @@ function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; 
 
           <label className="block space-y-2">
             <span className="flex items-baseline justify-between">
-              <span className="font-display text-base font-extrabold">Instrucciones</span>
+              <span className="font-display text-base font-extrabold">¿Algo especial? <span className="text-xs font-semibold text-text-secondary">(opcional)</span></span>
               <span className="text-xs font-semibold text-text-secondary">{notes.length}/{MAX_NOTE}</span>
             </span>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value.slice(0, MAX_NOTE))}
               rows={2}
-              placeholder="Ej.: sin cebolla, bien cocido, poco picante"
+              placeholder="Ej.: sin cebolla, poco picante"
               className="w-full resize-none rounded-2xl border border-white/10 bg-surface-2 px-4 py-3 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none"
             />
           </label>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3 border-t border-white/10 bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
-          <QtyStepper qty={qty} onChange={(n) => setQty(Math.max(1, n))} />
-          <GoldButton onClick={add} disabled={!item.available}>
-            {item.available ? <>Agregar <span className="tabular-nums">· {bs(Math.round(price.unit * qty * 100) / 100)}</span></> : 'Agotado'}
-          </GoldButton>
+        <div className="shrink-0 space-y-2 border-t border-white/10 bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
+          <div className="flex items-center gap-3">
+            <QtyStepper qty={qty} onChange={(n) => setQty(Math.max(1, n))} />
+            <GoldButton onClick={() => add(true)} disabled={!item.available}>
+              {item.available ? <>Pedir <span className="tabular-nums">· {bs(Math.round(price.unit * qty * 100) / 100)}</span></> : 'Agotado'}
+            </GoldButton>
+          </div>
+          {item.available && (
+            <button type="button" onClick={() => add(false)} className="min-h-11 w-full text-sm font-bold text-gold-primary touch-manipulation active:opacity-70">
+              Agregar y elegir otro plato
+            </button>
+          )}
         </div>
       </motion.div>
     </div>

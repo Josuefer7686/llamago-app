@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Banknote, Crosshair, MapPin, QrCode, StickyNote } from 'lucide-react';
+import { Banknote, Check, Crosshair, MapPin, Plus, StickyNote } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryApi } from '@/services/deliveryService';
-import { bs, deliveryFeeFor, roadKm, MAX_NOTE, type DeliveryPayment, type Restaurant } from '@/lib/delivery';
+import { bs, deliveryFeeFor, roadKm, MAX_NOTE, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, GoldButton, Photo, QtyStepper, motion, useStagger } from './ui';
 
@@ -15,15 +15,21 @@ interface Props {
   onPlaced: (orderId: string) => void;
 }
 
+const LAST_KEY = 'llamago-last-address-v1';
+const readLast = (): { text: string; reference: string } => {
+  try { return JSON.parse(localStorage.getItem(LAST_KEY) || '') || { text: '', reference: '' }; } catch { return { text: '', reference: '' }; }
+};
+
+/** "Confirma tu pedido": todo en una sola pantalla, sin pasos ocultos ni carrito aparte. */
 export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
   const here = useAppStore((s) => s.currentLocation);
   const setCurrentLocation = useAppStore((s) => s.setCurrentLocation);
   const gps = useAppStore((s) => s.gpsPermission);
   const { lines, setQty, removeLine, clear } = useDeliveryStore();
-  const [address, setAddress] = useState('');
-  const [reference, setReference] = useState('');
+  const [address, setAddress] = useState(() => (typeof window === 'undefined' ? '' : readLast().text));
+  const [reference, setReference] = useState(() => (typeof window === 'undefined' ? '' : readLast().reference));
   const [note, setNote] = useState('');
-  const [payment, setPayment] = useState<DeliveryPayment>('CASH');
+  const [showNote, setShowNote] = useState(false);
   const [busy, setBusy] = useState(false);
   const [locating, setLocating] = useState(false);
   const [error, setError] = useState('');
@@ -36,10 +42,12 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
   const belowMin = !!r?.minOrder && subtotal < r.minOrder;
   const far = km != null && km > 12;
   const realGps = gps === 'granted';
+  const hasAddress = address.trim().length >= 3;
+  const canOrder = !!r?.open && lines.length > 0 && hasAddress && !belowMin && !far && fee != null;
 
   const locate = () => {
     if (!navigator.geolocation) { setError('Tu teléfono no permite ubicación.'); return; }
-    setLocating(true);
+    setLocating(true); setError('');
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setCurrentLocation({ lat: p.coords.latitude, lng: p.coords.longitude, name: 'Mi ubicación', address: '' });
@@ -51,8 +59,6 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
     );
   };
 
-  const canOrder = !!r?.open && lines.length > 0 && address.trim().length >= 3 && !belowMin && !far && fee != null;
-
   const place = async () => {
     if (!r || !here || busy) return;
     setBusy(true); setError('');
@@ -60,22 +66,25 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
       restaurantId: r.id,
       items: lines.map((l) => ({ itemId: l.itemId, qty: l.qty, sizeId: l.sizeId, extraIds: l.extraIds, sauceIds: l.sauceIds, notes: l.notes })),
       address: { text: address.trim(), reference: reference.trim(), lat: here.lat, lng: here.lng },
-      paymentMethod: payment,
+      paymentMethod: 'CASH',
       note: note.trim(),
     });
     setBusy(false);
     if (!res.ok || !res.id) { haptics.error(); setError(res.error || 'No se pudo enviar el pedido.'); return; }
     haptics.success();
+    try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: address.trim(), reference: reference.trim() })); } catch { /* sin almacenamiento */ }
     clear();
     onPlaced(res.id);
   };
+
+  const field = 'h-14 w-full rounded-2xl border border-white/10 bg-surface-2 px-4 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none';
 
   return (
     <div className="flex h-full flex-col">
       <header className="flex shrink-0 items-center gap-3 px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <BackButton onClick={onBack} />
         <div className="min-w-0">
-          <h1 className="font-display text-xl font-extrabold tracking-tight">Tu pedido</h1>
+          <h1 className="font-display text-xl font-extrabold tracking-tight">Confirma tu pedido</h1>
           {r && <p className="truncate text-xs font-semibold text-text-secondary">{r.name}</p>}
         </div>
       </header>
@@ -84,8 +93,8 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
         <div className="mx-auto max-w-[430px] space-y-5 px-4">
           {!lines.length && (
             <div className="rounded-3xl bg-surface p-8 text-center">
-              <p className="font-display text-lg font-extrabold">Tu carrito está vacío</p>
-              <p className="mt-1.5 text-sm text-text-secondary">Elige algo rico del menú.</p>
+              <p className="font-display text-lg font-extrabold">Todavía no elegiste nada</p>
+              <p className="mt-1.5 text-sm text-text-secondary">Vuelve al menú y toca <b className="text-gold-primary">Pedir</b> en el plato que quieras.</p>
             </div>
           )}
 
@@ -106,65 +115,50 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
             ))}
           </ul>
 
+          <button type="button" onClick={() => { haptics.selection(); onBack(); }}
+            className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-gold-primary/40 text-[15px] font-bold text-gold-primary touch-manipulation transition-transform duration-150 ease-out active:scale-[0.98]">
+            <Plus className="h-5 w-5" aria-hidden /> Agregar otro plato
+          </button>
+
           <section className="space-y-3 rounded-3xl border border-white/10 bg-surface p-4">
-            <h2 className="flex items-center gap-2 font-display text-base font-extrabold"><MapPin className="h-[18px] w-[18px] text-gold-primary" aria-hidden /> Dónde te lo llevamos</h2>
-            <input
-              value={address}
-              onChange={(e) => setAddress(e.target.value.slice(0, 160))}
-              placeholder="Calle, barrio y número de casa"
-              aria-label="Dirección de entrega"
-              autoComplete="street-address"
-              enterKeyHint="next"
-              className="h-12 w-full rounded-2xl border border-white/10 bg-surface-2 px-4 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none"
-            />
-            <input
-              value={reference}
-              onChange={(e) => setReference(e.target.value.slice(0, 120))}
-              placeholder="Referencia (ej.: portón verde, frente a la tienda)"
-              aria-label="Referencia"
-              enterKeyHint="done"
-              className="h-12 w-full rounded-2xl border border-white/10 bg-surface-2 px-4 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none"
-            />
+            <h2 className="flex items-center gap-2 font-display text-lg font-extrabold"><MapPin className="h-5 w-5 text-gold-primary" aria-hidden /> ¿Dónde te lo llevamos?</h2>
             <button
               type="button"
-              onClick={() => { haptics.selection(); locate(); }}
+              onClick={locate}
               disabled={locating}
-              className={`flex min-h-12 w-full items-center gap-3 rounded-2xl border px-4 text-left text-sm font-semibold touch-manipulation transition-transform duration-150 ease-out active:scale-[0.985] ${realGps ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200' : 'border-gold-primary/40 bg-gold-primary/10 text-gold-primary'}`}
+              className={`flex min-h-14 w-full items-center gap-3 rounded-2xl border px-4 text-left text-[15px] font-bold touch-manipulation transition-transform duration-150 ease-out active:scale-[0.985] ${realGps ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200' : 'border-gold-primary/50 bg-gold-primary/10 text-gold-primary'}`}
             >
-              <Crosshair className={`h-5 w-5 shrink-0 ${locating ? 'animate-spin' : ''}`} aria-hidden />
-              {locating ? 'Buscando tu ubicación…' : realGps ? 'Usando tu ubicación actual. Toca para actualizarla.' : 'Usar mi ubicación actual (el repartidor te encuentra más rápido)'}
+              {realGps && !locating ? <Check className="h-5 w-5 shrink-0" strokeWidth={3} aria-hidden /> : <Crosshair className={`h-5 w-5 shrink-0 ${locating ? 'animate-spin' : ''}`} aria-hidden />}
+              <span>{locating ? 'Buscando tu ubicación…' : realGps ? 'Ya sabemos dónde estás' : 'Toca aquí para marcar dónde estás'}</span>
             </button>
-            {!realGps && <p className="text-xs leading-snug text-text-secondary">Si no activas la ubicación, calculamos el envío desde el centro de Riberalta.</p>}
+            <input value={address} onChange={(e) => setAddress(e.target.value.slice(0, 160))} placeholder="Escribe tu calle o barrio" aria-label="Tu calle o barrio" autoComplete="street-address" enterKeyHint="next" className={field} />
+            <input value={reference} onChange={(e) => setReference(e.target.value.slice(0, 120))} placeholder="Una referencia (opcional)" aria-label="Referencia, opcional" enterKeyHint="done" className={field} />
           </section>
 
-          <section className="space-y-3 rounded-3xl border border-white/10 bg-surface p-4">
-            <h2 className="font-display text-base font-extrabold">Cómo pagas</h2>
-            <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Método de pago">
-              <button type="button" role="radio" aria-checked={payment === 'CASH'} onClick={() => { haptics.selection(); setPayment('CASH'); }}
-                className={`flex min-h-14 items-center gap-2.5 rounded-2xl border px-4 text-left font-bold touch-manipulation transition-[background-color,border-color,transform] duration-150 active:scale-[0.97] ${payment === 'CASH' ? 'border-gold-primary bg-gold-primary/10' : 'border-white/10 bg-surface-2'}`}>
-                <Banknote className="h-5 w-5 text-gold-primary" aria-hidden /> Efectivo
-              </button>
-              <button type="button" role="radio" aria-checked={false} disabled aria-label="QR, próximamente"
-                className="flex min-h-14 items-center gap-2.5 rounded-2xl border border-white/10 bg-surface-2 px-4 text-left font-bold opacity-50">
-                <QrCode className="h-5 w-5" aria-hidden /> QR <span className="text-[11px] font-semibold text-text-secondary">pronto</span>
-              </button>
-            </div>
-            <p className="text-xs leading-snug text-text-secondary">Pagas al repartidor cuando recibes tu pedido. Ten el monto exacto si puedes.</p>
-          </section>
+          <div className="flex items-center gap-3 rounded-3xl border border-white/10 bg-surface p-4">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gold-primary/15 text-gold-primary"><Banknote className="h-6 w-6" aria-hidden /></span>
+            <p className="text-[15px] leading-snug"><b>Pagas en efectivo</b> cuando llegue tu pedido.</p>
+          </div>
 
-          <label className="block space-y-2">
-            <span className="flex items-baseline justify-between"><span className="font-display text-base font-extrabold">Nota para el repartidor</span><span className="text-xs font-semibold text-text-secondary">{note.length}/{MAX_NOTE}</span></span>
-            <textarea value={note} onChange={(e) => setNote(e.target.value.slice(0, MAX_NOTE))} rows={2} placeholder="Ej.: toca el timbre dos veces"
-              className="w-full resize-none rounded-2xl border border-white/10 bg-surface px-4 py-3 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none" />
-          </label>
+          {showNote ? (
+            <label className="block space-y-2">
+              <span className="flex items-baseline justify-between"><span className="font-display text-base font-extrabold">Mensaje para el repartidor</span><span className="text-xs font-semibold text-text-secondary">{note.length}/{MAX_NOTE}</span></span>
+              <textarea value={note} onChange={(e) => setNote(e.target.value.slice(0, MAX_NOTE))} rows={2} autoFocus placeholder="Ej.: toca el timbre dos veces"
+                className="w-full resize-none rounded-2xl border border-white/10 bg-surface px-4 py-3 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none" />
+            </label>
+          ) : (
+            <button type="button" onClick={() => { haptics.selection(); setShowNote(true); }} className="min-h-11 w-full text-sm font-bold text-text-secondary underline-offset-4 touch-manipulation hover:underline">
+              + Dejar un mensaje al repartidor
+            </button>
+          )}
 
           <section className="space-y-2 rounded-3xl bg-surface-2 p-4 text-[15px]" aria-label="Resumen">
-            <div className="flex justify-between"><span className="text-text-secondary">Productos</span><span className="font-semibold tabular-nums">{bs(subtotal)}</span></div>
-            <div className="flex justify-between"><span className="text-text-secondary">Envío{km != null ? ` · ${km.toFixed(1).replace('.', ',')} km` : ''}</span><span className="font-semibold tabular-nums">{fee != null ? bs(fee) : '…'}</span></div>
-            <div className="flex justify-between border-t border-white/10 pt-3 font-display text-xl font-extrabold"><span>Total</span><span className="tabular-nums text-gold-primary">{total != null ? bs(total) : '…'}</span></div>
+            <div className="flex justify-between"><span className="text-text-secondary">Tu pedido</span><span className="font-semibold tabular-nums">{bs(subtotal)}</span></div>
+            <div className="flex justify-between"><span className="text-text-secondary">Traerlo a tu casa</span><span className="font-semibold tabular-nums">{fee != null ? bs(fee) : '…'}</span></div>
+            <div className="flex justify-between border-t border-white/10 pt-3 font-display text-xl font-extrabold"><span>Total a pagar</span><span className="tabular-nums text-gold-primary">{total != null ? bs(total) : '…'}</span></div>
           </section>
 
-          {belowMin && r?.minOrder && <p role="alert" className="rounded-2xl bg-red-400/10 px-4 py-3 text-sm text-red-200">El pedido mínimo de este restaurante es {bs(r.minOrder)}.</p>}
+          {belowMin && r?.minOrder && <p role="alert" className="rounded-2xl bg-red-400/10 px-4 py-3 text-sm text-red-200">Este restaurante pide mínimo {bs(r.minOrder)}. Agrega otro plato.</p>}
           {far && <p role="alert" className="rounded-2xl bg-red-400/10 px-4 py-3 text-sm text-red-200">Estás muy lejos de este restaurante (más de 12 km).</p>}
           {r && !r.open && <p role="alert" className="rounded-2xl bg-red-400/10 px-4 py-3 text-sm text-red-200">El restaurante cerró. Vuelve cuando abra.</p>}
           {error && <p role="alert" className="rounded-2xl bg-red-400/10 px-4 py-3 text-sm text-red-200">{error}</p>}
@@ -174,9 +168,9 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
       <div className="shrink-0 border-t border-white/10 bg-background px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
         <div className="mx-auto max-w-[430px]">
           <GoldButton onClick={place} loading={busy} disabled={!canOrder}>
-            Confirmar pedido{total != null ? <span className="tabular-nums"> · {bs(total)}</span> : null}
+            Pedir ahora{total != null ? <span className="tabular-nums"> · {bs(total)}</span> : null}
           </GoldButton>
-          {lines.length > 0 && address.trim().length < 3 && <p className="mt-2 text-center text-xs text-text-secondary">Escribe tu dirección para continuar.</p>}
+          {lines.length > 0 && !hasAddress && <p className="mt-2 text-center text-sm text-text-secondary">Escribe tu calle o barrio para poder pedir.</p>}
         </div>
       </div>
     </div>

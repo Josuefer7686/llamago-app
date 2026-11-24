@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Clock, MapPin, Phone, Plus, ShoppingBag, Star } from 'lucide-react';
+import { Clock, MapPin, Phone, Star } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { cartCount, cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryService } from '@/services/deliveryService';
@@ -19,7 +19,7 @@ interface Props {
 export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
   const here = useAppStore((s) => s.currentLocation);
   const { lines, addLine, clear, restaurantId: cartRestaurant, restaurantName: cartRestaurantName } = useDeliveryStore();
-  const [conflict, setConflict] = useState<CartLine | null>(null);
+  const [conflict, setConflict] = useState<{ line: CartLine; now: boolean } | null>(null);
   const [items, setItems] = useState<MenuItem[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [open, setOpen] = useState<MenuItem | null>(null);
@@ -59,12 +59,6 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-black/40" />
           <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 pt-[max(0.75rem,env(safe-area-inset-top))]">
             <BackButton onClick={onBack} />
-            {count > 0 && (
-              <button type="button" onClick={onCart} aria-label={`Carrito, ${count} productos`} className="relative grid h-11 w-11 place-items-center rounded-full bg-black/55 text-white backdrop-blur-md touch-manipulation active:scale-95">
-                <ShoppingBag className="h-5 w-5" aria-hidden />
-                <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-gold-primary px-1 text-[11px] font-extrabold text-background">{count}</span>
-              </button>
-            )}
           </div>
         </div>
 
@@ -129,11 +123,12 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
                         <h3 className="line-clamp-2 min-h-[2.5rem] text-[15px] font-bold leading-tight">{it.name}</h3>
                         <p className="mt-0.5 line-clamp-2 min-h-[2.25rem] text-xs leading-snug text-text-secondary">{it.description}</p>
                         <p className="mt-2 font-display text-lg font-extrabold tabular-nums">{bs(it.price)}</p>
+                        <span className="block h-7" aria-hidden />
                       </div>
                     </button>
                     {it.available && r.open ? (
-                      <span className="pointer-events-none absolute bottom-3 right-3 grid h-10 w-10 place-items-center rounded-full bg-gold-primary text-background shadow-lg" aria-hidden>
-                        <Plus className="h-5 w-5" strokeWidth={3} />
+                      <span className="pointer-events-none absolute bottom-3 right-3 rounded-full bg-gold-primary px-4 py-2 font-display text-sm font-extrabold text-background shadow-lg" aria-hidden>
+                        Pedir
                       </span>
                     ) : !it.available ? (
                       <span className="absolute left-3 top-3"><StatusPill tone="gray">Agotado</StatusPill></span>
@@ -164,7 +159,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
           >
             <span className="flex items-center gap-2.5">
               <span className="grid h-7 min-w-7 place-items-center rounded-full bg-background px-1.5 text-sm text-gold-primary">{count}</span>
-              Ver carrito
+              Ver mi pedido
             </span>
             <span className="tabular-nums">{bs(subtotal)}</span>
           </button>
@@ -174,14 +169,14 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
       {conflict && (
         <div className="fixed inset-0 z-[80] grid place-items-center bg-black/70 px-6" role="alertdialog" aria-modal="true" aria-label="Cambiar de restaurante">
           <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-surface p-5">
-            <h2 className="font-display text-xl font-extrabold">¿Empezar un carrito nuevo?</h2>
+            <h2 className="font-display text-xl font-extrabold">¿Empezar un pedido nuevo?</h2>
             <p className="mt-2 text-sm leading-snug text-text-secondary">
-              Tu carrito tiene productos de <b className="text-white">{cartRestaurantName}</b>. Solo puedes pedir a un restaurante a la vez.
+              Ya empezaste un pedido en <b className="text-white">{cartRestaurantName}</b>. Solo puedes pedir a un restaurante a la vez. ¿Borramos lo anterior y empezamos aquí?
             </p>
             <div className="mt-5 grid gap-2">
-              <button type="button" onClick={() => { clear(); addLine({ id: r.id, name: r.name }, conflict); setConflict(null); flash('Agregado al carrito'); }}
-                className="min-h-12 rounded-2xl bg-gold-primary font-display font-extrabold text-background touch-manipulation active:scale-[0.97]">Vaciar y agregar</button>
-              <button type="button" onClick={() => setConflict(null)} className="min-h-12 rounded-2xl bg-white/[0.07] font-bold touch-manipulation active:scale-[0.97]">Mantener mi carrito</button>
+              <button type="button" onClick={() => { clear(); addLine({ id: r.id, name: r.name }, conflict.line); const go = conflict.now; setConflict(null); if (go) onCart(); else flash('Listo, elige otro plato o toca "Ver mi pedido"'); }}
+                className="min-h-12 rounded-2xl bg-gold-primary font-display font-extrabold text-background touch-manipulation active:scale-[0.97]">Sí, empezar aquí</button>
+              <button type="button" onClick={() => setConflict(null)} className="min-h-12 rounded-2xl bg-white/[0.07] font-bold touch-manipulation active:scale-[0.97]">No, seguir con el anterior</button>
             </div>
           </div>
         </div>
@@ -190,10 +185,11 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
       <ProductSheet
         item={open}
         onClose={() => setOpen(null)}
-        onAdd={(line) => {
-          if (cartRestaurant && cartRestaurant !== r.id && lines.length) { setConflict(line); return; }
-          flash('Agregado al carrito');
+        onAdd={(line, now) => {
+          if (cartRestaurant && cartRestaurant !== r.id && lines.length) { setConflict({ line, now }); return; }
           addLine({ id: r.id, name: r.name }, line);
+          if (now) { onCart(); return; }
+          flash('Listo, elige otro plato o toca "Ver mi pedido"');
         }}
       />
     </div>

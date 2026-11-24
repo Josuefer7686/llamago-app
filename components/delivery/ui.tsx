@@ -73,7 +73,7 @@ export function QtyStepper({
       <button
         type="button"
         className={`${btn} text-white`}
-        aria-label={trashAtMin && qty <= min ? 'Quitar del carrito' : 'Menos'}
+        aria-label={trashAtMin && qty <= min ? 'Quitar del pedido' : 'Menos'}
         onClick={() => { haptics.selection(); onChange(qty - 1); }}
         disabled={!trashAtMin && qty <= min}
       >

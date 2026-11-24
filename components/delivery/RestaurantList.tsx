@@ -55,7 +55,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
             aria-label="Mis pedidos"
             className="mt-1 flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-white/[0.07] px-3.5 text-sm font-semibold touch-manipulation transition-transform duration-150 ease-out active:scale-95"
           >
-            <Receipt className="h-[18px] w-[18px] text-gold-primary" aria-hidden /> Pedidos
+            <Receipt className="h-[18px] w-[18px] text-gold-primary" aria-hidden /> Mis pedidos
           </button>
         </div>
 
