@@ -44,16 +44,16 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
       <head>
-        <link rel="manifest" href="/manifest.json?v=2.1" />
+        <link rel="manifest" href="/manifest.json?v=3.1" />
         <meta name="theme-color" content="#05080B" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="LlamaGO" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2.1" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2.1" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=2.1" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2.1" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3.1" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=3.1" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=3.1" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3.1" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

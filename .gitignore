@@ -38,3 +38,4 @@ Thumbs.db
 # Respaldos de la base de datos (contienen datos personales)
 backups/
 .antigravity/
+.env.local.bak-*

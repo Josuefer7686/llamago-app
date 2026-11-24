@@ -301,7 +301,7 @@ Colecciones de viajes interprovinciales y paquetería entre Riberalta y Guayaram
 
 | Variable | Valor / Descripción |
 | :--- | :--- |
-| **Dominio de Producción** | `https://llamago.vercel.app` (el dominio anterior `ribergoo.vercel.app` sigue activo como alias) |
+| **Dominio de Producción** | `https://llamago.vercel.app`  |
 | **Repositorio GitHub** | `https://github.com/Josuefer7686/llamago-app.git` |
 | **Rama principal** | `main` |
 | **Telegram Bot Token** | `TELEGRAM_BOT_TOKEN` (solo en Vercel y `.env.local`; **nunca** en el código ni en este archivo) |
@@ -375,6 +375,6 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 - **Riesgos que quedan (aceptados por ahora):** la comisión por viaje y las calificaciones se escriben desde el cliente (un conductor tramposo podría no descontarse la comisión o un pasajero manipular una calificación). Para blindarlo hay que moverlos a rutas de servidor.
 - Nunca subas tokens, claves ni `.env*` al repositorio. Si se filtra un token, revócalo en @BotFather (`/revoke`).
 
-- **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `llamago-v3.0`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
+- **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `llamago-v3.1`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
 
-- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Se creó un proyecto de Firebase nuevo (`llamago-bo`, Firestore en São Paulo, Auth con Google y correo/contraseña) y se reinició toda la base. El correo interno del login por teléfono es `@llamago.bo`, la clave local de sesión `llamago-session-v1` y el dominio `llamago.vercel.app`.
+- **Marca LlamaGO:** proyecto de Firebase `llamago-bo` (Firestore en São Paulo, Auth con Google y correo/contraseña), correo interno del login por teléfono `@llamago.bo`, clave local de sesión `llamago-session-v1`, dominio `llamago.vercel.app`. El logo de `public/` es provisional (texto + pin) hasta tener el definitivo.
