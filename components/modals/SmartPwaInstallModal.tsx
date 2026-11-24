@@ -37,25 +37,11 @@ export const SmartPwaInstallModal = () => {
 
     // Capture Native PWA Install Prompt
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
       setDeferredPrompt(e);
       (window as any).deferredPwaPrompt = e;
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Auto-Open Trigger Logic (Only for standard web browsers, never inside installed PWA)
-    const hidePreference = localStorage.getItem('llamago_hide_install_prompt') === 'true';
-    if (!isStandalone && !hidePreference) {
-      const timer = setTimeout(() => {
-        // Double check standalone status before popping up
-        if (!checkIsPwaStandalone()) {
-          setShowPwaModal(true);
-          try { audio.messageReceived(); } catch(e) {}
-        }
-      }, 3500); // 3.5s delay allows splash and map to render completely
-      return () => clearTimeout(timer);
-    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);

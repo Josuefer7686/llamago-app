@@ -59,7 +59,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             __html: `
               window.deferredPwaPrompt = null;
               window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
+                // Sin preventDefault: Chrome muestra su propio aviso nativo de instalación.
                 window.deferredPwaPrompt = e;
               });
             `,
