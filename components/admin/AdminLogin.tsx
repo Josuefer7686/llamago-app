@@ -34,7 +34,7 @@ export function AdminLogin({ configured, onSuccess }: { configured: boolean; onS
       <form onSubmit={submit} className="w-full max-w-sm">
         <div className="mb-8 flex items-center gap-3">
           <div className="leading-tight">
-            <img src="/wordmark.png" alt="LlamaGO" className="h-14 w-auto" />
+            <img src="/wordmark.png" alt="LlamaGO" className="h-24 w-auto" />
             <p className="mt-1 text-sm text-text-secondary">Panel de administración</p>
           </div>
         </div>

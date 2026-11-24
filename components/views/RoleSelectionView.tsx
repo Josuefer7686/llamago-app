@@ -59,7 +59,7 @@ export const RoleSelectionView = () => {
         {(
           <>
             <div className="text-center mb-6">
-              <img src="/wordmark.png" alt="LlamaGO" className="mx-auto mb-4 h-auto w-40" />
+              <img src="/wordmark.png" alt="LlamaGO" className="mx-auto mb-4 h-auto w-28" />
               <h2 className="text-2xl font-bold tracking-tight mb-2">
                 ¿Cómo quieres usar <span className="text-white">Llama</span><span className="text-gold-primary">GO</span>?
               </h2>

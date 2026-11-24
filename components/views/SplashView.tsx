@@ -17,7 +17,7 @@ export const SplashView = () => {
           className="flex flex-col items-center"
         >
           {/* Official LlamaGO Logo with Ambient Aura Glow */}
-          <div className="relative mb-5 flex w-[min(78vw,320px)] items-center justify-center">
+          <div className="relative mb-5 flex w-[min(58vw,230px)] items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-gold-primary/20 blur-3xl animate-pulse" />
             <img
               src="/wordmark.png"

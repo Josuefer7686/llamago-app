@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { APP_VERSION } from '@/lib/appVersion';
 
 
-const LINES = ['Tu mototaxi, en minutos', 'Comida y compras a tu puerta', 'Viaja seguro por Riberalta', 'Pide, viaja y disfruta'];
+const LINES = ['Tu mototaxi, en minutos', 'Comida y compras a tu puerta', 'Viaja seguro por Riberalta'];
 
 /** Frase que cambia sola cada pocos segundos. */
 function RotatingLine() {
@@ -201,7 +201,7 @@ export const LoginView = () => {
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="relative mx-auto w-[min(82vw,330px)]"
+          className="relative mx-auto w-[min(60vw,240px)]"
         >
           <div className="lobby-pulse absolute inset-x-6 inset-y-4 rounded-full bg-gold-primary/25 blur-3xl" aria-hidden />
           <motion.img
