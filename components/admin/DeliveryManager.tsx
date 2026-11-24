@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, ImagePlus, Pencil, Plus, Trash2 } from 'lucide-react';
-import { DELIVERY_CATEGORIES, STATUS_LABEL, bs, type MenuItem, type OrderStatus, type Restaurant } from '@/lib/delivery';
+import { DELIVERY_CATEGORIES, STATUS_LABEL, bs, isStore, type MenuItem, type OrderStatus, type Restaurant } from '@/lib/delivery';
 import { compressToLimit } from '@/lib/imageUtils';
 
 type ActiveOrder = { id: string; restaurantName: string; customerName: string; status: OrderStatus; total: number; createdAtMs: number; driverName: string };
@@ -79,7 +79,7 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
 
 function RestaurantForm({ initial, onDone }: { initial: Partial<Restaurant>; onDone: () => void }) {
   const [f, setF] = useState({
-    name: initial.name || '', description: initial.description || '', category: initial.category || 'Almuerzos',
+    kind: initial.kind === 'STORE' ? 'STORE' : 'RESTAURANT', name: initial.name || '', description: initial.description || '', category: initial.category || 'Almuerzos',
     coverUrl: initial.coverUrl || '', address: initial.address || '', coords: initial.lat ? `${initial.lat}, ${initial.lng}` : '',
     phone: initial.phone || '', hours: initial.hours || '', prepMinutes: String(initial.prepMinutes ?? 20), minOrder: String(initial.minOrder ?? ''),
     rating: String(initial.rating ?? ''), open: initial.open ?? true, active: initial.active ?? true,
@@ -103,11 +103,22 @@ function RestaurantForm({ initial, onDone }: { initial: Partial<Restaurant>; onD
 
   return (
     <div className="space-y-4">
+      <div>
+        <span className={label}>Tipo de negocio</span>
+        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Tipo de negocio">
+          {([['RESTAURANT', 'Restaurante (comida preparada)'], ['STORE', 'Tienda o pulpería (productos)']] as const).map(([k, t]) => (
+            <button key={k} type="button" role="radio" aria-checked={f.kind === k} onClick={() => set('kind', k)}
+              className={`min-h-12 rounded-xl border px-3 text-sm font-semibold ${f.kind === k ? 'border-gold-primary bg-gold-primary/10 text-gold-light' : 'border-white/10 text-white/80'}`}>{t}</button>
+          ))}
+        </div>
+      </div>
       <div><label className={label}>Nombre</label><input className={input} value={f.name} onChange={(e) => set('name', e.target.value)} maxLength={60} /></div>
       <div><label className={label}>Descripción corta</label><input className={input} value={f.description} onChange={(e) => set('description', e.target.value)} maxLength={160} placeholder="Ej.: Pollo broaster y papas crocantes" /></div>
       <div className="grid grid-cols-2 gap-3">
-        <div><label className={label}>Categoría</label>
-          <select className={input} value={f.category} onChange={(e) => set('category', e.target.value)}>{DELIVERY_CATEGORIES.filter((c) => c !== 'Todos').map((c) => <option key={c}>{c}</option>)}</select></div>
+        {f.kind === 'RESTAURANT' ? (
+          <div><label className={label}>Categoría</label>
+            <select className={input} value={f.category} onChange={(e) => set('category', e.target.value)}>{DELIVERY_CATEGORIES.filter((c) => c !== 'Todos').map((c) => <option key={c}>{c}</option>)}</select></div>
+        ) : <div />}
         <div><label className={label}>Tiempo de preparación (min)</label><input className={input} inputMode="numeric" value={f.prepMinutes} onChange={(e) => set('prepMinutes', e.target.value)} /></div>
       </div>
       <PhotoField value={f.coverUrl} onChange={(v) => set('coverUrl', v)} text="Foto de portada" />
@@ -237,8 +248,8 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div><h1 className="font-display text-2xl font-extrabold">Restaurantes y menú</h1><p className="mt-1 max-w-xl text-[15px] text-text-secondary">Aquí das de alta los restaurantes del Delivery, subes su menú y marcas cuándo están abiertos. Lo que cambies se ve al instante en la app.</p></div>
-        <button onClick={() => setEditR({})} className="flex h-11 items-center gap-2 rounded-xl bg-gold-primary px-4 text-sm font-black text-background"><Plus className="h-4 w-4" aria-hidden /> Nuevo restaurante</button>
+        <div><h1 className="font-display text-2xl font-extrabold">Restaurantes, tiendas y menú</h1><p className="mt-1 max-w-xl text-[15px] text-text-secondary">Aquí das de alta los restaurantes y las tiendas o pulperías del Delivery, subes su menú o sus productos y marcas cuándo están abiertos. Lo que cambies se ve al instante en la app.</p></div>
+        <button onClick={() => setEditR({})} className="flex h-11 items-center gap-2 rounded-xl bg-gold-primary px-4 text-sm font-black text-background"><Plus className="h-4 w-4" aria-hidden /> Nuevo negocio</button>
       </div>
 
       {!!orders.length && (
@@ -257,14 +268,14 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
       )}
 
       {restaurants === null && <p className="text-text-secondary">Cargando…</p>}
-      {restaurants && !restaurants.length && <p className="rounded-2xl border border-white/10 bg-surface p-8 text-center text-text-secondary">Todavía no hay restaurantes. Crea el primero con “Nuevo restaurante”.</p>}
+      {restaurants && !restaurants.length && <p className="rounded-2xl border border-white/10 bg-surface p-8 text-center text-text-secondary">Todavía no hay negocios. Crea el primero con “Nuevo negocio”.</p>}
       <ul className="grid gap-3 lg:grid-cols-2">
         {(restaurants || []).sort((a, b) => a.name.localeCompare(b.name)).map((r) => (
           <li key={r.id} className="flex gap-3 rounded-2xl border border-white/10 bg-surface p-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {r.coverUrl ? <img src={r.coverUrl} alt="" className="h-24 w-24 shrink-0 rounded-xl object-cover" /> : <div className="h-24 w-24 shrink-0 rounded-xl bg-surface-2" />}
             <div className="min-w-0 flex-1">
-              <p className="flex items-center gap-2 truncate font-bold">{r.name}{r.demo && <span className="rounded-full bg-gold-primary/15 px-2 py-0.5 text-[11px] font-bold text-gold-primary">Demo</span>}{!r.active && <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-text-secondary">Oculto</span>}</p>
+              <p className="flex items-center gap-2 truncate font-bold">{r.name}{isStore(r) && <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-[11px] font-bold text-sky-300">Tienda</span>}{r.demo && <span className="rounded-full bg-gold-primary/15 px-2 py-0.5 text-[11px] font-bold text-gold-primary">Demo</span>}{!r.active && <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-text-secondary">Oculto</span>}</p>
               <p className="truncate text-xs text-text-secondary">{r.category} · {r.address}</p>
               <div className="mt-2 flex items-center gap-2">
                 <Switch on={r.open} label={`${r.name} abierto`} onChange={async (v) => { if (await act({ action: 'setOpen', id: r.id, open: v }, v ? 'Abierto' : 'Cerrado')) load(); }} />
@@ -280,7 +291,7 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
         ))}
       </ul>
 
-      {editR && <Modal title={editR.id ? 'Editar restaurante' : 'Nuevo restaurante'} onClose={() => setEditR(null)}><RestaurantForm initial={editR} onDone={() => { setEditR(null); flash('Restaurante guardado'); load(); }} /></Modal>}
+      {editR && <Modal title={editR.id ? 'Editar negocio' : 'Nuevo negocio'} onClose={() => setEditR(null)}><RestaurantForm initial={editR} onDone={() => { setEditR(null); flash('Restaurante guardado'); load(); }} /></Modal>}
       {msg && <div role="status" className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-white/10 bg-surface px-4 py-3 text-sm shadow-xl">{msg}</div>}
     </div>
   );

@@ -5,7 +5,7 @@ import { Clock, MapPin, Phone, Star } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { cartCount, cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryService } from '@/services/deliveryService';
-import { bs, deliveryFeeFor, roadKm, type CartLine, type MenuItem, type Restaurant } from '@/lib/delivery';
+import { bs, deliveryFeeFor, roadKm, unitPriceFor, type CartLine, type MenuItem, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, Photo, Skeleton, StatusPill, motion, useStagger } from './ui';
 import { ProductSheet } from './ProductSheet';
@@ -49,6 +49,21 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
     el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const handleAdd = (line: CartLine, now: boolean) => {
+    if (cartRestaurant && cartRestaurant !== r.id && lines.length) { setConflict({ line, now }); return; }
+    addLine({ id: r.id, name: r.name }, line);
+    if (now) { onCart(); return; }
+    flash('Listo, elige otro producto o toca "Ver mi pedido"');
+  };
+
+  /** Un producto sin opciones (una Coca-Cola, un pan) no necesita hoja: un toque y a confirmar. */
+  const tapItem = (it: MenuItem) => {
+    haptics.selection();
+    if (it.sizes?.length || it.extras?.length || it.sauces?.length) { setOpen(it); return; }
+    const p = unitPriceFor(it, undefined, [], []);
+    handleAdd({ key: `${it.id}|||`, itemId: it.id, name: it.name, photo: it.photo, qty: 1, unitPrice: p.unit, extraIds: [], sauceIds: [], optionsLabel: '', notes: '' }, true);
+  };
+
   const flash = (msg: string) => { setToast(msg); window.setTimeout(() => setToast(''), 1800); };
 
   return (
@@ -81,7 +96,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
               )}
             </div>
             {!r.open && (
-              <p className="mt-3 rounded-xl bg-white/[0.06] px-3 py-2 text-sm text-text-secondary">Ahora está cerrado. Puedes ver el menú, pero no pedir todavía.</p>
+              <p className="mt-3 rounded-xl bg-white/[0.06] px-3 py-2 text-sm text-text-secondary">Ahora está cerrado. Puedes mirar, pero no pedir todavía.</p>
             )}
           </div>
         </div>
@@ -104,7 +119,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
             <div className="grid grid-cols-2 gap-3" aria-busy="true">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-56" />)}</div>
           )}
           {failed && <p className="rounded-2xl bg-surface p-5 text-center text-sm text-text-secondary">No pudimos cargar el menú. Intenta otra vez.</p>}
-          {items && !items.length && <p className="rounded-2xl bg-surface p-5 text-center text-sm text-text-secondary">Este restaurante aún no publicó su menú.</p>}
+          {items && !items.length && <p className="rounded-2xl bg-surface p-5 text-center text-sm text-text-secondary">Este negocio aún no publicó su menú.</p>}
 
           {groups.map(([c, list]) => (
             <section key={c} data-cat={c} className="scroll-mt-16">
@@ -114,7 +129,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
                   <motion.div key={it.id} {...stagger(i)} className="relative">
                     <button
                       type="button"
-                      onClick={() => { haptics.selection(); setOpen(it); }}
+                      onClick={() => tapItem(it)}
                       disabled={!r.open}
                       className="block w-full overflow-hidden rounded-3xl border border-white/10 bg-surface text-left touch-manipulation transition-transform duration-150 ease-out active:scale-[0.97] disabled:opacity-70"
                     >
@@ -174,7 +189,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
               Ya empezaste un pedido en <b className="text-white">{cartRestaurantName}</b>. Solo puedes pedir a un restaurante a la vez. ¿Borramos lo anterior y empezamos aquí?
             </p>
             <div className="mt-5 grid gap-2">
-              <button type="button" onClick={() => { clear(); addLine({ id: r.id, name: r.name }, conflict.line); const go = conflict.now; setConflict(null); if (go) onCart(); else flash('Listo, elige otro plato o toca "Ver mi pedido"'); }}
+              <button type="button" onClick={() => { clear(); addLine({ id: r.id, name: r.name }, conflict.line); const go = conflict.now; setConflict(null); if (go) onCart(); else flash('Listo, elige otro producto o toca "Ver mi pedido"'); }}
                 className="min-h-12 rounded-2xl bg-gold-primary font-display font-extrabold text-background touch-manipulation active:scale-[0.97]">Sí, empezar aquí</button>
               <button type="button" onClick={() => setConflict(null)} className="min-h-12 rounded-2xl bg-white/[0.07] font-bold touch-manipulation active:scale-[0.97]">No, seguir con el anterior</button>
             </div>
@@ -185,12 +200,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
       <ProductSheet
         item={open}
         onClose={() => setOpen(null)}
-        onAdd={(line, now) => {
-          if (cartRestaurant && cartRestaurant !== r.id && lines.length) { setConflict({ line, now }); return; }
-          addLine({ id: r.id, name: r.name }, line);
-          if (now) { onCart(); return; }
-          flash('Listo, elige otro plato o toca "Ver mi pedido"');
-        }}
+        onAdd={handleAdd}
       />
     </div>
   );

@@ -184,7 +184,7 @@ export function AdminApp() {
 
       {/* Navegación en teléfono: tira horizontal */}
       <nav aria-label="Secciones" className="no-scrollbar flex gap-2 overflow-x-auto border-b border-white/10 px-4 py-2.5 md:hidden">
-        {[{ id: 'overview', label: 'Resumen' }, { id: 'delivery', label: 'Restaurantes y menú' }, ...ADMIN_COLLECTIONS].map((c) => (
+        {[{ id: 'overview', label: 'Resumen' }, { id: 'delivery', label: 'Restaurantes, tiendas y menú' }, ...ADMIN_COLLECTIONS].map((c) => (
           <button
             key={c.id}
             onClick={() => go(c.id)}
@@ -205,7 +205,7 @@ export function AdminApp() {
               {g.id === 'delivery' && (
                 <button onClick={() => go('delivery')} aria-current={view === 'delivery' ? 'page' : undefined}
                   className={`flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-[15px] transition-colors ${view === 'delivery' ? 'bg-gold-primary/15 font-bold text-gold-light' : 'text-white/80 hover:bg-white/[0.05]'}`}>
-                  <UtensilsCrossed className="h-4 w-4" aria-hidden /> Restaurantes y menú
+                  <UtensilsCrossed className="h-4 w-4" aria-hidden /> Restaurantes, tiendas y menú
                 </button>
               )}
               {g.items.map((c) => navBtn(c.id, c.label, counts[c.id]))}

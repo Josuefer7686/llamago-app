@@ -94,7 +94,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
           {!lines.length && (
             <div className="rounded-3xl bg-surface p-8 text-center">
               <p className="font-display text-lg font-extrabold">Todavía no elegiste nada</p>
-              <p className="mt-1.5 text-sm text-text-secondary">Vuelve al menú y toca <b className="text-gold-primary">Pedir</b> en el plato que quieras.</p>
+              <p className="mt-1.5 text-sm text-text-secondary">Vuelve y toca <b className="text-gold-primary">Pedir</b> en lo que quieras.</p>
             </div>
           )}
 
@@ -117,7 +117,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
 
           <button type="button" onClick={() => { haptics.selection(); onBack(); }}
             className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-gold-primary/40 text-[15px] font-bold text-gold-primary touch-manipulation transition-transform duration-150 ease-out active:scale-[0.98]">
-            <Plus className="h-5 w-5" aria-hidden /> Agregar otro plato
+            <Plus className="h-5 w-5" aria-hidden /> Agregar algo más
           </button>
 
           <section className="space-y-3 rounded-3xl border border-white/10 bg-surface p-4">

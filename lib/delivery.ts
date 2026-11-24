@@ -3,8 +3,12 @@
  * No lleva secretos ni dependencias de servidor.
  */
 
+export type PlaceKind = 'RESTAURANT' | 'STORE';
+
 export interface Restaurant {
   id: string;
+  /** RESTAURANT = comida preparada; STORE = tienda o pulpería (productos del estante). Sin dato = restaurante. */
+  kind?: PlaceKind;
   name: string;
   description: string;
   /** Categoría principal para los filtros (ver DELIVERY_CATEGORIES) */
@@ -125,6 +129,8 @@ export interface OpenOrder {
   distanceKm: number;
   createdAtMs: number;
 }
+
+export const isStore = (r?: Pick<Restaurant, 'kind'> | null) => r?.kind === 'STORE';
 
 export const ACTIVE_STATUSES: OrderStatus[] = ['PLACED', 'ACCEPTED', 'PICKED_UP'];
 export const isActiveOrder = (o?: Pick<DeliveryOrder, 'status'> | null) => !!o && ACTIVE_STATUSES.includes(o.status);

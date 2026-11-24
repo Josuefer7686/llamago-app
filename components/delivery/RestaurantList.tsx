@@ -1,10 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Clock, MapPin, Receipt, Search, Star, Bike, ChevronRight, X } from 'lucide-react';
+import { Clock, MapPin, Receipt, Search, Star, Bike, ChevronRight, X, UtensilsCrossed, Store } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import {
-  DELIVERY_CATEGORIES, STATUS_LABEL, bs, deliveryFeeFor, fmtKm, roadKm, isActiveOrder,
+  DELIVERY_CATEGORIES, STATUS_LABEL, bs, deliveryFeeFor, fmtKm, roadKm, isStore,
   type DeliveryOrder, type Restaurant,
 } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
@@ -25,6 +25,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
   const here = useAppStore((s) => s.currentLocation);
   const [q, setQ] = useState('');
   const [cat, setCat] = useState<string>('Todos');
+  const [stores, setStores] = useState(false);
   const stagger = useStagger();
 
   const list = useMemo(() => {
@@ -32,10 +33,10 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
     const term = norm(q.trim());
     return restaurants
       .map((r) => ({ r, km: here ? roadKm(here, { lat: r.lat, lng: r.lng }) : null }))
-      .filter(({ r }) => (cat === 'Todos' || r.category === cat) && (!term || norm(`${r.name} ${r.category} ${r.description}`).includes(term)))
+      .filter(({ r }) => isStore(r) === stores && (stores || cat === 'Todos' || r.category === cat) && (!term || norm(`${r.name} ${r.category} ${r.description}`).includes(term)))
       // Abiertos primero, luego los más cercanos
       .sort((a, b) => Number(b.r.open) - Number(a.r.open) || (a.km ?? 0) - (b.km ?? 0));
-  }, [restaurants, q, cat, here]);
+  }, [restaurants, q, cat, here, stores]);
 
   return (
     <div className="h-full overflow-y-auto overscroll-contain pb-8">
@@ -46,7 +47,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
               <MapPin className="h-3.5 w-3.5 text-gold-primary" aria-hidden /> Riberalta
             </p>
             <h1 className="mt-1 font-display text-[28px] font-extrabold italic leading-[1.05] tracking-tight">
-              ¿Qué se te <span className="text-gold-primary">antoja</span> hoy?
+              {stores ? <>¿Qué <span className="text-gold-primary">necesitas</span> hoy?</> : <>¿Qué se te <span className="text-gold-primary">antoja</span> hoy?</>}
             </h1>
           </div>
           <button
@@ -64,8 +65,8 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Busca un restaurante o un plato"
-            aria-label="Buscar restaurante"
+            placeholder={stores ? "Busca una tienda o un producto" : "Busca un restaurante o un plato"}
+            aria-label="Buscar"
             enterKeyHint="search"
             className="h-12 w-full rounded-2xl border border-white/10 bg-surface pl-12 pr-11 text-base text-white placeholder:text-text-secondary focus:border-gold-primary/60 focus:outline-none"
           />
@@ -76,7 +77,16 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
           )}
         </div>
 
-        <div className="mx-auto mt-3 flex max-w-[430px] gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="Categorías">
+        <div className="mx-auto mt-3 grid max-w-[430px] grid-cols-2 gap-1.5 rounded-2xl bg-white/[0.06] p-1.5" role="tablist" aria-label="Qué quieres pedir">
+          {([[false, 'Comida', UtensilsCrossed], [true, 'Tiendas', Store]] as const).map(([v, t, Icon]) => (
+            <button key={t} role="tab" aria-selected={stores === v} type="button" onClick={() => { haptics.selection(); setStores(v); setQ(''); }}
+              className={`flex min-h-12 items-center justify-center gap-2 rounded-xl font-display text-base font-extrabold touch-manipulation transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97] ${stores === v ? 'bg-gold-primary text-background' : 'text-white'}`}>
+              <Icon className="h-5 w-5" aria-hidden /> {t}
+            </button>
+          ))}
+        </div>
+
+        {!stores && <div className="mx-auto mt-3 flex max-w-[430px] gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="Categorías">
           {DELIVERY_CATEGORIES.map((c) => (
             <button
               key={c}
@@ -91,7 +101,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
               {c}
             </button>
           ))}
-        </div>
+        </div>}
       </header>
 
       <div className="mx-auto max-w-[430px] space-y-4 px-4">
@@ -130,7 +140,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
 
         {restaurants && !list.length && !failed && (
           <div className="rounded-3xl bg-surface p-8 text-center">
-            <p className="font-display text-lg font-extrabold">{restaurants.length ? 'No encontramos nada así' : 'Muy pronto, restaurantes aquí'}</p>
+            <p className="font-display text-lg font-extrabold">{restaurants.length ? 'No encontramos nada así' : stores ? 'Muy pronto, tiendas aquí' : 'Muy pronto, restaurantes aquí'}</p>
             <p className="mt-1.5 text-sm text-text-secondary">
               {restaurants.length ? 'Prueba con otra palabra o cambia de categoría.' : 'Estamos sumando los mejores sabores de Riberalta.'}
             </p>

@@ -50,15 +50,16 @@ export async function POST(req: NextRequest) {
       const name = text(r.name, 60);
       const lat = Number(r.lat), lng = Number(r.lng);
       const cover = photo(r.coverUrl);
-      if (name.length < 2) return bad('Escribe el nombre del restaurante.');
+      if (name.length < 2) return bad('Escribe el nombre del negocio.');
       if (!(Math.abs(lat) <= 90 && Math.abs(lng) <= 180) || (lat === 0 && lng === 0)) return bad('Falta la ubicación (latitud y longitud).');
       if (cover === null) return bad('La foto de portada no es válida o pesa demasiado.');
-      const category = (DELIVERY_CATEGORIES as readonly string[]).includes(r.category) && r.category !== 'Todos' ? r.category : 'Almuerzos';
+      const kind = r.kind === 'STORE' ? 'STORE' : 'RESTAURANT';
+      const category = kind === 'STORE' ? 'Tienda' : (DELIVERY_CATEGORIES as readonly string[]).includes(r.category) && r.category !== 'Todos' ? r.category : 'Almuerzos';
       const minOrder = r.minOrder === '' || r.minOrder == null ? 0 : money(r.minOrder, 500);
       const prep = Math.round(Number(r.prepMinutes));
       if (Number.isNaN(minOrder)) return bad('El pedido mínimo no es válido.');
       const data = {
-        name, description: text(r.description, 160), category, coverUrl: cover, address: text(r.address, 120),
+        name, kind, description: text(r.description, 160), category, coverUrl: cover, address: text(r.address, 120),
         lat, lng, phone: text(r.phone, 20), hours: text(r.hours, 40),
         open: !!r.open, active: r.active !== false,
         prepMinutes: prep >= 5 && prep <= 90 ? prep : 20, minOrder,

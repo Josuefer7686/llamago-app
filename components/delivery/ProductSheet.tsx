@@ -157,7 +157,7 @@ function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; 
           </div>
           {item.available && (
             <button type="button" onClick={() => add(false)} className="min-h-11 w-full text-sm font-bold text-gold-primary touch-manipulation active:opacity-70">
-              Agregar y elegir otro plato
+              Agregar y elegir algo más
             </button>
           )}
         </div>

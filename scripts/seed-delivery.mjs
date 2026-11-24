@@ -53,6 +53,20 @@ const RESTAURANTS = [
       { name: 'Pasta al pesto', category: 'Pastas', price: 36, desc: 'Fideos con salsa de albahaca y tomate.', photo: '1473093295043-cdd812d0e601', extras: [o('Queso rallado', 4)] },
     ],
   },
+  {
+    id: 'demo-tienda', name: 'Pulpería Don Beto', kind: 'STORE', category: 'Tienda', demo: true, active: true, open: true,
+    description: 'Bebidas, snacks y pan de todos los días', coverUrl: U('1604719312566-8912e9227c6a'),
+    address: 'Calle Gonzalo Moreno', lat: -11.0073, lng: -66.0651, phone: '+59170000004', hours: '07:00 - 22:00', prepMinutes: 8, minOrder: 0, rating: 4.9,
+    items: [
+      { name: 'Coca-Cola 2 L', category: 'Bebidas', price: 14, desc: 'Botella familiar, bien helada.', photo: '1622483767028-3f66f32aef97' },
+      { name: 'Coca-Cola 500 ml', category: 'Bebidas', price: 6, desc: 'Botella personal helada.', photo: '1622483767028-3f66f32aef97' },
+      { name: 'Agua 600 ml', category: 'Bebidas', price: 4, desc: 'Agua sin gas.', photo: '1548839140-29a749e1cf4d' },
+      { name: 'Gaseosa Schweppes 2 L', category: 'Bebidas', price: 13, desc: 'Pomelo, botella familiar.', photo: '1581006852262-e4307cf6283a' },
+      { name: 'Papitas fritas', category: 'Snacks', price: 5, desc: 'Bolsa mediana.', photo: '1566478989037-eec170784d0b' },
+      { name: 'Galletas de chocolate', category: 'Snacks', price: 3, desc: 'Paquete individual.', photo: '1499636136210-6f4ee915583e' },
+      { name: 'Pan (6 unidades)', category: 'Panadería', price: 6, desc: 'Pan fresco del día.', photo: '1509440159596-0249088772ff' },
+    ],
+  },
 ];
 
 if (process.argv.includes('--remove')) {
