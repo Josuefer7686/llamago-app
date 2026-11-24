@@ -302,7 +302,7 @@ Colecciones de viajes interprovinciales y paquetería entre Riberalta y Guayaram
 | Variable | Valor / Descripción |
 | :--- | :--- |
 | **Dominio de Producción** | `https://ribergoo.vercel.app` (¡Ojo con las dos 'o's!) |
-| **Repositorio GitHub** | `https://github.com/Josuefer7686/ribergo-app.git` |
+| **Repositorio GitHub** | `https://github.com/Josuefer7686/llamago-app.git` |
 | **Rama principal** | `main` |
 | **Telegram Bot Token** | `TELEGRAM_BOT_TOKEN` (solo en Vercel y `.env.local`; **nunca** en el código ni en este archivo) |
 | **Telegram Admin Chat ID** | `TELEGRAM_ADMIN_CHAT_ID` (variable de entorno; solo este usuario puede aprobar recargas) |
@@ -334,7 +334,7 @@ npm run build
 ```
 
 ### Flujo de Subida a GitHub y Despliegue en Vercel
-Vercel está conectado directamente al repositorio de GitHub `Josuefer7686/ribergo-app`. Cada vez que se hace un `push` a la rama `main`, Vercel compila y despliega en producción automáticamente:
+Vercel está conectado directamente al repositorio de GitHub `Josuefer7686/llamago-app`. Cada vez que se hace un `push` a la rama `main`, Vercel compila y despliega en producción automáticamente:
 
 ```bash
 # 1. Ver qué archivos han cambiado
