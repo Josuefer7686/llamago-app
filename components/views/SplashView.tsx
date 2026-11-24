@@ -17,12 +17,12 @@ export const SplashView = () => {
           className="flex flex-col items-center"
         >
           {/* Official LlamaGO Logo with Ambient Aura Glow */}
-          <div className="relative w-36 h-36 mb-4 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-[2.5rem] bg-gold-primary/30 blur-2xl animate-pulse" />
+          <div className="relative mb-5 flex w-[min(78vw,320px)] items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-gold-primary/20 blur-3xl animate-pulse" />
             <img
-              src="/logo.png"
-              alt="LlamaGO Logo Oficial"
-              className="w-36 h-36 object-contain rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.85)] relative z-10"
+              src="/wordmark.png"
+              alt="LlamaGO: pide, viaja y disfruta"
+              className="relative z-10 h-auto w-full"
             />
           </div>
 

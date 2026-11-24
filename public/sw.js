@@ -1,8 +1,10 @@
-const CACHE_NAME = 'llamago-v4.0';
+const CACHE_NAME = 'llamago-v4.1';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
   '/logo.png',
+  '/wordmark.png',
+  '/wordmark-dark.png',
   '/icon-192.png',
   '/icon-512.png',
   '/icon-180.png',

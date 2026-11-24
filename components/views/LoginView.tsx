@@ -149,17 +149,13 @@ export const LoginView = () => {
       <div className="pt-safe flex-1 flex flex-col justify-center max-w-sm mx-auto w-full z-10 space-y-6">
         {/* Header Branding con Logo Oficial LlamaGO */}
         <div className="text-center space-y-2">
-          <div className="relative inline-flex items-center justify-center mb-1">
-            <div className="absolute inset-0 rounded-[2rem] bg-gold-primary/30 blur-xl animate-pulse" />
-            <img
-              src="/logo.png"
-              alt="LlamaGO Logo"
-              className="w-24 h-24 object-contain rounded-[2rem] shadow-2xl shadow-gold-primary/20 relative z-10 border border-gold-primary/40"
-            />
+          <div className="relative mx-auto mb-2 flex w-56 items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-gold-primary/15 blur-2xl" />
+            <img src="/wordmark.png" alt="LlamaGO: pide, viaja y disfruta" className="relative z-10 h-auto w-full" />
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-            Bienvenido a <span className="text-white">Llama</span><span className="text-gold-primary">GO</span>
+            ¡Bienvenido!
           </h1>
           <p className="text-xs text-text-secondary max-w-[280px] mx-auto leading-relaxed">
             Tu transporte más rápido, seguro y confiable en Riberalta, Beni.

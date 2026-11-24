@@ -144,8 +144,8 @@ export function AdminApp() {
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-white/10 bg-background/95 px-4 py-3 backdrop-blur md:px-6">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="" className="h-9 w-9 rounded-lg" />
-          <p className="font-display text-lg font-extrabold italic">LLAMA <span className="text-gold-primary">GO</span> <span className="ml-1 hidden font-sans text-sm font-semibold not-italic text-text-secondary sm:inline">Panel de administración</span></p>
+          <img src="/wordmark.png" alt="LlamaGO" className="h-9 w-auto" />
+          <p className="font-display text-lg font-extrabold italic"><span className="ml-1 hidden font-sans text-sm font-semibold not-italic text-text-secondary sm:inline">Panel de administración</span></p>
         </div>
         <div className="flex items-center gap-2">
           <button

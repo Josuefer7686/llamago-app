@@ -33,10 +33,9 @@ export function AdminLogin({ configured, onSuccess }: { configured: boolean; onS
     <main className="grid min-h-full place-items-center px-5 py-10">
       <form onSubmit={submit} className="w-full max-w-sm">
         <div className="mb-8 flex items-center gap-3">
-          <img src="/logo.png" alt="" className="h-12 w-12 rounded-xl" />
           <div className="leading-tight">
-            <p className="font-display text-2xl font-extrabold italic">LLAMA <span className="text-gold-primary">GO</span></p>
-            <p className="text-sm text-text-secondary">Panel de administración</p>
+            <img src="/wordmark.png" alt="LlamaGO" className="h-14 w-auto" />
+            <p className="mt-1 text-sm text-text-secondary">Panel de administración</p>
           </div>
         </div>
 

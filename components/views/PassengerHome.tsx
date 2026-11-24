@@ -446,14 +446,8 @@ export const PassengerHome = () => {
       {/* Top: marca, notificaciones y buscador de destino */}
       <div className="relative z-30 px-4 pt-[max(1rem,env(safe-area-inset-top))] pointer-events-none space-y-3 max-w-[430px] mx-auto w-full">
         <div className="flex items-center justify-between gap-3 pointer-events-auto">
-          <div className="flex items-center gap-2.5 min-w-0 py-1.5 pl-1.5 pr-4 rounded-2xl bg-gold-primary shadow-[0_8px_20px_-8px_rgba(255,198,26,0.6)]">
-            <img src="/logo.png" alt="" className="w-10 h-10 object-contain shrink-0 rounded-xl" />
-            <div className="min-w-0 leading-none">
-              <p className="font-display text-[24px] font-extrabold italic tracking-tight text-background">
-                LLAMA GO
-              </p>
-              <p className="text-xs font-semibold text-background/80 mt-1 truncate">Tu transporte, más cerca</p>
-            </div>
+          <div className="flex items-center min-w-0 py-2 px-3.5 rounded-2xl bg-gold-primary shadow-[0_8px_20px_-8px_rgba(255,198,26,0.6)]">
+            <img src="/wordmark-dark.png" alt="LlamaGO: pide, viaja y disfruta" className="h-11 w-auto object-contain" />
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
