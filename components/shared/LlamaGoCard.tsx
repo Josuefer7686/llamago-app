@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { QrCode, Wifi, ShieldCheck, Sparkles, PlusCircle } from 'lucide-react';
 import { haptics } from '@/utils/haptics';
 
-interface RiberGoCardProps {
+interface LlamaGoCardProps {
   holderName?: string;
   balance?: number;
   accountNumber?: string;
@@ -13,13 +13,13 @@ interface RiberGoCardProps {
   onOpenTopup?: () => void;
 }
 
-export const RiberGoCard = ({ 
+export const LlamaGoCard = ({ 
   holderName, 
   balance: propBalance, 
   accountNumber: propAccountNumber, 
   onTopupClick, 
   onOpenTopup 
-}: RiberGoCardProps) => {
+}: LlamaGoCardProps) => {
   const { user } = useAppStore();
 
   const handleTopup = onTopupClick || onOpenTopup || (() => {});
@@ -48,7 +48,7 @@ export const RiberGoCard = ({
           <div className="flex items-center gap-2">
             <img 
               src="/logo.png" 
-              alt="RiberGO Logo" 
+              alt="LlamaGO Logo" 
               className="w-6 h-6 rounded-lg object-contain border border-gold-primary/40 shadow-sm"
             />
             <span className="text-lg font-black tracking-tight flex items-center gap-1">

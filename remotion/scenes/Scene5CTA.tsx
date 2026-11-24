@@ -39,7 +39,7 @@ export const Scene5CTA: React.FC = () => {
         <h2 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-4">
           ¡Únete hoy mismo a <br />
           <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-            RiberGO!
+            LlamaGO!
           </span>
         </h2>
 
@@ -60,7 +60,7 @@ export const Scene5CTA: React.FC = () => {
 
             <div className="px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white font-bold text-base flex items-center gap-2 backdrop-blur-md">
               <Globe className="w-5 h-5 text-amber-400" />
-              <span>ribergo.app</span>
+              <span>llamago.app</span>
             </div>
           </div>
         )}

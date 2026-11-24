@@ -1,7 +1,7 @@
 rules_version = '2';
 
 /**
- * Reglas de seguridad de RiberGO.
+ * Reglas de seguridad de LlamaGO.
  *
  * Principios:
  *  - Todo requiere sesión iniciada (Firebase Auth). No existe regla comodín.

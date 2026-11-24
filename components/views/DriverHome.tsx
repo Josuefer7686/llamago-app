@@ -57,7 +57,7 @@ export const DriverHome = () => {
   const [rejectedRideIds, setRejectedRideIds] = useState<string[]>(() => {
     if (typeof window === 'undefined') return [];
     try {
-      const raw = sessionStorage.getItem('ribergo_rejected_rides');
+      const raw = sessionStorage.getItem('llamago_rejected_rides');
       return raw ? JSON.parse(raw) : [];
     } catch (e) {
       return [];
@@ -75,7 +75,7 @@ export const DriverHome = () => {
       if (prev.includes(rideId)) return prev;
       const updated = [...prev, rideId];
       try {
-        sessionStorage.setItem('ribergo_rejected_rides', JSON.stringify(updated));
+        sessionStorage.setItem('llamago_rejected_rides', JSON.stringify(updated));
       } catch (e) {}
       return updated;
     });
@@ -85,7 +85,7 @@ export const DriverHome = () => {
   const walletBalance = user?.walletBalance ?? 0.0;
   const freeTrips = user?.freeTripsRemaining ?? 0;
 
-  const driverId = user?.id || (user?.phone ? 'drv-' + user.phone.replace(/[^0-9]/g, '') : 'drv-ribergo');
+  const driverId = user?.id || (user?.phone ? 'drv-' + user.phone.replace(/[^0-9]/g, '') : 'drv-llamago');
   const driverName = user?.name || 'Conductor';
   const driverPhone = user?.phone || '';
   const motorcycle = user?.motorcycle || '';
@@ -295,7 +295,7 @@ export const DriverHome = () => {
       // Filtrar solicitudes que este chofer específico ya rechazó
       let rejected: string[] = [];
       try {
-        const raw = sessionStorage.getItem('ribergo_rejected_rides');
+        const raw = sessionStorage.getItem('llamago_rejected_rides');
         if (raw) rejected = JSON.parse(raw);
       } catch (e) {}
       const allRejected = Array.from(new Set([...rejectedRideIds, ...rejected]));
@@ -358,7 +358,7 @@ export const DriverHome = () => {
           price: Number(req.price) || 10,
           distanceKm: req.distanceKm || 2.5,
           durationMin: req.durationMin || 7,
-          passengerName: req.passengerName || 'Pasajero RiberGO',
+          passengerName: req.passengerName || 'Pasajero LlamaGO',
           passengerPhone: req.passengerPhone || '+591 70000000',
           passengerRating: 5.0,
           serviceType: req.serviceType || 'MOTOTAXI',
@@ -586,7 +586,7 @@ export const DriverHome = () => {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-surface/90 border border-gold-primary/30 backdrop-blur-md shadow-lg">
             <img
               src="/logo.png"
-              alt="RiberGO Logo"
+              alt="LlamaGO Logo"
               className="w-5 h-5 object-contain rounded-md"
             />
             <div className={`w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-gold-primary animate-pulse' : 'bg-text-secondary'}`} />
@@ -651,7 +651,7 @@ export const DriverHome = () => {
           onClick={() => {
             haptics.selection();
             if (typeof window !== 'undefined') {
-              window.dispatchEvent(new CustomEvent('ribergo:recenter_map'));
+              window.dispatchEvent(new CustomEvent('llamago:recenter_map'));
             }
             triggerMapRecenter();
           }}

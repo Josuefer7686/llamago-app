@@ -4,9 +4,9 @@ const { marked } = require('marked');
 const { execSync } = require('child_process');
 
 const markdownPath = '/home/fernando/.gemini/antigravity/brain/60b4e1ad-70cf-4bca-b800-5384e5b57cc1/informe_tecnico_integral_ribergo.md';
-const outputHtmlPath = path.join(__dirname, '..', 'informe_tecnico_integral_ribergo.html');
-const publicHtmlPath = path.join(__dirname, '..', 'public', 'informe_tecnico_integral_ribergo.html');
-const outputPdfPath = path.join(__dirname, '..', 'informe_tecnico_integral_ribergo.pdf');
+const outputHtmlPath = path.join(__dirname, '..', 'informe_tecnico_integral_llamago.html');
+const publicHtmlPath = path.join(__dirname, '..', 'public', 'informe_tecnico_integral_llamago.html');
+const outputPdfPath = path.join(__dirname, '..', 'informe_tecnico_integral_llamago.pdf');
 
 console.log('Reading markdown source...');
 let mdContent = fs.readFileSync(markdownPath, 'utf8');
@@ -23,7 +23,7 @@ const fullHtml = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Informe Técnico Integral - Proyecto RiberGO</title>
+  <title>Informe Técnico Integral - Proyecto LlamaGO</title>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');

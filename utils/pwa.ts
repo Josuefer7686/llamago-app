@@ -1,5 +1,5 @@
 /**
- * RIBERGO PWA DETECTION & LIFECYCLE SYSTEM
+ * LLAMAGO PWA DETECTION & LIFECYCLE SYSTEM
  * Bulletproof multi-source detection for Android WebAPK/TWA, iOS Safari Home Screen, and Desktop PWA.
  */
 
@@ -16,20 +16,20 @@ export function checkIsPwaStandalone(): boolean {
       urlParams.get('pwa') === 'true' || 
       urlParams.get('utm_source') === 'pwa'
     ) {
-      sessionStorage.setItem('ribergo_is_standalone', 'true');
-      localStorage.setItem('ribergo_is_installed_pwa', 'true');
+      sessionStorage.setItem('llamago_is_standalone', 'true');
+      localStorage.setItem('llamago_is_installed_pwa', 'true');
       return true;
     }
 
     // 2. Check session storage (if detected once in the active session, keep it standalone!)
-    if (sessionStorage.getItem('ribergo_is_standalone') === 'true') {
+    if (sessionStorage.getItem('llamago_is_standalone') === 'true') {
       return true;
     }
 
     // 3. iOS Safari standalone mode (Add to Home Screen)
     if ((navigator as any).standalone === true) {
-      sessionStorage.setItem('ribergo_is_standalone', 'true');
-      localStorage.setItem('ribergo_is_installed_pwa', 'true');
+      sessionStorage.setItem('llamago_is_standalone', 'true');
+      localStorage.setItem('llamago_is_installed_pwa', 'true');
       return true;
     }
 
@@ -38,8 +38,8 @@ export function checkIsPwaStandalone(): boolean {
       document.referrer && 
       (document.referrer.startsWith('android-app://') || document.referrer.includes('android-app:'))
     ) {
-      sessionStorage.setItem('ribergo_is_standalone', 'true');
-      localStorage.setItem('ribergo_is_installed_pwa', 'true');
+      sessionStorage.setItem('llamago_is_standalone', 'true');
+      localStorage.setItem('llamago_is_installed_pwa', 'true');
       return true;
     }
 
@@ -53,18 +53,18 @@ export function checkIsPwaStandalone(): boolean {
 
     for (const query of displayModes) {
       if (window.matchMedia && window.matchMedia(query).matches) {
-        sessionStorage.setItem('ribergo_is_standalone', 'true');
-        localStorage.setItem('ribergo_is_installed_pwa', 'true');
+        sessionStorage.setItem('llamago_is_standalone', 'true');
+        localStorage.setItem('llamago_is_installed_pwa', 'true');
         return true;
       }
     }
 
     // 6. Check if localStorage previously recorded that this app was installed
-    if (localStorage.getItem('ribergo_is_installed_pwa') === 'true') {
+    if (localStorage.getItem('llamago_is_installed_pwa') === 'true') {
       // Only treat as browser if explicitly matching (display-mode: browser)
       const isExplicitBrowser = window.matchMedia && window.matchMedia('(display-mode: browser)').matches;
       if (!isExplicitBrowser) {
-        sessionStorage.setItem('ribergo_is_standalone', 'true');
+        sessionStorage.setItem('llamago_is_standalone', 'true');
         return true;
       }
     }
@@ -105,9 +105,9 @@ export function usePwa() {
 
     // Native appinstalled event
     const handleAppInstalled = () => {
-      localStorage.setItem('ribergo_is_installed_pwa', 'true');
-      localStorage.setItem('ribergo_hide_install_prompt', 'true');
-      sessionStorage.setItem('ribergo_is_standalone', 'true');
+      localStorage.setItem('llamago_is_installed_pwa', 'true');
+      localStorage.setItem('llamago_hide_install_prompt', 'true');
+      sessionStorage.setItem('llamago_is_standalone', 'true');
       setIsStandalone(true);
     };
 

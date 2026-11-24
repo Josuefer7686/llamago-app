@@ -72,7 +72,7 @@ export const Scene4Drivers: React.FC = () => {
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-white mt-3 leading-tight">
             ¿Tienes moto o vehículo? <br />
-            <span className="text-amber-400">¡Sé tu propio jefe con RiberGO!</span>
+            <span className="text-amber-400">¡Sé tu propio jefe con LlamaGO!</span>
           </h2>
         </div>
 

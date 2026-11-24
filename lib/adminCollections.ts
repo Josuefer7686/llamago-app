@@ -51,7 +51,7 @@ export const ADMIN_COLLECTIONS: AdminCollection[] = [
   {
     id: 'users', path: 'users', kind: 'collection', group: 'personas',
     label: 'Usuarios',
-    description: 'Todas las personas registradas en RiberGO: pasajeros y conductores, con su teléfono, calificación y saldo.',
+    description: 'Todas las personas registradas en LlamaGO: pasajeros y conductores, con su teléfono, calificación y saldo.',
   },
   {
     id: 'online_drivers', path: 'online_drivers', kind: 'collection', group: 'personas',

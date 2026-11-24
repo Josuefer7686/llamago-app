@@ -50,7 +50,7 @@ export function Overview({ names, onOpen, onUnauthorized }: { names: Names; onOp
       <header className="mb-6">
         <h1 className="font-display text-2xl font-extrabold">Resumen</h1>
         <p className="mt-1 text-[15px] text-text-secondary">
-          {loading ? 'Cargando lo que está pasando…' : 'Lo que está pasando en RiberGO ahora mismo. Se actualiza solo.'}
+          {loading ? 'Cargando lo que está pasando…' : 'Lo que está pasando en LlamaGO ahora mismo. Se actualiza solo.'}
         </p>
       </header>
 

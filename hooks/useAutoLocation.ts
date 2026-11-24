@@ -17,7 +17,7 @@ export function useAutoLocation() {
 
     // If we already have a location, immediately trigger recenter so user gets instant visual feedback
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('ribergo:recenter_map'));
+      window.dispatchEvent(new CustomEvent('llamago:recenter_map'));
     }
     triggerMapRecenter();
 
@@ -42,7 +42,7 @@ export function useAutoLocation() {
         setCurrentLocation(coords);
         triggerMapRecenter();
         if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('ribergo:recenter_map', { detail: { lat: coords.lat, lng: coords.lng } }));
+          window.dispatchEvent(new CustomEvent('llamago:recenter_map', { detail: { lat: coords.lat, lng: coords.lng } }));
         }
         setGpsPermission('granted');
         setLocationError(null);

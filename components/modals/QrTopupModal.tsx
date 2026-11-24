@@ -32,11 +32,11 @@ export const QrTopupModal = ({ isOpen, onClose, onSuccess }: QrTopupModalProps) 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const driverId = user?.id || 'drv-unregistered';
-  const driverName = user?.name || 'Conductor RiberGO';
+  const driverName = user?.name || 'Conductor LlamaGO';
   const driverPhone = user?.phone || '';
   const vehicle = `${user?.vehicleType || 'MOTOTAXI'} - ${user?.motorcycle || 'Honda Wave 110'} (${user?.plate || 'RBT-482'})`;
   const currentBalance = typeof user?.walletBalance === 'number' ? user.walletBalance : 0.0;
-  // QR oficial de cobro (Banco Unión / Yasta) con la marca RiberGO alrededor; el QR en sí no se modifica
+  // QR oficial de cobro (Banco Unión / Yasta) con la marca LlamaGO alrededor; el QR en sí no se modifica
   const qrUrl = '/qr-recarga.png';
 
   // Listen in real time to the recharge document in Firestore
@@ -92,7 +92,7 @@ export const QrTopupModal = ({ isOpen, onClose, onSuccess }: QrTopupModalProps) 
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = 'ribergo-qr-recarga.png';
+      link.download = 'llamago-qr-recarga.png';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -312,7 +312,7 @@ export const QrTopupModal = ({ isOpen, onClose, onSuccess }: QrTopupModalProps) 
                 </button>
 
                 <a
-                  href={`https://wa.me/59176868110?text=Hola%20Administrador,%20acabo%20de%20subir%20mi%20comprobante%20de%20recarga%20de%20${selectedAmount}%20BOB%20en%20RiberGO.%20Mi%20ID%20es%20${driverId}%20y%20código%20${activeRechargeId}`}
+                  href={`https://wa.me/59176868110?text=Hola%20Administrador,%20acabo%20de%20subir%20mi%20comprobante%20de%20recarga%20de%20${selectedAmount}%20BOB%20en%20LlamaGO.%20Mi%20ID%20es%20${driverId}%20y%20código%20${activeRechargeId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-2.5 rounded-xl bg-surface hover:bg-surface-2 border border-border-custom text-text-secondary hover:text-white text-xs font-bold flex items-center justify-center gap-2 transition"
@@ -370,7 +370,7 @@ export const QrTopupModal = ({ isOpen, onClose, onSuccess }: QrTopupModalProps) 
                 {/* QR oficial */}
                 <div className="w-full max-w-[260px] mx-auto rounded-2xl overflow-hidden shadow-xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={qrUrl} alt="QR oficial de RiberGO para recargar saldo" className="w-full h-auto block" />
+                  <img src={qrUrl} alt="QR oficial de LlamaGO para recargar saldo" className="w-full h-auto block" />
                 </div>
 
                 <div className="rounded-2xl bg-gold-primary/10 border border-gold-primary/40 p-3 text-left space-y-1">

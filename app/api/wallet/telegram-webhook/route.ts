@@ -48,11 +48,11 @@ export async function POST(req: NextRequest) {
 
       let text: string;
       if (isAdmin) {
-        text = `👋 ¡Hola ${senderName}! Estás vinculado como administrador de RiberGO.\n\nCada comprobante de recarga por QR llegará aquí para que lo apruebes o rechaces con un toque.`;
+        text = `👋 ¡Hola ${senderName}! Estás vinculado como administrador de LlamaGO.\n\nCada comprobante de recarga por QR llegará aquí para que lo apruebes o rechaces con un toque.`;
       } else if (!TELEGRAM_ADMIN_CHAT_ID) {
         text = `Este bot aún no tiene administrador configurado.\n\nTu Chat ID es ${senderId}. Si eres el administrador, guárdalo en la variable TELEGRAM_ADMIN_CHAT_ID del servidor.`;
       } else {
-        text = 'Este bot es solo para la administración de RiberGO.';
+        text = 'Este bot es solo para la administración de LlamaGO.';
       }
 
       await fetch(telegramApi('sendMessage'), {

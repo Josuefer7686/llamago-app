@@ -101,7 +101,7 @@ export const LoginView = () => {
 
       // Feedback animado iOS
       setSuccessTitle('¡Cuenta Lista!');
-      setSuccessSubtitle(`Bienvenido a RiberGO, ${updatedProfile.name}`);
+      setSuccessSubtitle(`Bienvenido a LlamaGO, ${updatedProfile.name}`);
       setShowSuccess(true);
     } catch (err) {
       console.error('Error guardando celular:', err);
@@ -147,13 +147,13 @@ export const LoginView = () => {
       />
 
       <div className="pt-safe flex-1 flex flex-col justify-center max-w-sm mx-auto w-full z-10 space-y-6">
-        {/* Header Branding con Logo Oficial RiberGO */}
+        {/* Header Branding con Logo Oficial LlamaGO */}
         <div className="text-center space-y-2">
           <div className="relative inline-flex items-center justify-center mb-1">
             <div className="absolute inset-0 rounded-[2rem] bg-gold-primary/30 blur-xl animate-pulse" />
             <img
               src="/logo.png"
-              alt="RiberGO Logo"
+              alt="LlamaGO Logo"
               className="w-24 h-24 object-contain rounded-[2rem] shadow-2xl shadow-gold-primary/20 relative z-10 border border-gold-primary/40"
             />
           </div>
@@ -173,7 +173,7 @@ export const LoginView = () => {
             role="status"
             className="p-4 rounded-2xl bg-gold-primary/10 border border-gold-primary/40 text-sm text-white space-y-2"
           >
-            <p className="font-extrabold text-gold-primary">RiberGO se reinició: versión {APP_VERSION}</p>
+            <p className="font-extrabold text-gold-primary">LlamaGO se reinició: versión {APP_VERSION}</p>
             <p className="text-xs text-text-secondary leading-relaxed">
               Hicimos un reinicio general de la aplicación por temas de seguridad y cambios en nuestras normas, así que tu sesión se cerró. Ahora sí puedes registrarte de nuevo. ¡Gracias por tu paciencia!
             </p>
@@ -241,7 +241,7 @@ export const LoginView = () => {
           </button>
 
           <p className="text-[10px] text-center text-text-secondary">
-            Al continuar, aceptas los Términos de Servicio de RiberGO Bolivia.
+            Al continuar, aceptas los Términos de Servicio de LlamaGO Bolivia.
           </p>
         </div>
       </div>
@@ -249,7 +249,7 @@ export const LoginView = () => {
       {/* Footer */}
       <div className="pb-safe pt-2 text-center z-10">
         <p className="text-[11px] text-text-secondary/70">
-          RiberGO • Riberalta, Beni, Bolivia 🇧🇴
+          LlamaGO • Riberalta, Beni, Bolivia 🇧🇴
         </p>
       </div>
 

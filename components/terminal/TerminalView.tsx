@@ -34,7 +34,7 @@ export const TerminalView = () => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gold-primary/10 border border-gold-primary/30 text-gold-primary text-[10px] font-black uppercase tracking-widest">
             <Clock className="w-3.5 h-3.5" />
-            <span>Próximamente en RiberGO</span>
+            <span>Próximamente en LlamaGO</span>
           </div>
           <h2 className="text-2xl font-black text-white tracking-tight">
             Terminal Interprovincial <br />
@@ -49,14 +49,14 @@ export const TerminalView = () => {
             <span>Estamos trabajando en grandes mejoras para brindarte el servicio de transporte interprovincial más rápido, cómodo y seguro de la región.</span>
           </p>
           <p className="text-text-secondary text-[11px] pt-2 border-t border-border-custom/30">
-            Muy pronto podrás reservar pasajes en Autos Noah/Ipsum, contratar Expresos y realizar envíos de Encomiendas en tiempo real desde RiberGO.
+            Muy pronto podrás reservar pasajes en Autos Noah/Ipsum, contratar Expresos y realizar envíos de Encomiendas en tiempo real desde LlamaGO.
           </p>
         </div>
 
         {/* Trust Badge */}
         <div className="flex items-center justify-center gap-2 text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 py-2.5 px-3.5 rounded-xl">
           <ShieldCheck className="w-4 h-4 shrink-0" />
-          <span>¡Gracias por tu paciencia y por confiar en RiberGO!</span>
+          <span>¡Gracias por tu paciencia y por confiar en LlamaGO!</span>
         </div>
 
         {/* Action Button: Volver a Mototaxi Urbana */}

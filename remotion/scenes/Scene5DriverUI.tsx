@@ -24,7 +24,7 @@ export const Scene5DriverUI: React.FC = () => {
   useEffect(() => {
     if (relFrame === 1) {
       promoAudioEngine.playWhoosh();
-      promoAudioEngine.speakVoiceover('¿Quieres trabajar con RiberGO? Conéctate cuando quieras, recibe carreras y gana dinero todos los días.', 0.9);
+      promoAudioEngine.speakVoiceover('¿Quieres trabajar con LlamaGO? Conéctate cuando quieras, recibe carreras y gana dinero todos los días.', 0.9);
     }
     if (relFrame === 30) promoAudioEngine.playPop();
     if (relFrame === 120) promoAudioEngine.playConfirmation();
@@ -55,7 +55,7 @@ export const Scene5DriverUI: React.FC = () => {
           Para Conductores y Socios
         </span>
         <h2 style={{ fontSize: '56px', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
-          ¡Sé tu propio jefe con <span style={{ color: '#F4C542' }}>RiberGO</span>!
+          ¡Sé tu propio jefe con <span style={{ color: '#F4C542' }}>LlamaGO</span>!
         </h2>
       </div>
 

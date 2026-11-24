@@ -1,5 +1,5 @@
 /**
- * Utilidades de servidor para el bot de Telegram de RiberGO.
+ * Utilidades de servidor para el bot de Telegram de LlamaGO.
  * El token y el chat del administrador viven SOLO en variables de entorno.
  */
 

@@ -21,7 +21,7 @@ export const Scene2Intro: React.FC = () => {
     if (frame === 150) {
       promoAudioEngine.playWhoosh();
       promoAudioEngine.playPop();
-      promoAudioEngine.speakVoiceover('Con RiberGO, pedir tu transporte es más fácil, rápido y sencillo.', 0.95);
+      promoAudioEngine.speakVoiceover('Con LlamaGO, pedir tu transporte es más fácil, rápido y sencillo.', 0.95);
     }
   }, [frame]);
 
@@ -46,7 +46,7 @@ export const Scene2Intro: React.FC = () => {
       {/* Top Header Logo Presentation */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', zIndex: 10 }}>
         
-        {/* RiberGO 3D Logo Badge */}
+        {/* LlamaGO 3D Logo Badge */}
         <div 
           style={{
             transform: `scale(${logoScale})`,
@@ -90,7 +90,7 @@ export const Scene2Intro: React.FC = () => {
             <div style={{ width: '120px', height: '120px', borderRadius: '32px', backgroundColor: 'rgba(244,197,66,0.2)', border: '2px solid rgba(244,197,66,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
               <Smartphone style={{ width: '64px', height: '64px', color: '#F4C542' }} />
             </div>
-            <h3 style={{ fontSize: '42px', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>RiberGO App</h3>
+            <h3 style={{ fontSize: '42px', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>LlamaGO App</h3>
             <p style={{ fontSize: '22px', color: '#8F9AA3', marginTop: '12px', fontWeight: 600 }}>Riberalta, Beni - Bolivia</p>
 
             {/* Quick Loading Simulation */}

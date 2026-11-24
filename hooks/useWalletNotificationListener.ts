@@ -72,7 +72,7 @@ export const useWalletNotificationListener = () => {
 
         // 3. Send system notification if user is outside app or in background
         notifications.sendNativeNotification(
-          `✅ RiberGO: ¡Recarga Aprobada! (+${amount} BOB)`,
+          `✅ LlamaGO: ¡Recarga Aprobada! (+${amount} BOB)`,
           `Tu saldo de ${newBalance.toFixed(2)} BOB ya está disponible en tu billetera.`,
           '/logo.png'
         );
@@ -117,7 +117,7 @@ export const useWalletNotificationListener = () => {
         });
 
         notifications.sendNativeNotification(
-          '❌ RiberGO: Recarga no aprobada',
+          '❌ LlamaGO: Recarga no aprobada',
           'Tu comprobante no pudo ser verificado. Contacta a soporte para más detalles.',
           '/logo.png'
         );

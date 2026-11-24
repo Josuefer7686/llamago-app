@@ -7,7 +7,7 @@ import {
   HelpCircle, AlertCircle, Star, MessageSquare, MapPin, Award
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { RiberGoCard } from '@/components/shared/RiberGoCard';
+import { LlamaGoCard } from '@/components/shared/LlamaGoCard';
 import { QrTopupModal } from '@/components/modals/QrTopupModal';
 import { DriverWalletTutorialModal } from '@/components/modals/DriverWalletTutorialModal';
 import { apiService, DriverBox } from '@/services/apiService';
@@ -22,7 +22,7 @@ export const IncomeView = () => {
   const [loading, setLoading] = useState(true);
 
   // ID único permanente del conductor para su casillero exclusivo
-  const driverId = user?.id || (user?.phone ? 'drv-' + user.phone.replace(/[^0-9]/g, '') : 'drv-ribergo');
+  const driverId = user?.id || (user?.phone ? 'drv-' + user.phone.replace(/[^0-9]/g, '') : 'drv-llamago');
   const currentBalance = user?.walletBalance ?? 0.0;
 
   // Suscripción reactiva en tiempo real al casillero único del conductor
@@ -129,10 +129,10 @@ export const IncomeView = () => {
           </button>
         </div>
 
-        {/* METALLIC RIBERGO DIGITAL CREDIT CARD */}
+        {/* METALLIC LLAMAGO DIGITAL CREDIT CARD */}
         <div className="space-y-3">
-          <RiberGoCard
-            holderName={user?.name || driverBox?.driverName || 'Chofer RiberGO'}
+          <LlamaGoCard
+            holderName={user?.name || driverBox?.driverName || 'Chofer LlamaGO'}
             balance={currentBalance}
             accountNumber={user?.accountNumber || 'RBT-4820-9182'}
             onTopupClick={() => setIsQrModalOpen(true)}
@@ -292,7 +292,7 @@ export const IncomeView = () => {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-xs font-black text-white">{trip.passengerName || 'Pasajero RiberGO'}</p>
+                      <p className="text-xs font-black text-white">{trip.passengerName || 'Pasajero LlamaGO'}</p>
                       <p className="text-[10px] text-text-secondary">{trip.date} • {trip.time}</p>
                     </div>
                     <span className="text-sm font-black text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">

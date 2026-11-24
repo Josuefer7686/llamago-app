@@ -63,7 +63,7 @@ export const RoleSelectionView = () => {
                 <div className="absolute inset-0 rounded-2xl bg-gold-primary/25 blur-lg" />
                 <img
                   src="/logo.png"
-                  alt="RiberGO Logo"
+                  alt="LlamaGO Logo"
                   className="w-16 h-16 object-contain rounded-2xl shadow-xl shadow-gold-primary/10 relative z-10 border border-gold-primary/30"
                 />
               </div>

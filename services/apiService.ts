@@ -13,7 +13,7 @@ import {
 } from 'firebase/auth';
 
 /**
- * RIBERGO REAL FIREBASE & LOCAL DATA SERVICE LAYER
+ * LLAMAGO REAL FIREBASE & LOCAL DATA SERVICE LAYER
  * Supports Phone SMS Auth (RecaptchaVerifier + signInWithPhoneNumber), Google Sign-In, and Cloud Firestore.
  */
 
@@ -88,10 +88,10 @@ interface SyncEvent {
   timestamp: number;
 }
 
-const RIDES_STORAGE_KEY = 'ribergo_active_rides_cache_v3';
-const CHAT_STORAGE_KEY_PREFIX = 'ribergo_chat_cache_v3_';
-const DRIVERS_STORAGE_KEY = 'ribergo_online_drivers_cache_v3';
-const CHANNEL_NAME = 'ribergo_realtime_sync_channel';
+const RIDES_STORAGE_KEY = 'llamago_active_rides_cache_v3';
+const CHAT_STORAGE_KEY_PREFIX = 'llamago_chat_cache_v3_';
+const DRIVERS_STORAGE_KEY = 'llamago_online_drivers_cache_v3';
+const CHANNEL_NAME = 'llamago_realtime_sync_channel';
 
 class RealtimeSyncBus {
   private channel: BroadcastChannel | null = null;
@@ -532,9 +532,9 @@ export const apiService = {
     // Demo fallback
     return {
       id: 'usr-sms-' + Date.now(),
-      name: userMetadata?.name || 'Usuario RiberGO SMS',
+      name: userMetadata?.name || 'Usuario LlamaGO SMS',
       phone: '+591 71234567',
-      email: 'demo@ribergo.bo',
+      email: 'demo@llamago.bo',
       rating: null,
       ratingsCount: 0,
       trips: 0,
@@ -555,7 +555,7 @@ export const apiService = {
 
         const profileData: UserProfile = {
           id: uid,
-          name: name || 'Usuario RiberGO',
+          name: name || 'Usuario LlamaGO',
           phone: phone || '+591 70000000',
           email: authIdentifier,
           rating: null,
@@ -662,7 +662,7 @@ export const apiService = {
 
         const newProfile: UserProfile = {
           id: user.uid,
-          name: user.displayName || user.email?.split('@')[0] || 'Usuario RiberGO',
+          name: user.displayName || user.email?.split('@')[0] || 'Usuario LlamaGO',
           email: user.email || '',
           phone: user.phoneNumber || '',
           avatar: user.photoURL || undefined,
@@ -690,7 +690,7 @@ export const apiService = {
     return {
       profile: {
         id: 'usr-google-demo',
-        name: 'Usuario Google RiberGO',
+        name: 'Usuario Google LlamaGO',
         email: 'usuario@gmail.com',
         phone: '',
         rating: null,
@@ -1032,7 +1032,7 @@ export const apiService = {
    */
   async getDriverBox(driverId: string): Promise<DriverBox> {
     const todayStr = new Date().toISOString().slice(0, 10);
-    const localKey = `ribergo_driver_box_${driverId}`;
+    const localKey = `llamago_driver_box_${driverId}`;
     let box: DriverBox = {
       driverId,
       totalIncome: 0,
@@ -1124,7 +1124,7 @@ export const apiService = {
             };
             if (typeof window !== 'undefined') {
               try {
-                localStorage.setItem(`ribergo_driver_box_${driverId}`, JSON.stringify(fullBox));
+                localStorage.setItem(`llamago_driver_box_${driverId}`, JSON.stringify(fullBox));
               } catch (e) {}
             }
             callback(fullBox);
@@ -1164,7 +1164,7 @@ export const apiService = {
     // Guardar en LocalStorage
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem(`ribergo_driver_box_${driverId}`, JSON.stringify(box));
+        localStorage.setItem(`llamago_driver_box_${driverId}`, JSON.stringify(box));
       } catch (e) {}
     }
 
@@ -1212,7 +1212,7 @@ export const apiService = {
     // Guardar en LocalStorage
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem(`ribergo_driver_box_${driverId}`, JSON.stringify(box));
+        localStorage.setItem(`llamago_driver_box_${driverId}`, JSON.stringify(box));
       } catch (e) {}
     }
 
@@ -1613,7 +1613,7 @@ export const apiService = {
     box.updatedAtMs = Date.now();
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem(`ribergo_driver_box_${driverId}`, JSON.stringify(box));
+        localStorage.setItem(`llamago_driver_box_${driverId}`, JSON.stringify(box));
       } catch (e) {}
     }
 

@@ -66,7 +66,7 @@ export const ProfileView = () => {
 
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-white">{user?.name || 'Usuario RiberGO'}</h3>
+              <h3 className="text-base font-bold text-white">{user?.name || 'Usuario LlamaGO'}</h3>
               <span className="px-2 py-0.5 rounded-full bg-gold-primary/20 text-[9px] font-black text-gold-primary uppercase border border-gold-primary/30">
                 {isPassenger ? 'Pasajero' : 'Conductor'}
               </span>
@@ -176,7 +176,7 @@ export const ProfileView = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center shrink-0 overflow-hidden p-1 shadow-md">
-                <img src="/logo.png" alt="RiberGO Logo" className="w-full h-full object-contain rounded-xl" />
+                <img src="/logo.png" alt="LlamaGO Logo" className="w-full h-full object-contain rounded-xl" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">Estado de la Aplicación</h4>
@@ -212,13 +212,13 @@ export const ProfileView = () => {
                 className="flex-1 py-2.5 px-3 rounded-xl bg-gold-primary text-background font-black text-xs hover:bg-gold-light transition shadow-md shadow-gold-primary/20 active:scale-95 flex items-center justify-center gap-1.5"
               >
                 <Smartphone className="w-4 h-4" />
-                <span>Instalar RiberGO App</span>
+                <span>Instalar LlamaGO App</span>
               </button>
 
               <button
                 onClick={() => {
                   haptics.selection();
-                  localStorage.removeItem('ribergo_hide_install_prompt');
+                  localStorage.removeItem('llamago_hide_install_prompt');
                   setShowPwaModal(true);
                 }}
                 className="py-2.5 px-3 rounded-xl bg-surface-2 text-text-secondary hover:text-white font-bold text-[11px] transition active:scale-95 whitespace-nowrap"
@@ -324,8 +324,8 @@ export const ProfileView = () => {
         </button>
 
         <div className="flex flex-col items-center justify-center gap-1.5 text-[10px] text-text-secondary pb-4">
-          <img src="/logo.png" alt="RiberGO Logo" className="w-5 h-5 rounded-md object-contain opacity-80" />
-          <span>RiberGO PWA v{APP_VERSION} • Riberalta, Bolivia</span>
+          <img src="/logo.png" alt="LlamaGO Logo" className="w-5 h-5 rounded-md object-contain opacity-80" />
+          <span>LlamaGO PWA v{APP_VERSION} • Riberalta, Bolivia</span>
         </div>
       </div>
 
@@ -513,7 +513,7 @@ export const ProfileView = () => {
               onClick={() => setShowDeleteConfirm(true)}
               className="w-full py-3 bg-red-500/10 border border-red-500/30 text-red-400 font-bold rounded-xl text-xs hover:bg-red-500/20 transition"
             >
-              Eliminar mi cuenta RiberGO
+              Eliminar mi cuenta LlamaGO
             </button>
           ) : (
             <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/40 space-y-3">
@@ -630,7 +630,7 @@ export const ProfileView = () => {
           <div className="p-4 rounded-2xl bg-gold-primary/10 border border-gold-primary/40 space-y-2">
             <div className="flex items-center gap-2 text-gold-primary font-bold">
               <Bike className="w-5 h-5" />
-              <span>Trabaja con RiberGO en Riberalta</span>
+              <span>Trabaja con LlamaGO en Riberalta</span>
             </div>
             <p className="text-[11px] text-text-secondary leading-relaxed">
               Tu cuenta actual está registrada permanentemente como <strong>Pasajero</strong>. Por seguridad de nuestros clientes, los conductores pasan por un proceso de selección estricto y requieren una cuenta de conductor aprobada.
@@ -649,7 +649,7 @@ export const ProfileView = () => {
 
           <div className="p-4 rounded-2xl bg-surface border border-border-custom space-y-3">
             <a
-              href="https://wa.me/59176868110?text=Hola%20RiberGO,%20deseo%20postularme%20como%20conductor%20en%20Riberalta"
+              href="https://wa.me/59176868110?text=Hola%20LlamaGO,%20deseo%20postularme%20como%20conductor%20en%20Riberalta"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg transition"

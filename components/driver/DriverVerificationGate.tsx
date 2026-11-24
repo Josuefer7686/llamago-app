@@ -98,7 +98,7 @@ export function DriverVerificationGate({ children }: { children: ReactNode }) {
           <ShieldX className="w-16 h-16 text-rose-400 mx-auto" />
           <h2 className="font-display text-2xl font-extrabold">Cuenta suspendida</h2>
           <p className="text-sm text-text-secondary leading-relaxed">{info.rejectReason || 'La administración suspendió esta cuenta de conductor.'}</p>
-          <p className="text-xs text-text-secondary">Si crees que es un error, comunícate con RiberGO.</p>
+          <p className="text-xs text-text-secondary">Si crees que es un error, comunícate con LlamaGO.</p>
         </div>
       </Screen>
     );
@@ -227,7 +227,7 @@ function Wizard({
   onCancel?: () => void;
 }) {
   const uid = useAppStore((st) => st.user?.id);
-  const draftKey = `ribergo-driver-draft:${uid ?? 'anon'}:${mode}`;
+  const draftKey = `llamago-driver-draft:${uid ?? 'anon'}:${mode}`;
   const [saved] = useState<Draft | null>(() => (typeof window === 'undefined' ? null : loadDraft(draftKey)));
   const [selected, setSelected] = useState<DriverVehicleType[]>(saved?.selected ?? []);
   const [drafts, setDrafts] = useState<Draft['drafts']>(saved?.drafts ?? {});
@@ -243,9 +243,9 @@ function Wizard({
 
   // Guarda el avance (con un pequeño retraso, las fotos pesan) y evita recargas automáticas mientras tanto
   useEffect(() => {
-    const w = window as unknown as { __ribergoBusy?: number };
-    w.__ribergoBusy = (w.__ribergoBusy ?? 0) + 1;
-    return () => { w.__ribergoBusy = Math.max(0, (w.__ribergoBusy ?? 1) - 1); };
+    const w = window as unknown as { __llamagoBusy?: number };
+    w.__llamagoBusy = (w.__llamagoBusy ?? 0) + 1;
+    return () => { w.__llamagoBusy = Math.max(0, (w.__llamagoBusy ?? 1) - 1); };
   }, []);
   useEffect(() => {
     const t = setTimeout(() => {
@@ -711,7 +711,7 @@ function FaceStep({
     }
     setNeedRetakeId(false);
     if (!navigator.mediaDevices?.getUserMedia) {
-      return fail('Este navegador no permite usar la cámara. Abre RiberGO en Chrome o Safari.');
+      return fail('Este navegador no permite usar la cámara. Abre LlamaGO en Chrome o Safari.');
     }
     setLoadingText('Abriendo la cámara…');
     try {

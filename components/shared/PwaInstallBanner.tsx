@@ -31,7 +31,7 @@ export const PwaInstallBanner = () => {
         setDeferredPwaPrompt(null);
       });
     } else {
-      alert('Para instalar RiberGO en iOS: abre el menú del navegador y selecciona "Agregar a la pantalla de inicio".');
+      alert('Para instalar LlamaGO en iOS: abre el menú del navegador y selecciona "Agregar a la pantalla de inicio".');
     }
   };
 
@@ -47,10 +47,10 @@ export const PwaInstallBanner = () => {
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gold-primary/10 border border-gold-primary/40 flex items-center justify-center shrink-0 overflow-hidden p-1 shadow-md">
-            <img src="/logo.png" alt="RiberGO Logo" className="w-full h-full object-contain rounded-lg" />
+            <img src="/logo.png" alt="LlamaGO Logo" className="w-full h-full object-contain rounded-lg" />
           </div>
           <div>
-            <h4 className="font-bold text-white">Instala RiberGO</h4>
+            <h4 className="font-bold text-white">Instala LlamaGO</h4>
             <p className="text-text-secondary text-[11px]">Ten tus mototaxis siempre a un toque</p>
           </div>
         </div>

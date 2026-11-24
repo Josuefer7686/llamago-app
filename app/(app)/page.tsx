@@ -34,7 +34,7 @@ export default function App() {
         const { activeTrip, passengerState, driverState } = useAppStore.getState();
         const inTrip = Boolean(activeTrip) || (passengerState !== 'IDLE' && passengerState !== 'LOCATION_READY' && passengerState !== 'LOCATION_LOADING') || !['OFFLINE', 'ONLINE', 'TRIP_COMPLETED'].includes(driverState);
         // Tampoco mientras el conductor completa su registro (fotos en curso)
-        const busy = (window as unknown as { __ribergoBusy?: number }).__ribergoBusy ?? 0;
+        const busy = (window as unknown as { __llamagoBusy?: number }).__llamagoBusy ?? 0;
         if (inTrip || busy > 0) return;
         refreshing = true;
         window.location.reload();

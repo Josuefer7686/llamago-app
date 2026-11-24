@@ -67,7 +67,7 @@ export const IosLocationPermissionModal = ({
           </h3>
 
           <p className="text-xs text-text-secondary leading-relaxed px-1">
-            RiberGO necesita conocer tu <strong className="text-white">ubicación GPS exacta</strong> para mostrarte en el mapa y conectarte con el mototaxi más cercano en Riberalta. Sin tu ubicación, la aplicación no puede funcionar.
+            LlamaGO necesita conocer tu <strong className="text-white">ubicación GPS exacta</strong> para mostrarte en el mapa y conectarte con el mototaxi más cercano en Riberalta. Sin tu ubicación, la aplicación no puede funcionar.
           </p>
         </div>
 

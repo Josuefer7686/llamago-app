@@ -2,18 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const outputPath = path.join(__dirname, '..', 'informe_tecnico_integral_ribergo.html');
-const publicPath = path.join(__dirname, '..', 'public', 'informe_tecnico_integral_ribergo.html');
-const pdfPath = path.join(__dirname, '..', 'informe_tecnico_integral_ribergo.pdf');
+const outputPath = path.join(__dirname, '..', 'informe_tecnico_integral_llamago.html');
+const publicPath = path.join(__dirname, '..', 'public', 'informe_tecnico_integral_llamago.html');
+const pdfPath = path.join(__dirname, '..', 'informe_tecnico_integral_llamago.pdf');
 
-console.log('Generando documento maestro refinado para RiberGO (Tarifa 10 Bs, Comisión 1 Bs, Pagos QR, Billetera y Créditos)...');
+console.log('Generando documento maestro refinado para LlamaGO (Tarifa 10 Bs, Comisión 1 Bs, Pagos QR, Billetera y Créditos)...');
 
 const htmlContent = `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Documento Técnico Oficial: Plataforma RiberGO (Riberalta, Bolivia)</title>
+  <title>Documento Técnico Oficial: Plataforma LlamaGO (Riberalta, Bolivia)</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
@@ -570,7 +570,7 @@ const htmlContent = `<!DOCTYPE html>
 
       <h1>
         MEMORIA TÉCNICA E INFORME COMPLETO: <br />
-        <span class="gold-text">APLICACIÓN DIGITAL DE MOVILIDAD "RiberGO"</span>
+        <span class="gold-text">APLICACIÓN DIGITAL DE MOVILIDAD "LlamaGO"</span>
       </h1>
 
       <p class="lead-text">
@@ -583,7 +583,7 @@ const htmlContent = `<!DOCTYPE html>
       <h2><span class="num">01</span> SÍNTESIS DE LAS TECNOLOGÍAS UTILIZADAS: ORIGEN Y CREADORES</h2>
 
       <p>
-        Para materializar RiberGO se seleccionó un ecosistema de tecnologías web de vanguardia. A continuación se resume qué es cada una, cuándo nació y quién la creó:
+        Para materializar LlamaGO se seleccionó un ecosistema de tecnologías web de vanguardia. A continuación se resume qué es cada una, cuándo nació y quién la creó:
       </p>
 
       <div class="table-responsive">
@@ -644,12 +644,12 @@ const htmlContent = `<!DOCTYPE html>
       </div>
 
       <!-- =================================================== -->
-      <!-- SECCIÓN 2: MODELO ECONÓMICO Y DE PAGOS DE RIBERGO -->
+      <!-- SECCIÓN 2: MODELO ECONÓMICO Y DE PAGOS DE LLAMAGO -->
       <!-- =================================================== -->
       <h2><span class="num">02</span> MODELO DE TARIFACIÓN, COMISIÓN JUSTA Y SISTEMA DE PAGOS</h2>
 
       <p>
-        El modelo financiero de RiberGO fue diseñado milimétricamente respetando la realidad de la economía de Riberalta:
+        El modelo financiero de LlamaGO fue diseñado milimétricamente respetando la realidad de la economía de Riberalta:
       </p>
 
       <div class="grid-3">
@@ -677,7 +677,7 @@ const htmlContent = `<!DOCTYPE html>
       <ul>
         <li><strong>1. Pago en Efectivo (Cash)</strong>: Modalidad tradicional directa. El pasajero abona los 10 Bs billete a mano al mototaxista al descender del vehículo.</li>
         <li><strong>2. Pago por Código QR (Simple QR / Banca Móvil)</strong>: El pasajero abre su aplicación bancaria preferida (Banco Unión, BNB, Banco Mercantil, BCP, Banco Fie o billeteras como Yape Bolivia), escanea el código QR del chofer y transfiere los 10 Bs al instante.</li>
-        <li><strong>3. Saldo Digital / Créditos Prepagados en App</strong>: Los usuarios pueden tener saldo a favor en su perfil de RiberGO para viajar sin necesidad de llevar efectivo físico.</li>
+        <li><strong>3. Saldo Digital / Créditos Prepagados en App</strong>: Los usuarios pueden tener saldo a favor en su perfil de LlamaGO para viajar sin necesidad de llevar efectivo físico.</li>
       </ul>
 
       <h3>2.2. Sistema de Billetera Digital del Conductor (Driver Wallet) y Créditos</h3>
@@ -721,13 +721,13 @@ const htmlContent = `<!DOCTYPE html>
 
           <!-- Plataforma Box -->
           <rect x="670" y="40" width="160" height="150" rx="16" fill="#131C29" stroke="#F4C542" stroke-width="2"/>
-          <text x="750" y="70" fill="#F4C542" font-size="14" font-weight="bold" text-anchor="middle">RIBERGO</text>
+          <text x="750" y="70" fill="#F4C542" font-size="14" font-weight="bold" text-anchor="middle">LLAMAGO</text>
           <text x="750" y="95" fill="#FFFFFF" font-size="18" font-weight="900" text-anchor="middle">COMISIÓN 1 Bs</text>
           <text x="750" y="125" fill="#94A3B8" font-size="11" text-anchor="middle">Débito Automático:</text>
           <text x="750" y="145" fill="#CBD5E1" font-size="11" text-anchor="middle">Resta 1 crédito de saldo</text>
           <text x="750" y="165" fill="#F4C542" font-size="10" font-weight="bold" text-anchor="middle">Cero Cobranzas en Calle</text>
         </svg>
-        <div class="diagram-caption">Figura 1: Arquitectura Financiera de RiberGO — Pasaje 10 Bs, Ganancia 9 Bs y Comisión Transparente de 1 Bs</div>
+        <div class="diagram-caption">Figura 1: Arquitectura Financiera de LlamaGO — Pasaje 10 Bs, Ganancia 9 Bs y Comisión Transparente de 1 Bs</div>
       </div>
 
       <!-- =================================================== -->
@@ -828,7 +828,7 @@ const htmlContent = `<!DOCTYPE html>
             <text x="40" y="402" fill="#94A3B8" font-size="10">20 Bs • 50 Bs • 100 Bs (Banca Móvil)</text>
           </g>
         </svg>
-        <div class="diagram-caption">Figura 2: Interfaces reales de RiberGO — A la izquierda: Pasajero (Mapa, Tarifa 10 Bs y Métodos de Pago). A la derecha: Conductor (En Línea, Alerta con 9 Bs netos y Billetera QR).</div>
+        <div class="diagram-caption">Figura 2: Interfaces reales de LlamaGO — A la izquierda: Pasajero (Mapa, Tarifa 10 Bs y Métodos de Pago). A la derecha: Conductor (En Línea, Alerta con 9 Bs netos y Billetera QR).</div>
       </div>
 
       <!-- =================================================== -->
@@ -837,7 +837,7 @@ const htmlContent = `<!DOCTYPE html>
       <h2><span class="num">04</span> DICCIONARIO Y DESGLOSE EXHAUSTIVO ARCHIVO POR ARCHIVO</h2>
 
       <p>
-        A continuación se explica la totalidad de los archivos que componen el repositorio de la aplicación RiberGO, su misión técnica y funciones específicas:
+        A continuación se explica la totalidad de los archivos que componen el repositorio de la aplicación LlamaGO, su misión técnica y funciones específicas:
       </p>
 
       <h3>4.1. Núcleo de Entrada y Vistas (<code>app/</code> y <code>components/views/</code>)</h3>
@@ -887,7 +887,7 @@ const htmlContent = `<!DOCTYPE html>
       <h3>4.3. Estado Global y Capa de Datos (<code>store/</code> y <code>services/</code>)</h3>
       <ul>
         <li><code>store/useAppStore.ts</code>: Store global en Zustand. Gobierna las interfaces fundamentales:
-          <pre><code>// Estado y tipos de cobro en RiberGO
+          <pre><code>// Estado y tipos de cobro en LlamaGO
 export interface ActiveTripInfo {
   id: string;
   pickup: LocationPoint;
@@ -964,12 +964,12 @@ export interface ActiveTripInfo {
       <h2><span class="num">05</span> ARQUITECTURA PWA: INSTALACIÓN SIN TIENDAS Y OPERACIÓN OFFLINE</h2>
 
       <p>
-        Uno de los mayores logros de ingeniería de RiberGO radica en su condición de <strong>Progressive Web App</strong>:
+        Uno de los mayores logros de ingeniería de LlamaGO radica en su condición de <strong>Progressive Web App</strong>:
       </p>
 
       <ul>
         <li><strong>Instalación Directa</strong>: El usuario visita <code>https://ribergo-app.vercel.app</code> e inmediatamente recibe la opción de agregar la app a su pantalla de inicio como una aplicación nativa.</li>
-        <li><strong>Cero Espacio en Memoria</strong>: Frente a aplicaciones tradicionales que exigen entre 50 y 150 MB de descarga inicial, RiberGO pesa <strong>menos de 1.2 MB</strong> de caché local, ideal para teléfonos con espacio saturado.</li>
+        <li><strong>Cero Espacio en Memoria</strong>: Frente a aplicaciones tradicionales que exigen entre 50 y 150 MB de descarga inicial, LlamaGO pesa <strong>menos de 1.2 MB</strong> de caché local, ideal para teléfonos con espacio saturado.</li>
         <li><strong>Service Worker (<code>public/sw.js</code>)</strong>: Intercepta peticiones HTTP, almacena en caché las librerías esenciales y garantiza que la interfaz cargue al instante incluso con mala cobertura 3G o 4G en zonas periféricas de Riberalta.</li>
         <li><strong>Manifiesto Web (<code>public/manifest.json</code>)</strong>: Declara el comportamiento a pantalla completa (<code>display: standalone</code>), eliminando barras de navegación y URL del navegador.</li>
       </ul>
@@ -980,7 +980,7 @@ export interface ActiveTripInfo {
       <h2><span class="num">06</span> CONCLUSIÓN Y VALOR ESTRATÉGICO PARA RIBERALTA</h2>
 
       <p>
-        <strong>RiberGO</strong> materializa un ecosistema tecnológico equilibrado, justo y sustentable:
+        <strong>LlamaGO</strong> materializa un ecosistema tecnológico equilibrado, justo y sustentable:
       </p>
       <ul>
         <li>Para el <strong>Pasajero</strong>: Previsibilidad con <strong>tarifa exacta de 10 Bs</strong>, múltiples opciones de pago (Efectivo o Simple QR) y certeza de viajar con un conductor identificado.</li>
@@ -989,7 +989,7 @@ export interface ActiveTripInfo {
       </ul>
 
       <div style="margin-top: 55px; padding-top: 25px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-dim);">
-        <div>Proyecto RiberGO • Riberalta, Beni, Bolivia</div>
+        <div>Proyecto LlamaGO • Riberalta, Beni, Bolivia</div>
         <div>Desarrollo Local Independiente • 2026</div>
       </div>
 

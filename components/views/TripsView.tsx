@@ -26,7 +26,7 @@ export const TripsView = () => {
           <div className="p-8 text-center bg-surface rounded-3xl border border-border-custom space-y-3">
             <Bike className="w-10 h-10 text-gold-primary mx-auto opacity-50" />
             <p className="text-sm font-bold text-white">Aún no tienes viajes registrados</p>
-            <p className="text-xs text-text-secondary">Pide tu primer mototaxi con RiberGO hoy mismo.</p>
+            <p className="text-xs text-text-secondary">Pide tu primer mototaxi con LlamaGO hoy mismo.</p>
           </div>
         ) : (
           <div className="space-y-3">

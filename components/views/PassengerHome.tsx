@@ -105,7 +105,7 @@ export const PassengerHome = () => {
   useEffect(() => {
     const trip = activeTrip;
     if (passengerState !== 'DRIVER_FOUND' || !trip?.id || !trip.destination?.isCustom) return;
-    const key = `ribergo_custom_dest_sent_${trip.id}`;
+    const key = `llamago_custom_dest_sent_${trip.id}`;
     try {
       if (sessionStorage.getItem(key)) return;
       sessionStorage.setItem(key, '1');
@@ -117,7 +117,7 @@ export const PassengerHome = () => {
   const handleFetchLocation = () => {
     haptics.selection();
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('ribergo:recenter_map'));
+      window.dispatchEvent(new CustomEvent('llamago:recenter_map'));
     }
     triggerMapRecenter();
     requestLocation();
@@ -137,7 +137,7 @@ export const PassengerHome = () => {
     const pickupLoc = currentLocation || { lat: -11.0061, lng: -66.0747, name: 'Mi Ubicación' };
     const destLoc = { lat: -11.0061, lng: -66.0747, name: 'Acordar en chat / en persona' };
     const passengerId = user?.id || 'usr-anon';
-    const passengerName = user?.name || 'Pasajero RiberGO';
+    const passengerName = user?.name || 'Pasajero LlamaGO';
     const initialPrice = getBaseFare(urbanServiceType);
 
     try {
@@ -199,7 +199,7 @@ export const PassengerHome = () => {
       if (rideData.status === 'NEGOTIATING') {
         const driverInfo = {
           id: rideData.driverId,
-          name: rideData.driverName || 'Mototaxista RiberGO',
+          name: rideData.driverName || 'Mototaxista LlamaGO',
           phone: rideData.driverPhone || '+591 70000000',
           rating: typeof rideData.driverRating === 'number' ? rideData.driverRating : null,
           trips: typeof rideData.driver?.trips === 'number' ? rideData.driver.trips : 0,
@@ -224,7 +224,7 @@ export const PassengerHome = () => {
       } else if (rideData.driverId && rideData.status === 'GOING_TO_PASSENGER') {
         const driverInfo = {
           id: rideData.driverId,
-          name: rideData.driverName || 'Mototaxista RiberGO',
+          name: rideData.driverName || 'Mototaxista LlamaGO',
           phone: rideData.driverPhone || '+591 70000000',
           rating: typeof rideData.driverRating === 'number' ? rideData.driverRating : null,
           trips: typeof rideData.driver?.trips === 'number' ? rideData.driver.trips : 0,
@@ -283,7 +283,7 @@ export const PassengerHome = () => {
     const pickupLoc = currentLocation || { lat: -11.0061, lng: -66.0747, name: 'Mi Ubicación' };
     const destLoc = destination || { lat: -11.0061, lng: -66.0747, name: 'Acordar en chat / en persona' };
     const passengerId = user?.id || 'usr-anon';
-    const passengerName = user?.name || 'Pasajero RiberGO';
+    const passengerName = user?.name || 'Pasajero LlamaGO';
     const finalFare = currentOfferFare;
 
     try {
@@ -450,7 +450,7 @@ export const PassengerHome = () => {
             <img src="/logo.png" alt="" className="w-10 h-10 object-contain shrink-0 rounded-xl" />
             <div className="min-w-0 leading-none">
               <p className="font-display text-[24px] font-extrabold italic tracking-tight text-background">
-                RIBER GO
+                LLAMA GO
               </p>
               <p className="text-xs font-semibold text-background/80 mt-1 truncate">Tu transporte, más cerca</p>
             </div>
@@ -854,8 +854,8 @@ export const PassengerHome = () => {
                     {/* QR Code Container */}
                     <div className="p-3 bg-white rounded-xl flex flex-col items-center justify-center">
                       <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=RIBERGO_PAY_${activeTrip?.id || 'DEMO'}_${activeTrip?.price || 10}BOB`}
-                        alt="QR Pago RiberGO"
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=LLAMAGO_PAY_${activeTrip?.id || 'DEMO'}_${activeTrip?.price || 10}BOB`}
+                        alt="QR Pago LlamaGO"
                         className="w-32 h-32 rounded-lg"
                       />
                       <p className="text-[10px] text-zinc-800 font-bold mt-1.5 text-center">

@@ -13,7 +13,7 @@ import { Scene6Ecosystem } from './scenes/Scene6Ecosystem';
 import { Scene7CTA } from './scenes/Scene7CTA';
 import { promoAudioEngine } from './AudioEngine';
 
-export const RiberGoVerticalPromoComposition: React.FC<{ enableAudio?: boolean }> = ({ enableAudio = true }) => {
+export const LlamaGoVerticalPromoComposition: React.FC<{ enableAudio?: boolean }> = ({ enableAudio = true }) => {
   const frame = useCurrentFrame();
 
   // Start background music loop on start

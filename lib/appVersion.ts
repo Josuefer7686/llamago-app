@@ -1,4 +1,4 @@
-/** Versión visible de RiberGO. */
+/** Versión visible de LlamaGO. */
 export const APP_VERSION = '3.0';
 
 /**

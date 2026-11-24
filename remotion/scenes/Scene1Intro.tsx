@@ -32,7 +32,7 @@ export const Scene1Intro: React.FC = () => {
       {/* Main Container */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-2xl">
         
-        {/* Animated RiberGO Logo Badge */}
+        {/* Animated LlamaGO Logo Badge */}
         <div 
           style={{ transform: `scale(${badgeScale}) translateY(${floatY}px)` }}
           className="relative w-28 h-28 rounded-3xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-[2px] shadow-[0_0_50px_rgba(244,197,66,0.35)] mb-8"
@@ -70,7 +70,7 @@ export const Scene1Intro: React.FC = () => {
           style={{ opacity: subtitleOpacity, transform: `translateY(${subtitleY}px)` }}
           className="text-xl md:text-2xl text-white/80 font-medium leading-relaxed max-w-lg"
         >
-          ¡Llegó <span className="text-amber-400 font-bold">RiberGO</span>! La primera app oficial de transporte y mototaxis a un toque.
+          ¡Llegó <span className="text-amber-400 font-bold">LlamaGO</span>! La primera app oficial de transporte y mototaxis a un toque.
         </p>
 
         {/* Decorative Map Pins */}

@@ -1,5 +1,5 @@
 /**
- * RIBERGO AUDIO SYNTHESIZER SYSTEM
+ * LLAMAGO AUDIO SYNTHESIZER SYSTEM
  * Uses standard Web Audio API (AudioContext) for zero-dependency, ultra-fast, high-volume audio feedback.
  * Completely distinct sound profiles for DRIVER (loud alerts, ticks, warning beep-beep-beep) and PASSENGER (gentle chimes, success chords).
  */

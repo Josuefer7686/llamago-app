@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'RiberGO · Panel de administración',
+  title: 'LlamaGO · Panel de administración',
   robots: { index: false, follow: false },
 };
 

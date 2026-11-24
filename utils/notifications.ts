@@ -1,5 +1,5 @@
 /**
- * RIBERGO NATIVE & IN-APP NOTIFICATION HELPER
+ * LLAMAGO NATIVE & IN-APP NOTIFICATION HELPER
  * Manages browser Notification.requestPermission() and native OS notifications.
  */
 
@@ -49,7 +49,7 @@ export const notifications = {
           body,
           icon: icon || '/icons/icon-192x192.png',
           badge: '/icons/icon-192x192.png',
-          tag: 'ribergo-message',
+          tag: 'llamago-message',
         });
         notif.onclick = () => {
           window.focus();

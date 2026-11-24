@@ -54,7 +54,7 @@ export const MotocarIcon: React.FC<React.SVGProps<SVGSVGElement> & { size?: numb
 };
 
 /**
- * Componente unificado para iconos nativos de vehículos en RiberGO:
+ * Componente unificado para iconos nativos de vehículos en LlamaGO:
  * - MOTOTAXI: Motorbike (Lucide nativo)
  * - TAXI_AUTO: CarTaxiFront (Lucide nativo con letrero TAXI)
  * - MOTOCAR: MotocarIcon (Vector nativo de motocar de carga)

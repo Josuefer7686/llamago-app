@@ -36,7 +36,7 @@ export const IosMapLoader = () => {
         <div className="space-y-2">
           <div className="flex items-center justify-center gap-1.5 text-gold-primary">
             <Sparkles className="w-4 h-4 animate-spin" />
-            <span className="text-[11px] font-black uppercase tracking-widest">RiberGO GPS</span>
+            <span className="text-[11px] font-black uppercase tracking-widest">LlamaGO GPS</span>
           </div>
 
           <h3 className="text-base font-extrabold text-white tracking-tight">

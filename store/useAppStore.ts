@@ -206,7 +206,7 @@ interface AppState {
   loginUser: (user: UserProfile, targetView?: AppView) => void;
   setRole: (role: UserRole) => void;
   logout: () => void;
-  /** Aviso de "reinicio de RiberGO" tras un borrado general de datos */
+  /** Aviso de "reinicio de LlamaGO" tras un borrado general de datos */
   resetNotice: boolean;
   forceReset: () => void;
   dismissResetNotice: () => void;

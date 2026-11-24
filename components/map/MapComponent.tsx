@@ -179,8 +179,8 @@ function MapUpdater({
       }
     };
 
-    window.addEventListener('ribergo:recenter_map', handleRecenter);
-    return () => window.removeEventListener('ribergo:recenter_map', handleRecenter);
+    window.addEventListener('llamago:recenter_map', handleRecenter);
+    return () => window.removeEventListener('llamago:recenter_map', handleRecenter);
   }, [map]);
 
   // Recenter map ONLY when the "Mi Ubicación" button increments recenterTrigger
@@ -397,7 +397,7 @@ export default function MapComponent() {
                 opacity: 0.38,
                 lineCap: 'round',
                 lineJoin: 'round',
-                className: isRescue ? 'ribergo-route-glow-rescue' : 'ribergo-route-glow-gold'
+                className: isRescue ? 'llamago-route-glow-rescue' : 'llamago-route-glow-gold'
               }}
             />
 
@@ -422,7 +422,7 @@ export default function MapComponent() {
                 opacity: 0.95,
                 lineCap: 'round',
                 lineJoin: 'round',
-                className: isRescue ? 'ribergo-route-flow-rescue' : 'ribergo-route-flow-gold'
+                className: isRescue ? 'llamago-route-flow-rescue' : 'llamago-route-flow-gold'
               }}
             />
           </>

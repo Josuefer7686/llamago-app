@@ -16,12 +16,12 @@ export const SplashView = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-center"
         >
-          {/* Official RiberGO Logo with Ambient Aura Glow */}
+          {/* Official LlamaGO Logo with Ambient Aura Glow */}
           <div className="relative w-36 h-36 mb-4 flex items-center justify-center">
             <div className="absolute inset-0 rounded-[2.5rem] bg-gold-primary/30 blur-2xl animate-pulse" />
             <img
               src="/logo.png"
-              alt="RiberGO Logo Oficial"
+              alt="LlamaGO Logo Oficial"
               className="w-36 h-36 object-contain rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.85)] relative z-10"
             />
           </div>

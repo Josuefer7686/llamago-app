@@ -8,7 +8,7 @@ import { doc, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 let env;
 before(async () => {
   env = await initializeTestEnvironment({
-    projectId: 'ribergo-rules-test',
+    projectId: 'llamago-rules-test',
     firestore: { rules: readFileSync('firestore.rules', 'utf8') },
   });
 });

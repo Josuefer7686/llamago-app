@@ -221,11 +221,11 @@ export const NegotiationChatModal = () => {
 
     if (!isPassenger) {
       try {
-        const raw = sessionStorage.getItem('ribergo_rejected_rides');
+        const raw = sessionStorage.getItem('llamago_rejected_rides');
         const list = raw ? JSON.parse(raw) : [];
         if (!list.includes(currentRideId)) {
           list.push(currentRideId);
-          sessionStorage.setItem('ribergo_rejected_rides', JSON.stringify(list));
+          sessionStorage.setItem('llamago_rejected_rides', JSON.stringify(list));
         }
       } catch (e) {}
     }

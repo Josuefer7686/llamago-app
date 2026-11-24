@@ -58,7 +58,7 @@ function GiftSlide() {
         </motion.div>
       </div>
       <div className="space-y-2">
-        <h2 className="font-display text-3xl font-extrabold leading-tight">¡Bienvenido a RiberGO!</h2>
+        <h2 className="font-display text-3xl font-extrabold leading-tight">¡Bienvenido a LlamaGO!</h2>
         <p className="text-base text-text-secondary leading-relaxed">Para empezar con fuerza te regalamos <strong className="text-white">5 viajes sin comisión</strong>. Lo que cobres es todo tuyo.</p>
       </div>
       <div className="flex justify-center gap-2" aria-label="5 viajes de regalo">
@@ -270,7 +270,7 @@ export const DriverWalletTutorialModal = ({ isOpen, onClose }: Props) => {
           exit={{ opacity: 0 }}
           role="dialog"
           aria-modal="true"
-          aria-label="Cómo funciona RiberGO para conductores"
+          aria-label="Cómo funciona LlamaGO para conductores"
           className="fixed inset-0 z-[80] bg-background max-w-[430px] mx-auto flex flex-col text-white"
         >
           <div className="pt-safe px-5 pt-4 pb-2 flex items-center gap-3 shrink-0">

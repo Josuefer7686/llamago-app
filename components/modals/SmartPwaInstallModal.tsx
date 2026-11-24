@@ -45,7 +45,7 @@ export const SmartPwaInstallModal = () => {
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     // Auto-Open Trigger Logic (Only for standard web browsers, never inside installed PWA)
-    const hidePreference = localStorage.getItem('ribergo_hide_install_prompt') === 'true';
+    const hidePreference = localStorage.getItem('llamago_hide_install_prompt') === 'true';
     if (!isStandalone && !hidePreference) {
       const timer = setTimeout(() => {
         // Double check standalone status before popping up
@@ -65,7 +65,7 @@ export const SmartPwaInstallModal = () => {
   const handleClose = () => {
     haptics.selection();
     if (dontShowAgain) {
-      localStorage.setItem('ribergo_hide_install_prompt', 'true');
+      localStorage.setItem('llamago_hide_install_prompt', 'true');
     }
     setShowPwaModal(false);
   };
@@ -77,8 +77,8 @@ export const SmartPwaInstallModal = () => {
       deferredPrompt.prompt();
       const choiceResult = await deferredPrompt.userChoice;
       if (choiceResult.outcome === 'accepted') {
-        localStorage.setItem('ribergo_is_installed_pwa', 'true');
-        localStorage.setItem('ribergo_hide_install_prompt', 'true');
+        localStorage.setItem('llamago_is_installed_pwa', 'true');
+        localStorage.setItem('llamago_hide_install_prompt', 'true');
         setShowPwaModal(false);
       }
       setDeferredPrompt(null);
@@ -124,7 +124,7 @@ export const SmartPwaInstallModal = () => {
                   <div className="relative w-14 h-14 rounded-2xl shrink-0">
                     <img
                       src="/logo.png"
-                      alt="RiberGO Logo"
+                      alt="LlamaGO Logo"
                       className="w-full h-full object-contain rounded-2xl border border-gold-primary/40 shadow-xl shadow-gold-primary/20"
                     />
                   </div>
@@ -134,7 +134,7 @@ export const SmartPwaInstallModal = () => {
                       Instalación
                     </span>
                     <h3 className="text-xl font-extrabold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-                      RiberGO App
+                      LlamaGO App
                     </h3>
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export const SmartPwaInstallModal = () => {
                     <div className="space-y-2">
                       {deferredPrompt ? (
                         <p className="text-sm font-medium text-white/90">
-                          Tu dispositivo está listo para instalar RiberGO con un solo clic.
+                          Tu dispositivo está listo para instalar LlamaGO con un solo clic.
                         </p>
                       ) : (
                         <div className="space-y-2">
@@ -192,7 +192,7 @@ export const SmartPwaInstallModal = () => {
 
                   {platform === 'IOS' && (
                     <div className="space-y-2">
-                      <p className="text-xs text-white/90 font-medium">Instala RiberGO en tu iPhone o iPad:</p>
+                      <p className="text-xs text-white/90 font-medium">Instala LlamaGO en tu iPhone o iPad:</p>
                       <div className="flex flex-col gap-2 bg-white/5 p-3 rounded-xl border border-white/5 shadow-inner">
                         <div className="flex items-center gap-2 text-[11px] text-white/80">
                           <span className="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0 font-bold">1</span>

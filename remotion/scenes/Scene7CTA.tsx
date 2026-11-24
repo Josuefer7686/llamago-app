@@ -20,7 +20,7 @@ export const Scene7CTA: React.FC = () => {
   useEffect(() => {
     if (relFrame === 1) {
       promoAudioEngine.playWhoosh();
-      promoAudioEngine.speakVoiceover('Descarga RiberGO hoy mismo y vive la nueva era de la movilidad.', 0.95);
+      promoAudioEngine.speakVoiceover('Descarga LlamaGO hoy mismo y vive la nueva era de la movilidad.', 0.95);
     }
     if (relFrame === 25) {
       promoAudioEngine.playCashRegister();
@@ -63,7 +63,7 @@ export const Scene7CTA: React.FC = () => {
 
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', maxWidth: '900px' }}>
         
-        {/* RiberGO 3D Logo Badge */}
+        {/* LlamaGO 3D Logo Badge */}
         <div 
           style={{
             transform: `scale(${logoScale})`,
@@ -92,13 +92,13 @@ export const Scene7CTA: React.FC = () => {
         <h2 style={{ fontSize: '76px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.15, margin: 0 }}>
           ¡Únete hoy a <br />
           <span style={{ background: 'linear-gradient(90deg, #F4C542 0%, #FFD966 50%, #F59E0B 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            RiberGO!
+            LlamaGO!
           </span>
         </h2>
 
         {/* Slogan */}
         <p style={{ fontSize: '32px', color: '#FFFFFF', fontWeight: 800, margin: '24px 0 60px 0' }}>
-          Tu ciudad. Tu viaje. Tu RiberGO.
+          Tu ciudad. Tu viaje. Tu LlamaGO.
         </p>
 
         {/* CTA Buttons */}
@@ -113,7 +113,7 @@ export const Scene7CTA: React.FC = () => {
 
             <div style={{ width: '100%', padding: '28px 0', backgroundColor: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.2)', color: '#FFFFFF', fontWeight: 800, textAlign: 'center', borderRadius: '32px', fontSize: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', backdropFilter: 'blur(10px)' }}>
               <Globe style={{ width: '32px', height: '32px', color: '#F4C542' }} />
-              <span>ribergo.app</span>
+              <span>llamago.app</span>
             </div>
           </div>
         )}

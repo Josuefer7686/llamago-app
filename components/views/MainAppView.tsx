@@ -70,7 +70,7 @@ function MainAppInner() {
           const currentDriver = assignedDriverRef.current;
           setActiveToast({
             id: latestMsg.id,
-            senderName: role === 'PASSENGER' ? (currentDriver?.name || currentTrip?.driver?.name || 'Mototaxista RiberGO') : (currentTrip?.passengerName || 'Pasajero RiberGO'),
+            senderName: role === 'PASSENGER' ? (currentDriver?.name || currentTrip?.driver?.name || 'Mototaxista LlamaGO') : (currentTrip?.passengerName || 'Pasajero LlamaGO'),
             senderAvatar: currentDriver?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
             text: latestMsg.text,
             time: latestMsg.time || 'Ahora',

@@ -1,4 +1,4 @@
-# MANUAL DE CONTEXTO TÉCNICO Y ARQUITECTURA DE RIBERGO APP
+# MANUAL DE CONTEXTO TÉCNICO Y ARQUITECTURA DE LLAMAGO APP
 > **Documento maestro para Claude y asistentes de IA.**  
 > Contiene la especificación completa del sistema, arquitectura, listado detallado de archivos, base de datos, flujos de usuario, integraciones y comandos operativos.
 
@@ -6,8 +6,8 @@
 
 ## 1. VISIÓN GENERAL DE LA APLICACIÓN
 
-### ¿Qué es RiberGO?
-**RiberGO** es una Progressive Web App (PWA) de transporte y logística diseñada específicamente para la ciudad de **Riberalta** y la ruta interprovincial **Riberalta ↔ Guayaramerín** (Departamento del Beni, Bolivia).
+### ¿Qué es LlamaGO?
+**LlamaGO** es una Progressive Web App (PWA) de transporte y logística diseñada específicamente para la ciudad de **Riberalta** y la ruta interprovincial **Riberalta ↔ Guayaramerín** (Departamento del Beni, Bolivia).
 
 ### Modalidades del Sistema
 1. **Transporte Urbano en Riberalta:**
@@ -21,7 +21,7 @@
    - Envío y seguimiento de "Encomiendas" con código de rastreo.
 3. **Billetera Digital del Conductor (Wallet):**
    - Sistema de saldo prepagado por QR (Yasta / Al Toque de Banco Unión / bancos bolivianos).
-   - Verificación automatizada con Bot de Telegram (`@RiberGoBot`) con botones de 1 toque `[ ✅ Aprobar ]` / `[ ❌ Rechazar ]`.
+   - Verificación automatizada con Bot de Telegram (`@LlamaGoBot`) con botones de 1 toque `[ ✅ Aprobar ]` / `[ ❌ Rechazar ]`.
    - Experiencia háptica estilo Apple Pay, banner superior iOS Dynamic Island y canal oficial de soporte en mensajes.
 
 ---
@@ -39,9 +39,9 @@
 | **Mapas** | Leaflet + React-Leaflet | `1.9.4` con OpenStreetMap |
 | **Audio** | Web Audio API nativa | Síntesis procedural en tiempo real (`AudioContext`), sin archivos MP3 pesados |
 | **Hápticos** | Navigator Vibrate API | Patrones rítmicos estilo iOS (`[20, 40, 25, 45, 60]`) |
-| **PWA & Offline** | Service Worker nativo | `public/sw.js` (Versión `ribergo-v2.8`), caché Stale-While-Revalidate con bypass a `/api/*` |
+| **PWA & Offline** | Service Worker nativo | `public/sw.js` (Versión `llamago-v2.8`), caché Stale-While-Revalidate con bypass a `/api/*` |
 | **Hosting & Deploy** | Vercel Serverless | Dominio: `https://ribergoo.vercel.app` (Conectado a GitHub `origin/main`) |
-| **Bot Telegram** | Telegram Bot API | `@RiberGoBot` (token SOLO en variables de entorno, ver §6) |
+| **Bot Telegram** | Telegram Bot API | `@LlamaGoBot` (token SOLO en variables de entorno, ver §6) |
 
 ---
 
@@ -64,7 +64,7 @@
 - [`app/api/wallet/telegram-webhook/route.ts`](app/api/wallet/telegram-webhook/route.ts): **Ruta Serverless POST.** Webhook oficial de Telegram. Procesa comandos de texto (`/start`) y clics en botones inline (`approve:rec-xxx`, `reject:rec-xxx`). Acredita atómicamente el saldo en `users/{driverId}.walletBalance`, actualiza Firestore y edita el mensaje en Telegram.
 
 ### 3.3. Directorio `components/views/` (Vistas Principales)
-- [`SplashView.tsx`](components/views/SplashView.tsx): Pantalla de inicio con logo animado de RiberGO, aura dorada y animación de carga.
+- [`SplashView.tsx`](components/views/SplashView.tsx): Pantalla de inicio con logo animado de LlamaGO, aura dorada y animación de carga.
 - [`LoginView.tsx`](components/views/LoginView.tsx): Inicio de sesión con Google Popup o mediante Teléfono/Contraseña, teclado numérico y validación de credenciales.
 - [`RegisterView.tsx`](components/views/RegisterView.tsx): Formulario de registro de nuevos usuarios (Nombre, teléfono boliviano +591, correo, avatar).
 - [`RoleSelectionView.tsx`](components/views/RoleSelectionView.tsx): **Selección Permanente de Rol.** El usuario escoge una sola vez entre "Pasajero" o "Conductor". Si escoge Conductor, selecciona su vehículo inicial (Mototaxi, Taxi Auto o Motocar). Una vez elegido, no puede alternar roles.
@@ -72,7 +72,7 @@
 - [`PassengerHome.tsx`](components/views/PassengerHome.tsx): Pantalla principal del pasajero: mapa interactivo con conductores en vivo, selector de servicio (Mototaxi/Auto/Motocar/Remolcada), fijación de origen y destino, caja de oferta de tarifa, negociación y seguimiento en tiempo real.
 - [`DriverHome.tsx`](components/views/DriverHome.tsx): Pantalla principal del conductor: switch de conexión ONLINE/OFFLINE, radar de solicitudes entrantes, temporizador de 15 segundos con avisos sonoros/hápticos de urgencia, panel de carrera activa y chat.
 - [`IncomeView.tsx`](components/views/IncomeView.tsx): Pantalla de ingresos y billetera del chofer. Tarjeta digital con saldo en BOB, desglose de ganancias de hoy vs histórico, botón de recarga QR y lista de viajes realizados.
-- [`MessagesView.tsx`](components/views/MessagesView.tsx): Centro de mensajes. Incluye el canal oficial fijado **"Billetera & Finanzas RiberGO"** (historial de comprobantes y recargas aprobadas), además del chat en vivo durante la carrera con mensajes predefinidos y teclado adaptativo.
+- [`MessagesView.tsx`](components/views/MessagesView.tsx): Centro de mensajes. Incluye el canal oficial fijado **"Billetera & Finanzas LlamaGO"** (historial de comprobantes y recargas aprobadas), además del chat en vivo durante la carrera con mensajes predefinidos y teclado adaptativo.
 - [`ProfileView.tsx`](components/views/ProfileView.tsx): Perfil de usuario, estadísticas de viajes, calificaciones en estrellas, configuración de sonido/hápticos, botón para choferes de "Cambiar tipo de vehículo" y cierre de sesión.
 - [`TripsView.tsx`](components/views/TripsView.tsx): Historial detallado de carreras anteriores completadas, fechas, costos y conductores/pasajeros.
 
@@ -94,7 +94,7 @@
 - [`CustomNumericKeypad.tsx`](components/shared/CustomNumericKeypad.tsx): Teclado numérico táctil personalizado para montos o teléfonos con sonidos de tecleo procedurales.
 - [`OtpPinInput.tsx`](components/shared/OtpPinInput.tsx): Entradas de casillas individuales para códigos SMS de verificación.
 - [`PwaInstallBanner.tsx`](components/shared/PwaInstallBanner.tsx): Barra fija superior/inferior para invitar a instalar la app en el dispositivo.
-- [`RiberGoCard.tsx`](components/shared/RiberGoCard.tsx): Tarjetas contenedoras con bordes de cristal y sombras obsidian.
+- [`LlamaGoCard.tsx`](components/shared/LlamaGoCard.tsx): Tarjetas contenedoras con bordes de cristal y sombras obsidian.
 - [`IosMapLoader.tsx`](components/shared/IosMapLoader.tsx): Placeholder de carga elegante para cuando el mapa de Leaflet se está montando en el navegador.
 
 ### 3.6. Directorio `components/passenger/` y `components/terminal/`
@@ -135,7 +135,7 @@ Visor en vivo de Firestore en español, solo para el dueño. **Lee por el servid
 - [`MapView.tsx`](components/map/MapView.tsx): Envoltorio cliente con importación dinámica (`next/dynamic` con `ssr: false`) para evitar errores de compilación del objeto `window` en Next.js.
 
 ### 3.8. Directorio `store/`
-- [`useAppStore.ts`](store/useAppStore.ts): **Cerebro del estado de RiberGO.**
+- [`useAppStore.ts`](store/useAppStore.ts): **Cerebro del estado de LlamaGO.**
   - Tipos: `UserProfile`, `ActiveTripInfo`, `PendingRechargeState`, `WalletNotificationItem`, `ServiceType`, etc.
   - Estado: `user`, `role`, `currentView`, `activeTab`, `activeTrip`, `driverState`, `passengerState`, `pendingRecharge`, `walletNotifications`.
   - Acciones: `loginUser()`, `topUpWallet()`, `deductWalletCommission()`, `setPendingRecharge()`, `addWalletNotification()`, `resetRide()`.
@@ -174,7 +174,7 @@ Perfiles de usuarios (Pasajeros y Choferes).
   "id": "drv-firebase-uid",
   "name": "Josué Fernando Maita",
   "phone": "+59176868110",
-  "email": "conductor@ribergo.bo",
+  "email": "conductor@llamago.bo",
   "role": "DRIVER",
   "vehicleType": "MOTOTAXI",
   "motorcycle": "Honda Wave 110",
@@ -375,4 +375,6 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 - **Riesgos que quedan (aceptados por ahora):** la comisión por viaje y las calificaciones se escriben desde el cliente (un conductor tramposo podría no descontarse la comisión o un pasajero manipular una calificación). Para blindarlo hay que moverlos a rutas de servidor.
 - Nunca subas tokens, claves ni `.env*` al repositorio. Si se filtra un token, revócalo en @BotFather (`/revoke`).
 
-- **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `ribergo-v3.0`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
+- **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `llamago-v3.0`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
+
+- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Identificadores técnicos que se conservaron a propósito porque cambiarlos rompe cosas: proyecto de Firebase `ribergo-app` (el ID no se puede renombrar; solo su nombre visible), el sufijo interno `@ribergo.bo` de los correos sintéticos de login por teléfono (cambiarlo dejaría fuera a las cuentas existentes), la clave local `ribergo-session-v1` y el dominio `ribergoo.vercel.app` hasta que se cambie en Vercel.

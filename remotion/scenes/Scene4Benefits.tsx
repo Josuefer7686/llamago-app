@@ -52,7 +52,7 @@ export const Scene4Benefits: React.FC = () => {
       {/* Header */}
       <div style={{ textAlign: 'center', zIndex: 10, marginBottom: '80px', maxWidth: '850px' }}>
         <span style={{ color: '#F4C542', fontWeight: 900, fontSize: '24px', textTransform: 'uppercase', letterSpacing: '6px', backgroundColor: 'rgba(244,197,66,0.15)', padding: '14px 36px', borderRadius: '100px', border: '2px solid rgba(244,197,66,0.4)' }}>
-          ¿Por qué RiberGO?
+          ¿Por qué LlamaGO?
         </span>
         <h2 style={{ fontSize: '64px', fontWeight: 900, color: '#FFFFFF', marginTop: '28px', lineHeight: 1.2 }}>
           La experiencia que <br />

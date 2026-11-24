@@ -36,7 +36,7 @@ export const IosMessageToast = ({ toast, onClose, onOpenChat }: IosMessageToastP
 
       // Trigger native browser notification if allowed
       notifications.sendNativeNotification(
-        `RiberGO: ${toast.senderName}`,
+        `LlamaGO: ${toast.senderName}`,
         toast.text,
         toast.senderAvatar
       );

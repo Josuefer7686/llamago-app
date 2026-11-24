@@ -46,7 +46,7 @@ export const MessagesView = () => {
   const effectiveChatId = selectedChatId;
   const rideId = activeTrip?.id;
 
-  const driverName = assignedDriver?.name || activeTrip?.driver?.name || (role === 'PASSENGER' ? 'Conductor RiberGO' : 'Pasajero RiberGO');
+  const driverName = assignedDriver?.name || activeTrip?.driver?.name || (role === 'PASSENGER' ? 'Conductor LlamaGO' : 'Pasajero LlamaGO');
   const driverAvatar = assignedDriver?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80';
 
   // Listen to real-time chat messages in Firestore for the active ride
@@ -193,7 +193,7 @@ export const MessagesView = () => {
           
           <div className="flex-1">
             <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-bold text-white">Billetera & Finanzas RiberGO</h3>
+              <h3 className="text-sm font-bold text-white">Billetera & Finanzas LlamaGO</h3>
               <ShieldCheck className="w-4 h-4 text-gold-primary" />
             </div>
             <p className="text-[11px] text-gold-primary font-semibold flex items-center gap-1">

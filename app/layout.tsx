@@ -6,13 +6,13 @@ const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--nf-displa
 const sans = Figtree({ subsets: ['latin'], variable: '--nf-sans', display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'RiberGO - Mototaxis a un toque',
-  description: 'RiberGO es una plataforma moderna de movilidad urbana para solicitar mototaxis en Riberalta de forma rápida y segura.',
+  title: 'LlamaGO - Mototaxis a un toque',
+  description: 'LlamaGO es una plataforma moderna de movilidad urbana para solicitar mototaxis en Riberalta de forma rápida y segura.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'RiberGO',
+    title: 'LlamaGO',
   },
   formatDetection: {
     telephone: false,
@@ -49,7 +49,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="RiberGO" />
+        <meta name="apple-mobile-web-app-title" content="LlamaGO" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2.1" />
         <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2.1" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=2.1" />
