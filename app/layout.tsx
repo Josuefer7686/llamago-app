@@ -19,13 +19,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-      { url: '/logo.png', type: 'image/png' },
+      { url: '/icon-192.png?v=4.0', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png?v=4.0', sizes: '512x512', type: 'image/png' },
+      { url: '/logo.png?v=4.0', type: 'image/png' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-      { url: '/icon-192.png' },
+      { url: '/apple-touch-icon.png?v=4.0', sizes: '180x180', type: 'image/png' },
+      { url: '/icon-192.png?v=4.0' },
     ],
   },
 };
@@ -44,16 +44,16 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
       <head>
-        <link rel="manifest" href="/manifest.json?v=3.1" />
+        <link rel="manifest" href="/manifest.json?v=4.0" />
         <meta name="theme-color" content="#05080B" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="LlamaGO" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3.1" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=3.1" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=3.1" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3.1" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4.0" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=4.0" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=4.0" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=4.0" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
