@@ -40,7 +40,7 @@
 | **Audio** | Web Audio API nativa | Síntesis procedural en tiempo real (`AudioContext`), sin archivos MP3 pesados |
 | **Hápticos** | Navigator Vibrate API | Patrones rítmicos estilo iOS (`[20, 40, 25, 45, 60]`) |
 | **PWA & Offline** | Service Worker nativo | `public/sw.js` (Versión `llamago-v2.8`), caché Stale-While-Revalidate con bypass a `/api/*` |
-| **Hosting & Deploy** | Vercel Serverless | Dominio: `https://ribergoo.vercel.app` (Conectado a GitHub `origin/main`) |
+| **Hosting & Deploy** | Vercel Serverless | Dominio: `https://llamago.vercel.app` (Conectado a GitHub `origin/main`) |
 | **Bot Telegram** | Telegram Bot API | `@LlamaGoBot` (token SOLO en variables de entorno, ver §6) |
 
 ---
@@ -301,7 +301,7 @@ Colecciones de viajes interprovinciales y paquetería entre Riberalta y Guayaram
 
 | Variable | Valor / Descripción |
 | :--- | :--- |
-| **Dominio de Producción** | `https://ribergoo.vercel.app` (¡Ojo con las dos 'o's!) |
+| **Dominio de Producción** | `https://llamago.vercel.app` (el dominio anterior `ribergoo.vercel.app` sigue activo como alias) |
 | **Repositorio GitHub** | `https://github.com/Josuefer7686/llamago-app.git` |
 | **Rama principal** | `main` |
 | **Telegram Bot Token** | `TELEGRAM_BOT_TOKEN` (solo en Vercel y `.env.local`; **nunca** en el código ni en este archivo) |
@@ -310,7 +310,7 @@ Colecciones de viajes interprovinciales y paquetería entre Riberalta y Guayaram
 | **Limpieza diaria** | `CRON_SECRET` (16+ caracteres). Vercel Cron llama a `/api/cron/cleanup` cada día (ver `vercel.json`); sin el secreto responde 401 |
 | **Firebase Admin** | `FIREBASE_SERVICE_ACCOUNT_B64` (JSON de cuenta de servicio en base64; solo servidor) |
 | **Telegram Webhook Secret** | `TELEGRAM_WEBHOOK_SECRET` (cadena larga aleatoria; se registra con `secret_token` en `setWebhook`) |
-| **Webhook URL** | `https://ribergoo.vercel.app/api/wallet/telegram-webhook` |
+| **Webhook URL** | `https://llamago.vercel.app/api/wallet/telegram-webhook` |
 | **Firebase Project ID** | `ribergo-app` |
 | **Firebase Auth Domain** | `ribergo-app.firebaseapp.com` |
 
@@ -358,7 +358,7 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getWebhookInfo"
 
 # Registrar el Webhook con secret_token (Telegram lo enviará en la cabecera X-Telegram-Bot-Api-Secret-Token)
 curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
-  -d "url=https://ribergoo.vercel.app/api/wallet/telegram-webhook" \
+  -d "url=https://llamago.vercel.app/api/wallet/telegram-webhook" \
   -d "secret_token=$TELEGRAM_WEBHOOK_SECRET"
 ```
 
@@ -377,4 +377,4 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 
 - **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `llamago-v3.0`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
 
-- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Identificadores técnicos que se conservaron a propósito porque cambiarlos rompe cosas: proyecto de Firebase `ribergo-app` (el ID no se puede renombrar; solo su nombre visible), el sufijo interno `@ribergo.bo` de los correos sintéticos de login por teléfono (cambiarlo dejaría fuera a las cuentas existentes), la clave local `ribergo-session-v1` y el dominio `ribergoo.vercel.app` hasta que se cambie en Vercel.
+- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Identificadores técnicos que se conservaron a propósito porque cambiarlos rompe cosas: proyecto de Firebase `ribergo-app` (el ID no se puede renombrar; solo su nombre visible), el sufijo interno `@ribergo.bo` de los correos sintéticos de login por teléfono (cambiarlo dejaría fuera a las cuentas existentes), la clave local `ribergo-session-v1` ; el dominio anterior `ribergoo.vercel.app` sigue activo como alias.
