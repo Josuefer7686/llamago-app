@@ -54,7 +54,7 @@ export const RoleSelectionView = () => {
   };
 
   return (
-    <div className="w-full h-full min-h-screen bg-background flex flex-col justify-between p-6 sm:p-8 text-white relative">
+    <div className="w-full h-full overflow-y-auto overscroll-contain bg-background flex flex-col justify-between p-6 sm:p-8 text-white relative">
       <div className="pt-safe flex-1 flex flex-col justify-center max-w-sm mx-auto w-full">
         {(
           <>

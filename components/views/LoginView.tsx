@@ -182,7 +182,7 @@ export const LoginView = () => {
   };
 
   return (
-    <div className="relative flex h-full min-h-screen w-full select-none flex-col overflow-hidden bg-background p-5 text-white">
+    <div className="relative h-full w-full select-none overflow-hidden bg-background text-white">
       <LobbyBackdrop />
 
       {/* iOS Loading & Success Toast Overlay */}
@@ -195,13 +195,15 @@ export const LoginView = () => {
         onSuccessComplete={handleSuccessFinished}
       />
 
-      <div className="pt-safe z-10 mx-auto flex w-full max-w-sm flex-1 flex-col justify-center">
+      {/* Si la pantalla es baja o ancha, el lobby se desplaza en vez de cortarse */}
+      <div className="relative z-10 flex h-full flex-col overflow-y-auto overflow-x-hidden overscroll-contain px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
+      <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-4">
         {/* Marca: el logo se dibuja de izquierda a derecha y flota suave */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="relative mx-auto w-[min(60vw,240px)]"
+          className="relative mx-auto w-[min(60vw,240px,30dvh)]"
         >
           <div className="lobby-pulse absolute inset-x-6 inset-y-4 rounded-full bg-gold-primary/25 blur-3xl" aria-hidden />
           <motion.img
@@ -267,6 +269,7 @@ export const LoginView = () => {
       </div>
 
       <RoadStrip />
+      </div>
 
       {/* MODAL CUPERTINO PARA PEDIR EL CELULAR EN EL PRIMER REGISTRO */}
       <AnimatePresence>
