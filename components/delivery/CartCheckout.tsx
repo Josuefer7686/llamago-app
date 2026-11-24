@@ -32,6 +32,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
   const [showNote, setShowNote] = useState(false);
   const [busy, setBusy] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [located, setLocated] = useState(false);
   const [error, setError] = useState('');
   const stagger = useStagger();
   const thing = isStore(r) ? 'producto' : 'plato';
@@ -42,9 +43,9 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
   const total = fee != null ? Math.round((subtotal + fee) * 100) / 100 : null;
   const belowMin = !!r?.minOrder && subtotal < r.minOrder;
   const far = km != null && km > 12;
-  const realGps = gps === 'granted';
+  const exact = gps === 'granted' || located;
   const hasAddress = address.trim().length >= 3;
-  const canOrder = !!r?.open && lines.length > 0 && hasAddress && !belowMin && !far && fee != null;
+  const canOrder = !!r?.open && lines.length > 0 && (hasAddress || exact) && !belowMin && !far && fee != null;
 
   const locate = () => {
     if (!navigator.geolocation) { setError('Tu teléfono no permite ubicación.'); return; }
@@ -53,6 +54,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
       (p) => {
         setCurrentLocation({ lat: p.coords.latitude, lng: p.coords.longitude, name: 'Mi ubicación', address: '' });
         setLocating(false);
+        setLocated(true);
         haptics.success();
       },
       () => { setLocating(false); setError('No pudimos ubicarte. Activa el GPS e intenta otra vez.'); },
@@ -66,7 +68,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
     const res = await deliveryApi('create', {
       restaurantId: r.id,
       items: lines.map((l) => ({ itemId: l.itemId, qty: l.qty, sizeId: l.sizeId, extraIds: l.extraIds, sauceIds: l.sauceIds, notes: l.notes })),
-      address: { text: address.trim(), reference: reference.trim(), lat: here.lat, lng: here.lng },
+      address: { text: address.trim() || 'Ubicación exacta (GPS)', reference: reference.trim(), lat: here.lat, lng: here.lng },
       paymentMethod: 'CASH',
       note: note.trim(),
     });
@@ -127,12 +129,12 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
               type="button"
               onClick={locate}
               disabled={locating}
-              className={`flex min-h-14 w-full items-center gap-3 rounded-2xl border px-4 text-left text-[15px] font-bold touch-manipulation transition-transform duration-150 ease-out active:scale-[0.985] ${realGps ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200' : 'border-gold-primary/50 bg-gold-primary/10 text-gold-primary'}`}
+              className={`flex min-h-14 w-full items-center gap-3 rounded-2xl border px-4 text-left text-[15px] font-bold touch-manipulation transition-transform duration-150 ease-out active:scale-[0.985] ${exact ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200' : 'border-gold-primary/50 bg-gold-primary/10 text-gold-primary'}`}
             >
-              {realGps && !locating ? <Check className="h-5 w-5 shrink-0" strokeWidth={3} aria-hidden /> : <Crosshair className={`h-5 w-5 shrink-0 ${locating ? 'animate-spin' : ''}`} aria-hidden />}
-              <span>{locating ? 'Buscando tu ubicación…' : realGps ? 'Ya sabemos dónde estás' : 'Toca aquí para marcar dónde estás'}</span>
+              {exact && !locating ? <Check className="h-5 w-5 shrink-0" strokeWidth={3} aria-hidden /> : <Crosshair className={`h-5 w-5 shrink-0 ${locating ? 'animate-spin' : ''}`} aria-hidden />}
+              <span>{locating ? 'Buscando tu ubicación…' : exact ? 'Entregar en mi ubicación exacta' : 'Usar mi ubicación exacta'}</span>
             </button>
-            <input value={address} onChange={(e) => setAddress(e.target.value.slice(0, 160))} placeholder="Escribe tu calle o barrio" aria-label="Tu calle o barrio" autoComplete="street-address" enterKeyHint="next" className={field} />
+            <input value={address} onChange={(e) => setAddress(e.target.value.slice(0, 160))} placeholder={exact ? "Calle o barrio (opcional)" : "O escribe tu calle o barrio"} aria-label="Tu calle o barrio" autoComplete="street-address" enterKeyHint="next" className={field} />
             <input value={reference} onChange={(e) => setReference(e.target.value.slice(0, 120))} placeholder="Una referencia (opcional)" aria-label="Referencia, opcional" enterKeyHint="done" className={field} />
           </section>
 
@@ -171,7 +173,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
           <GoldButton onClick={place} loading={busy} disabled={!canOrder}>
             Pedir ahora{total != null ? <span className="tabular-nums"> · {bs(total)}</span> : null}
           </GoldButton>
-          {lines.length > 0 && !hasAddress && <p className="mt-2 text-center text-sm text-text-secondary">Escribe tu calle o barrio para poder pedir.</p>}
+          {lines.length > 0 && !hasAddress && !exact && <p className="mt-2 text-center text-sm text-text-secondary">Toca “Usar mi ubicación exacta” o escribe tu calle.</p>}
         </div>
       </div>
     </div>
