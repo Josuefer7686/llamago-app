@@ -477,7 +477,7 @@ export const useAppStore = create<AppState>()(
       }),
     }),
     {
-      name: 'ribergo-session-v1',
+      name: 'llamago-session-v1',
       version: DATA_EPOCH,
       // Un teléfono con datos de una época anterior (antes del reinicio) arranca limpio y con el aviso
       migrate: (persisted: any, fromVersion: number) =>

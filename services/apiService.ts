@@ -38,7 +38,7 @@ const formatAuthIdentifier = (identifier: string): string => {
   const clean = identifier.trim().toLowerCase();
   if (clean.includes('@')) return clean;
   const numericPhone = clean.replace(/[^0-9]/g, '');
-  return `${numericPhone}@ribergo.bo`;
+  return `${numericPhone}@llamago.bo`;
 };
 
 export interface DriverTripRecord {
@@ -510,7 +510,7 @@ export const apiService = {
           id: user.uid,
           name: userMetadata?.name || 'Usuario ' + (user.phoneNumber || ''),
           phone: user.phoneNumber || '',
-          email: `${user.phoneNumber?.replace(/[^0-9]/g, '') || 'user'}@ribergo.bo`,
+          email: `${user.phoneNumber?.replace(/[^0-9]/g, '') || 'user'}@llamago.bo`,
           rating: null,
           ratingsCount: 0,
           trips: 0,

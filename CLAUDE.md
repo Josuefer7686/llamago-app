@@ -34,7 +34,7 @@
 | **Lenguaje** | TypeScript | `5.9.3` (Modo estricto) |
 | **Estilos** | Tailwind CSS | `4.1.11` + tw-animate-css |
 | **Animaciones** | Framer Motion (`motion`) | `12.23.24` |
-| **Gestor de Estado** | Zustand + persist | `5.0.15` (Guardado en `localStorage` con clave `ribergo-session-v1`) |
+| **Gestor de Estado** | Zustand + persist | `5.0.15` (Guardado en `localStorage` con clave `llamago-session-v1`) |
 | **Base de Datos & Auth** | Google Cloud Firestore & Firebase Auth | `12.19.0` |
 | **Mapas** | Leaflet + React-Leaflet | `1.9.4` con OpenStreetMap |
 | **Audio** | Web Audio API nativa | Síntesis procedural en tiempo real (`AudioContext`), sin archivos MP3 pesados |
@@ -377,4 +377,4 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 
 - **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `llamago-v3.0`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
 
-- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Identificadores técnicos que se conservaron a propósito porque cambiarlos rompe cosas: proyecto de Firebase `ribergo-app` (el ID no se puede renombrar; solo su nombre visible), el sufijo interno `@ribergo.bo` de los correos sintéticos de login por teléfono (cambiarlo dejaría fuera a las cuentas existentes), la clave local `ribergo-session-v1` ; el dominio anterior `ribergoo.vercel.app` sigue activo como alias.
+- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Identificadores técnicos que se conservaron a propósito porque cambiarlos rompe cosas: proyecto de Firebase `ribergo-app` (el ID no se puede renombrar; solo su nombre visible), el sufijo interno `@ribergo.bo` de los correos sintéticos de login por teléfono (cambiarlo dejaría fuera a las cuentas existentes), la clave local `llamago-session-v1` ; el dominio anterior `ribergoo.vercel.app` sigue activo como alias.

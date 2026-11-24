@@ -3,7 +3,7 @@ const path = require('path');
 const { marked } = require('marked');
 const { execSync } = require('child_process');
 
-const markdownPath = '/home/fernando/.gemini/antigravity/brain/60b4e1ad-70cf-4bca-b800-5384e5b57cc1/informe_tecnico_integral_ribergo.md';
+const markdownPath = '/home/fernando/.gemini/antigravity/brain/60b4e1ad-70cf-4bca-b800-5384e5b57cc1/informe_tecnico_integral_llamago.md';
 const outputHtmlPath = path.join(__dirname, '..', 'informe_tecnico_integral_llamago.html');
 const publicHtmlPath = path.join(__dirname, '..', 'public', 'informe_tecnico_integral_llamago.html');
 const outputPdfPath = path.join(__dirname, '..', 'informe_tecnico_integral_llamago.pdf');

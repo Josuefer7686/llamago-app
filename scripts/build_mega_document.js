@@ -968,7 +968,7 @@ export interface ActiveTripInfo {
       </p>
 
       <ul>
-        <li><strong>Instalación Directa</strong>: El usuario visita <code>https://ribergo-app.vercel.app</code> e inmediatamente recibe la opción de agregar la app a su pantalla de inicio como una aplicación nativa.</li>
+        <li><strong>Instalación Directa</strong>: El usuario visita <code>https://llamago.vercel.app</code> e inmediatamente recibe la opción de agregar la app a su pantalla de inicio como una aplicación nativa.</li>
         <li><strong>Cero Espacio en Memoria</strong>: Frente a aplicaciones tradicionales que exigen entre 50 y 150 MB de descarga inicial, LlamaGO pesa <strong>menos de 1.2 MB</strong> de caché local, ideal para teléfonos con espacio saturado.</li>
         <li><strong>Service Worker (<code>public/sw.js</code>)</strong>: Intercepta peticiones HTTP, almacena en caché las librerías esenciales y garantiza que la interfaz cargue al instante incluso con mala cobertura 3G o 4G en zonas periféricas de Riberalta.</li>
         <li><strong>Manifiesto Web (<code>public/manifest.json</code>)</strong>: Declara el comportamiento a pantalla completa (<code>display: standalone</code>), eliminando barras de navegación y URL del navegador.</li>
