@@ -446,7 +446,7 @@ export const PassengerHome = () => {
       {/* Top: marca, notificaciones y buscador de destino */}
       <div className="relative z-30 px-4 pt-[max(1rem,env(safe-area-inset-top))] pointer-events-none space-y-3 max-w-[430px] mx-auto w-full">
         <div className="flex items-center justify-between gap-3 pointer-events-auto">
-          <div className="flex items-center min-w-0 py-2 px-3.5 rounded-2xl bg-gold-primary shadow-[0_8px_20px_-8px_rgba(255,198,26,0.6)]">
+          <div className="flex items-center min-w-0 py-2 px-3.5 rounded-2xl bg-gold-primary shadow-[0_8px_20px_-8px_rgba(252,234,13,0.6)]">
             <img src="/wordmark-dark.png" alt="LlamaGO: pide, viaja y disfruta" className="h-11 w-auto object-contain" />
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -538,7 +538,7 @@ export const PassengerHome = () => {
                 <>
                   <button
                     onClick={handleConfirmBooking}
-                    className="w-full h-14 rounded-2xl bg-gold-primary text-background font-black text-base flex items-center justify-center gap-2.5 shadow-[0_10px_24px_-8px_rgba(255,198,26,0.55)] transition active:scale-[0.98]"
+                    className="w-full h-14 rounded-2xl bg-gold-primary text-background font-black text-base flex items-center justify-center gap-2.5 shadow-[0_10px_24px_-8px_rgba(252,234,13,0.55)] transition active:scale-[0.98]"
                   >
                     <Check className="w-5 h-5 stroke-[3]" />
                     <span>Confirmar y pedir</span>
@@ -931,7 +931,7 @@ export const PassengerHome = () => {
                       <Star
                         className={`w-8 h-8 transition-colors ${
                           star <= rating 
-                            ? 'fill-gold-primary text-gold-primary drop-shadow-[0_0_8px_rgba(244,197,66,0.6)]' 
+                            ? 'fill-gold-primary text-gold-primary drop-shadow-[0_0_8px_rgba(252,234,13,0.6)]' 
                             : 'text-neutral-600'
                         }`}
                       />
@@ -968,7 +968,7 @@ export const PassengerHome = () => {
               <div className="space-y-2 pt-1">
                 <button
                   onClick={() => handleFinishTrip(false)}
-                  className="w-full py-3.5 bg-gradient-to-r from-gold-primary via-amber-400 to-yellow-500 text-background rounded-2xl font-black text-sm uppercase tracking-wider shadow-xl shadow-gold-primary/25 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-gradient-to-r from-gold-primary via-gold-primary to-gold-light text-background rounded-2xl font-black text-sm uppercase tracking-wider shadow-xl shadow-gold-primary/25 hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-2"
                 >
                   <Check className="w-4 h-4 stroke-[3]" />
                   <span>Calificar y Finalizar</span>
@@ -997,7 +997,7 @@ export const PassengerHome = () => {
             transition={{ type: 'spring', damping: 22, stiffness: 350 }}
             className="absolute inset-x-4 bottom-4 z-40 max-w-sm mx-auto pointer-events-auto"
           >
-            <div className="relative p-4 rounded-3xl bg-surface/95 backdrop-blur-xl border-2 border-gold-primary/60 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(244,197,66,0.25)] text-white overflow-hidden space-y-3">
+            <div className="relative p-4 rounded-3xl bg-surface/95 backdrop-blur-xl border-2 border-gold-primary/60 shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_30px_rgba(252,234,13,0.25)] text-white overflow-hidden space-y-3">
               
               {/* Gold Shimmer Ambient Aura */}
               <div className="absolute top-0 right-0 w-36 h-36 bg-gold-primary/15 rounded-full blur-2xl pointer-events-none" />

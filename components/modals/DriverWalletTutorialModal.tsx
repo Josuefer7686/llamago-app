@@ -52,7 +52,7 @@ function GiftSlide() {
           initial={{ scale: 0.4, rotate: -12 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 240, damping: 14 }}
-          className="relative w-28 h-28 rounded-[32px] bg-gold-primary text-background flex items-center justify-center shadow-[0_16px_40px_-10px_rgba(255,198,26,0.7)]"
+          className="relative w-28 h-28 rounded-[32px] bg-gold-primary text-background flex items-center justify-center shadow-[0_16px_40px_-10px_rgba(252,234,13,0.7)]"
         >
           <Gift className="w-14 h-14" />
         </motion.div>
@@ -145,7 +145,7 @@ function CommissionSlide() {
           max={30}
           value={trips}
           onChange={(e) => { setTrips(Number(e.target.value)); haptics.selection(); }}
-          className="w-full accent-[#FFC61A] h-8"
+          className="w-full accent-[#FCEA0D] h-8"
           aria-valuetext={`${trips} viajes`}
         />
         <dl className="grid grid-cols-3 gap-2 text-center">
@@ -184,7 +184,7 @@ function RechargeSlide() {
       </div>
       <div className="flex justify-center gap-2" role="group" aria-label="Montos de recarga">
         {amounts.map((a, idx) => (
-          <motion.div key={a} animate={{ scale: idx === i ? 1.12 : 1, backgroundColor: idx === i ? '#FFC61A' : 'rgba(255,255,255,0.06)', color: idx === i ? '#05080B' : '#ffffff' }}
+          <motion.div key={a} animate={{ scale: idx === i ? 1.12 : 1, backgroundColor: idx === i ? '#FCEA0D' : 'rgba(255,255,255,0.06)', color: idx === i ? '#0C0C0C' : '#ffffff' }}
             className="min-w-16 rounded-2xl px-3 py-3 text-center font-display font-extrabold">
             {a}<span className="text-xs font-bold"> Bs</span>
           </motion.div>
@@ -304,7 +304,7 @@ export const DriverWalletTutorialModal = ({ isOpen, onClose }: Props) => {
             )}
             <button
               onClick={() => (last ? complete() : go(index + 1))}
-              className="flex-1 min-h-14 rounded-2xl bg-gold-primary text-background font-black text-base flex items-center justify-center gap-2 shadow-[0_10px_24px_-8px_rgba(255,198,26,0.55)] active:scale-[0.98] transition"
+              className="flex-1 min-h-14 rounded-2xl bg-gold-primary text-background font-black text-base flex items-center justify-center gap-2 shadow-[0_10px_24px_-8px_rgba(252,234,13,0.55)] active:scale-[0.98] transition"
             >
               {last ? '¡A trabajar!' : 'Siguiente'}
               <ArrowRight className="w-5 h-5 stroke-[3]" />

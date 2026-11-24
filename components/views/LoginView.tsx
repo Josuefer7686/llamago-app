@@ -1,14 +1,65 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore, UserProfile } from '@/store/useAppStore';
 import { apiService } from '@/services/apiService';
-import { Smartphone, Sparkles, Check, AlertCircle, ArrowRight, ShieldCheck, Zap, Bike } from 'lucide-react';
+import { Smartphone, Check, AlertCircle, ArrowRight } from 'lucide-react';
 import { haptics } from '@/utils/haptics';
 import { IosToastOverlay } from '@/components/shared/IosToastOverlay';
 import { IosSpinner } from '@/components/shared/IosSpinner';
 import { motion, AnimatePresence } from 'motion/react';
 import { APP_VERSION } from '@/lib/appVersion';
+
+
+const LINES = ['Tu mototaxi, en minutos', 'Comida y compras a tu puerta', 'Viaja seguro por Riberalta', 'Pide, viaja y disfruta'];
+
+/** Frase que cambia sola cada pocos segundos. */
+function RotatingLine() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = window.setInterval(() => setI((n) => (n + 1) % LINES.length), 2600);
+    return () => window.clearInterval(t);
+  }, []);
+  return (
+    <div className="mt-5 h-7 text-center" aria-live="off">
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={i}
+          initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+          transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+          className="font-display text-lg font-bold tracking-tight text-white/90"
+        >
+          {LINES[i]}
+        </motion.p>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/** Fondo vivo: luces amarillas que se mueven despacio y puntos sutiles. */
+function LobbyBackdrop() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <div className="lobby-drift-a absolute -left-24 top-[8%] h-80 w-80 rounded-full bg-gold-primary/[0.14] blur-[90px]" />
+      <div className="lobby-drift-b absolute -right-28 top-[45%] h-96 w-96 rounded-full bg-gold-primary/[0.09] blur-[110px]" />
+      <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_50%_35%,black,transparent_70%)]" />
+    </div>
+  );
+}
+
+/** Calle con rayas que avanzan: la app "en movimiento". */
+function RoadStrip() {
+  return (
+    <div className="pb-safe relative z-10 pt-6" aria-hidden>
+      <div className="relative mx-auto h-8 w-full max-w-sm overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_20%,black_80%,transparent)]">
+        <div className="lobby-road absolute left-0 top-1/2 h-[3px] w-[200%] -translate-y-1/2 [background-image:repeating-linear-gradient(90deg,#FCEA0D_0_26px,transparent_26px_52px)]" />
+      </div>
+      <p className="mt-2 text-center text-[11px] font-semibold tracking-[0.18em] text-text-secondary/80">RIBERALTA · BENI · BOLIVIA</p>
+    </div>
+  );
+}
 
 export const LoginView = () => {
   const { setCurrentView, loginUser, resetNotice, dismissResetNotice } = useAppStore();
@@ -131,10 +182,8 @@ export const LoginView = () => {
   };
 
   return (
-    <div className="w-full h-full min-h-screen bg-background flex flex-col justify-between p-4 sm:p-6 text-white relative overflow-hidden select-none">
-      {/* Luces doradas de fondo estéticas */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 bg-gold-primary/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-64 h-64 bg-amber-500/5 rounded-full blur-[80px] pointer-events-none" />
+    <div className="relative flex h-full min-h-screen w-full select-none flex-col overflow-hidden bg-background p-5 text-white">
+      <LobbyBackdrop />
 
       {/* iOS Loading & Success Toast Overlay */}
       <IosToastOverlay
@@ -146,108 +195,78 @@ export const LoginView = () => {
         onSuccessComplete={handleSuccessFinished}
       />
 
-      <div className="pt-safe flex-1 flex flex-col justify-center max-w-sm mx-auto w-full z-10 space-y-6">
-        {/* Header Branding con Logo Oficial LlamaGO */}
-        <div className="text-center space-y-2">
-          <div className="relative mx-auto mb-2 flex w-56 items-center justify-center">
-            <div className="absolute inset-0 rounded-full bg-gold-primary/15 blur-2xl" />
-            <img src="/wordmark.png" alt="LlamaGO: pide, viaja y disfruta" className="relative z-10 h-auto w-full" />
-          </div>
+      <div className="pt-safe z-10 mx-auto flex w-full max-w-sm flex-1 flex-col justify-center">
+        {/* Marca: el logo se dibuja de izquierda a derecha y flota suave */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+          className="relative mx-auto w-[min(82vw,330px)]"
+        >
+          <div className="lobby-pulse absolute inset-x-6 inset-y-4 rounded-full bg-gold-primary/25 blur-3xl" aria-hidden />
+          <motion.img
+            src="/wordmark.png"
+            alt="LlamaGO: pide, viaja y disfruta"
+            initial={{ clipPath: 'inset(0 100% 0 0)' }}
+            animate={{ clipPath: 'inset(0 0% 0 0)' }}
+            transition={{ duration: 1.1, delay: 0.15, ease: [0.77, 0, 0.175, 1] }}
+            className="lobby-float relative z-10 h-auto w-full"
+          />
+        </motion.div>
 
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-            ¡Bienvenido!
-          </h1>
-          <p className="text-xs text-text-secondary max-w-[280px] mx-auto leading-relaxed">
-            Tu transporte más rápido, seguro y confiable en Riberalta, Beni.
-          </p>
-        </div>
+        <RotatingLine />
 
         {resetNotice && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             role="status"
-            className="p-4 rounded-2xl bg-gold-primary/10 border border-gold-primary/40 text-sm text-white space-y-2"
+            className="mt-6 space-y-2 rounded-2xl border border-gold-primary/40 bg-gold-primary/10 p-4 text-sm text-white"
           >
             <p className="font-extrabold text-gold-primary">LlamaGO se reinició: versión {APP_VERSION}</p>
-            <p className="text-xs text-text-secondary leading-relaxed">
+            <p className="text-xs leading-relaxed text-text-secondary">
               Hicimos un reinicio general de la aplicación por temas de seguridad y cambios en nuestras normas, así que tu sesión se cerró. Ahora sí puedes registrarte de nuevo. ¡Gracias por tu paciencia!
             </p>
-            <button type="button" onClick={dismissResetNotice} className="min-h-10 px-4 rounded-xl bg-gold-primary text-background text-xs font-black">Entendido</button>
+            <button type="button" onClick={dismissResetNotice} className="min-h-10 rounded-xl bg-gold-primary px-4 text-xs font-black text-background">Entendido</button>
           </motion.div>
         )}
 
         {errorMsg && (
-          <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/30 text-xs text-red-400 flex items-center gap-2 animate-in fade-in">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+          <div className="mt-6 flex items-center gap-2 rounded-2xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
+            <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        {/* Tarjetas de Beneficios */}
-        <div className="grid grid-cols-1 gap-2.5">
-          <div className="p-3 rounded-2xl bg-surface/70 border border-border-custom flex items-center gap-3 backdrop-blur-md">
-            <div className="w-9 h-9 rounded-xl bg-gold-primary/20 border border-gold-primary/40 flex items-center justify-center text-gold-primary shrink-0 shadow-inner">
-              <Zap className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-white">Ingreso Rápido en 1 Toque</p>
-              <p className="text-[10px] text-text-secondary">Sin contraseñas complicadas ni esperas de SMS.</p>
-            </div>
-          </div>
-
-          <div className="p-3 rounded-2xl bg-surface/70 border border-border-custom flex items-center gap-3 backdrop-blur-md">
-            <div className="w-9 h-9 rounded-xl bg-gold-primary/20 border border-gold-primary/40 flex items-center justify-center text-gold-primary shrink-0 shadow-inner">
-              <Bike className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-white">Mototaxis & Auxilio en Tiempo Real</p>
-              <p className="text-[10px] text-text-secondary">Conecta con choferes verificados cerca de ti.</p>
-            </div>
-          </div>
-
-          <div className="p-3 rounded-2xl bg-surface/70 border border-border-custom flex items-center gap-3 backdrop-blur-md">
-            <div className="w-9 h-9 rounded-xl bg-gold-primary/20 border border-gold-primary/40 flex items-center justify-center text-gold-primary shrink-0 shadow-inner">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-white">Tarifa Justa & Negociable</p>
-              <p className="text-[10px] text-text-secondary">Acuerda tu pasaje en el chat de regateo.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* BOTÓN PRINCIPAL: CONTINUAR CON GOOGLE */}
-        <div className="pt-2 space-y-3">
+        {/* Botón principal */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9, ease: [0.23, 1, 0.32, 1] }}
+          className="mt-10 space-y-3"
+        >
           <button
             type="button"
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full py-4 px-5 bg-white hover:bg-neutral-100 text-slate-900 font-extrabold rounded-2xl flex items-center justify-center gap-3 shadow-2xl shadow-white/10 transition active:scale-[0.98] disabled:opacity-50 text-sm group"
+            className="lobby-shine group relative flex min-h-14 w-full touch-manipulation items-center justify-center gap-3 overflow-hidden rounded-2xl bg-white px-5 text-[15px] font-extrabold text-neutral-900 shadow-[0_0_0_1px_rgba(252,234,13,0.5),0_14px_40px_-12px_rgba(252,234,13,0.55)] transition-transform duration-150 ease-out active:scale-[0.97] disabled:opacity-50"
           >
-            {/* Logo Oficial de Google SVG a 4 colores */}
-            <svg className="w-5 h-5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" aria-hidden>
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
             <span>Continuar con Google</span>
-            <ArrowRight className="w-4 h-4 ml-auto text-slate-500 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="h-4 w-4 text-neutral-500 transition-transform group-hover:translate-x-0.5" aria-hidden />
           </button>
-
-          <p className="text-[10px] text-center text-text-secondary">
-            Al continuar, aceptas los Términos de Servicio de LlamaGO Bolivia.
+          <p className="text-center text-[11px] text-text-secondary">
+            Al continuar aceptas los Términos de LlamaGO Bolivia.
           </p>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Footer */}
-      <div className="pb-safe pt-2 text-center z-10">
-        <p className="text-[11px] text-text-secondary/70">
-          LlamaGO • Riberalta, Beni, Bolivia 🇧🇴
-        </p>
-      </div>
+      <RoadStrip />
 
       {/* MODAL CUPERTINO PARA PEDIR EL CELULAR EN EL PRIMER REGISTRO */}
       <AnimatePresence>
@@ -305,7 +324,7 @@ export const LoginView = () => {
                 <button
                   type="submit"
                   disabled={savingPhone || phoneDigits.length < 8}
-                  className="w-full py-3.5 bg-gradient-to-r from-gold-primary via-amber-400 to-yellow-500 text-background rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-gold-primary/25 transition active:scale-[0.98] disabled:opacity-40"
+                  className="w-full py-3.5 bg-gradient-to-r from-gold-primary via-gold-primary to-gold-light text-background rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-gold-primary/25 transition active:scale-[0.98] disabled:opacity-40"
                 >
                   {savingPhone ? (
                     <IosSpinner size="sm" color="dark" />

@@ -15,7 +15,7 @@ export const Scene3Terminal: React.FC = () => {
   const badgeOpacity = interpolate(frame, [0, 20], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
-    <div className="w-full h-full bg-[#05080B] text-white flex flex-col items-center justify-center p-12 relative overflow-hidden font-sans">
+    <div className="w-full h-full bg-[#0C0C0C] text-white flex flex-col items-center justify-center p-12 relative overflow-hidden font-sans">
       {/* Ambient Radial Background */}
       <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-amber-500/10 blur-[150px] rounded-full pointer-events-none" />
 

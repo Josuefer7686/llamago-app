@@ -24,7 +24,7 @@ export const LlamaGoVerticalPromoComposition: React.FC<{ enableAudio?: boolean }
   }, [frame, enableAudio]);
 
   return (
-    <div style={{ width: '1080px', height: '1920px', backgroundColor: '#05080B', position: 'relative', overflow: 'hidden', color: '#FFFFFF', boxSizing: 'border-box' }}>
+    <div style={{ width: '1080px', height: '1920px', backgroundColor: '#0C0C0C', position: 'relative', overflow: 'hidden', color: '#FFFFFF', boxSizing: 'border-box' }}>
       
       {/* Background Ambient Particle Glow */}
       <ParticleGlow frame={frame} />

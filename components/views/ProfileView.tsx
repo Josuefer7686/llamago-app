@@ -87,7 +87,7 @@ export const ProfileView = () => {
         {!isPassenger && (
           <div className="p-4 rounded-2xl bg-surface border border-gold-primary/40 flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-[#05080B] border border-gold-primary/40 flex items-center justify-center p-2 text-gold-primary shrink-0 shadow-md">
+              <div className="w-11 h-11 rounded-xl bg-[#0C0C0C] border border-gold-primary/40 flex items-center justify-center p-2 text-gold-primary shrink-0 shadow-md">
                 <VehicleIcon type={user?.vehicleType || 'MOTOTAXI'} className="w-6 h-6 stroke-[2.2]" />
               </div>
               <div>

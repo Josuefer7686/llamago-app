@@ -33,7 +33,7 @@ export const Scene4Benefits: React.FC = () => {
       style={{
         width: '1080px',
         height: '1920px',
-        backgroundColor: '#05080B',
+        backgroundColor: '#0C0C0C',
         color: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
@@ -47,16 +47,16 @@ export const Scene4Benefits: React.FC = () => {
       }}
     >
       {/* Background radial glow */}
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '900px', height: '900px', background: 'radial-gradient(circle, rgba(244,197,66,0.2) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '900px', height: '900px', background: 'radial-gradient(circle, rgba(252,234,13,0.2) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
 
       {/* Header */}
       <div style={{ textAlign: 'center', zIndex: 10, marginBottom: '80px', maxWidth: '850px' }}>
-        <span style={{ color: '#F4C542', fontWeight: 900, fontSize: '24px', textTransform: 'uppercase', letterSpacing: '6px', backgroundColor: 'rgba(244,197,66,0.15)', padding: '14px 36px', borderRadius: '100px', border: '2px solid rgba(244,197,66,0.4)' }}>
+        <span style={{ color: '#FCEA0D', fontWeight: 900, fontSize: '24px', textTransform: 'uppercase', letterSpacing: '6px', backgroundColor: 'rgba(252,234,13,0.15)', padding: '14px 36px', borderRadius: '100px', border: '2px solid rgba(252,234,13,0.4)' }}>
           ¿Por qué LlamaGO?
         </span>
         <h2 style={{ fontSize: '64px', fontWeight: 900, color: '#FFFFFF', marginTop: '28px', lineHeight: 1.2 }}>
           La experiencia que <br />
-          <span style={{ color: '#F4C542' }}>Riberalta se merece</span>
+          <span style={{ color: '#FCEA0D' }}>Riberalta se merece</span>
         </h2>
       </div>
 
@@ -66,10 +66,10 @@ export const Scene4Benefits: React.FC = () => {
         {/* Benefit 1 */}
         {b1Scale > 0.01 && (
           <div 
-            style={{ transform: `scale(${b1Scale})`, display: 'flex', alignItems: 'center', gap: '28px', padding: '32px 36px', borderRadius: '32px', backgroundColor: '#0d141e', border: '2px solid rgba(244,197,66,0.4)', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}
+            style={{ transform: `scale(${b1Scale})`, display: 'flex', alignItems: 'center', gap: '28px', padding: '32px 36px', borderRadius: '32px', backgroundColor: '#0d141e', border: '2px solid rgba(252,234,13,0.4)', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}
           >
-            <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(244,197,66,0.2)', color: '#F4C542', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Zap style={{ width: '48px', height: '48px', fill: '#F4C542' }} />
+            <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(252,234,13,0.2)', color: '#FCEA0D', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Zap style={{ width: '48px', height: '48px', fill: '#FCEA0D' }} />
             </div>
             <div>
               <h3 style={{ fontSize: '32px', fontWeight: 900, color: '#FFFFFF', margin: 0, textTransform: 'uppercase', letterSpacing: '2px' }}>⚡ RÁPIDO</h3>
@@ -81,13 +81,13 @@ export const Scene4Benefits: React.FC = () => {
         {/* Benefit 2 */}
         {b2Scale > 0.01 && (
           <div 
-            style={{ transform: `scale(${b2Scale})`, display: 'flex', alignItems: 'center', gap: '28px', padding: '32px 36px', borderRadius: '32px', backgroundColor: '#0d141e', border: '2px solid rgba(244,197,66,0.4)', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}
+            style={{ transform: `scale(${b2Scale})`, display: 'flex', alignItems: 'center', gap: '28px', padding: '32px 36px', borderRadius: '32px', backgroundColor: '#0d141e', border: '2px solid rgba(252,234,13,0.4)', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}
           >
-            <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(244,197,66,0.2)', color: '#F4C542', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(252,234,13,0.2)', color: '#FCEA0D', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <DollarSign style={{ width: '48px', height: '48px' }} />
             </div>
             <div>
-              <h3 style={{ fontSize: '32px', fontWeight: 900, color: '#F4C542', margin: 0, textTransform: 'uppercase', letterSpacing: '2px' }}>💰 TRANSPARENTE</h3>
+              <h3 style={{ fontSize: '32px', fontWeight: 900, color: '#FCEA0D', margin: 0, textTransform: 'uppercase', letterSpacing: '2px' }}>💰 TRANSPARENTE</h3>
               <p style={{ fontSize: '22px', color: '#8F9AA3', fontWeight: 600, margin: '8px 0 0 0' }}>Tarifas claras fijas antes de pedir. Cero cobros abusivos.</p>
             </div>
           </div>
@@ -96,9 +96,9 @@ export const Scene4Benefits: React.FC = () => {
         {/* Benefit 3 */}
         {b3Scale > 0.01 && (
           <div 
-            style={{ transform: `scale(${b3Scale})`, display: 'flex', alignItems: 'center', gap: '28px', padding: '32px 36px', borderRadius: '32px', backgroundColor: '#0d141e', border: '2px solid rgba(244,197,66,0.4)', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}
+            style={{ transform: `scale(${b3Scale})`, display: 'flex', alignItems: 'center', gap: '28px', padding: '32px 36px', borderRadius: '32px', backgroundColor: '#0d141e', border: '2px solid rgba(252,234,13,0.4)', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}
           >
-            <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(244,197,66,0.2)', color: '#F4C542', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: '80px', height: '80px', borderRadius: '24px', backgroundColor: 'rgba(252,234,13,0.2)', color: '#FCEA0D', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <MapPin style={{ width: '48px', height: '48px' }} />
             </div>
             <div>

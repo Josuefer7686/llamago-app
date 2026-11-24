@@ -24,9 +24,9 @@ export const OtpPinInput: React.FC<OtpPinInputProps> = ({ value, length = 6 }) =
             animate={{
               scale: isFilled ? [1, 1.12, 1] : 1,
               borderColor: isCurrent
-                ? '#F4C542'
+                ? '#FCEA0D'
                 : isFilled
-                ? 'rgba(244, 197, 66, 0.6)'
+                ? 'rgba(252,234,13, 0.6)'
                 : 'rgba(255, 255, 255, 0.12)',
             }}
             transition={{ duration: 0.2, ease: 'easeOut' }}

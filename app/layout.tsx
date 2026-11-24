@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#05080B',
+  themeColor: '#0C0C0C',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -45,7 +45,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json?v=4.0" />
-        <meta name="theme-color" content="#05080B" />
+        <meta name="theme-color" content="#0C0C0C" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

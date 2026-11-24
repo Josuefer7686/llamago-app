@@ -33,7 +33,7 @@ export function ServicePicker({ value, onChange, getFare }: Props) {
             }}
             className={`relative min-h-[104px] px-2 pt-3.5 pb-3 rounded-2xl border flex flex-col items-center gap-1.5 text-center transition-[transform,background-color,border-color,box-shadow] duration-150 ease-out active:scale-[0.97] ${
               selected
-                ? 'bg-gold-primary/[0.12] border-gold-primary shadow-[0_6px_18px_-8px_rgba(255,198,26,0.5)]'
+                ? 'bg-gold-primary/[0.12] border-gold-primary shadow-[0_6px_18px_-8px_rgba(252,234,13,0.5)]'
                 : 'bg-surface-2 border-white/10'
             }`}
           >

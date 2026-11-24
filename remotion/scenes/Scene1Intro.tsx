@@ -21,13 +21,13 @@ export const Scene1Intro: React.FC = () => {
   const floatY = Math.sin(frame / 12) * 8;
 
   return (
-    <div className="w-full h-full bg-[#05080B] text-white flex flex-col items-center justify-center p-12 relative overflow-hidden font-sans">
+    <div className="w-full h-full bg-[#0C0C0C] text-white flex flex-col items-center justify-center p-12 relative overflow-hidden font-sans">
       {/* Dynamic Ambient Background Glows */}
       <div 
         className="absolute w-[600px] h-[600px] bg-amber-500/15 rounded-full blur-[140px] pointer-events-none"
         style={{ transform: `scale(${1 + Math.sin(frame / 20) * 0.1})` }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(#f4c542_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#FCEA0D_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none" />
 
       {/* Main Container */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-2xl">
@@ -35,10 +35,10 @@ export const Scene1Intro: React.FC = () => {
         {/* Animated LlamaGO Logo Badge */}
         <div 
           style={{ transform: `scale(${badgeScale}) translateY(${floatY}px)` }}
-          className="relative w-28 h-28 rounded-3xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-[2px] shadow-[0_0_50px_rgba(244,197,66,0.35)] mb-8"
+          className="relative w-28 h-28 rounded-3xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-[2px] shadow-[0_0_50px_rgba(252,234,13,0.35)] mb-8"
         >
           <div className="w-full h-full bg-[#0b0f17] rounded-3xl flex items-center justify-center backdrop-blur-md">
-            <Smartphone className="w-14 h-14 text-amber-400 drop-shadow-[0_0_12px_rgba(244,197,66,0.8)]" />
+            <Smartphone className="w-14 h-14 text-amber-400 drop-shadow-[0_0_12px_rgba(252,234,13,0.8)]" />
           </div>
           <div className="absolute -bottom-2 -right-2 bg-amber-400 text-black rounded-full p-2 shadow-lg">
             <Sparkles className="w-5 h-5 fill-black" />

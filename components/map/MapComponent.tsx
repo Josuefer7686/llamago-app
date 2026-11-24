@@ -34,8 +34,8 @@ function getUserIcon(scale = 1.0) {
   return new L.DivIcon({
     html: `
       <div style="position: relative; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; transform: scale(${scale}); transform-origin: center center;">
-        <div style="position: absolute; inset: -8px; background: rgba(244,197,66,0.35); border-radius: 50%; animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
-        <div style="width: 22px; height: 22px; background: #F4C542; border: 3px solid #05080B; border-radius: 50%; box-shadow: 0 0 14px rgba(244,197,66,0.85);"></div>
+        <div style="position: absolute; inset: -8px; background: rgba(252,234,13,0.35); border-radius: 50%; animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
+        <div style="width: 22px; height: 22px; background: #FCEA0D; border: 3px solid #0C0C0C; border-radius: 50%; box-shadow: 0 0 14px rgba(252,234,13,0.85);"></div>
       </div>
     `,
     className: 'custom-user-marker',
@@ -50,7 +50,7 @@ function getPassengerPickupIcon(isRescue = false, scale = 1.0) {
     html: `
       <div style="position: relative; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; transform: scale(${scale}); transform-origin: center center;">
         <div style="position: absolute; inset: -6px; background: ${isRescue ? 'rgba(249,115,22,0.35)' : 'rgba(56,189,248,0.35)'}; border-radius: 50%; animation: ping 1.8s cubic-bezier(0,0,0.2,1) infinite;"></div>
-        <div style="width: 28px; height: 28px; background: #05080B; border: 2.5px solid ${color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 16px ${isRescue ? 'rgba(249,115,22,0.85)' : 'rgba(56,189,248,0.85)'};">
+        <div style="width: 28px; height: 28px; background: #0C0C0C; border: 2.5px solid ${color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 16px ${isRescue ? 'rgba(249,115,22,0.85)' : 'rgba(56,189,248,0.85)'};">
           ${isRescue 
             ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`
             : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`
@@ -67,8 +67,8 @@ function getPassengerPickupIcon(isRescue = false, scale = 1.0) {
 function getDestIcon(scale = 1.0) {
   return new L.DivIcon({
     html: `
-      <div style="width: 26px; height: 26px; background: #05080B; border: 3px solid #F4C542; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(244,197,66,0.7); transform: scale(${scale}); transform-origin: center center;">
-        <div style="width: 8px; height: 8px; background: #F4C542; border-radius: 50%;"></div>
+      <div style="width: 26px; height: 26px; background: #0C0C0C; border: 3px solid #FCEA0D; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(252,234,13,0.7); transform: scale(${scale}); transform-origin: center center;">
+        <div style="width: 8px; height: 8px; background: #FCEA0D; border-radius: 50%;"></div>
       </div>
     `,
     className: 'custom-dest-marker',
@@ -91,7 +91,7 @@ function getVehicleIcon(
   isMoving = false, 
   scale = 1.0
 ) {
-  const strokeColor = active ? '#FFE885' : '#F4C542';
+  const strokeColor = active ? '#FFE885' : '#FCEA0D';
   const rotation = heading || 0;
   const vehicleSvg = getVehicleSvgString(vehicleType, strokeColor, 22);
   
@@ -100,21 +100,21 @@ function getVehicleIcon(
       <div style="position: relative; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; cursor: pointer; transform: scale(${scale}); transform-origin: center center;">
         <!-- Directional Pointer Arrow -->
         <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transform: rotate(${rotation}deg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;">
-          <div style="position: absolute; top: -8px; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 11px solid #F4C542; filter: drop-shadow(0 0 6px rgba(244,197,66,0.95));"></div>
+          <div style="position: absolute; top: -8px; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 11px solid #FCEA0D; filter: drop-shadow(0 0 6px rgba(252,234,13,0.95));"></div>
         </div>
 
         <!-- Ambient Golden Pulse Ring -->
-        <div style="position: absolute; inset: -4px; border-radius: 50%; background: rgba(244,197,66,0.25); ${isMoving || active ? 'animation: ping 1.8s cubic-bezier(0,0,0.2,1) infinite;' : ''} pointer-events: none;"></div>
+        <div style="position: absolute; inset: -4px; border-radius: 50%; background: rgba(252,234,13,0.25); ${isMoving || active ? 'animation: ping 1.8s cubic-bezier(0,0,0.2,1) infinite;' : ''} pointer-events: none;"></div>
 
         <!-- Inner Vehicle Bubble with native vector SVG icon -->
-        <div style="width: 38px; height: 38px; background: #05080B; border: 2.5px solid ${strokeColor}; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.85), 0 0 ${active ? '18px rgba(244,197,66,0.9)' : '10px rgba(244,197,66,0.45)'}; transform: scale(${active ? 1.15 : 1}); pointer-events: none;">
-          <div style="transform: rotate(${rotation}deg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; pointer-events: none; filter: drop-shadow(0 0 2px rgba(244,197,66,0.5));">
+        <div style="width: 38px; height: 38px; background: #0C0C0C; border: 2.5px solid ${strokeColor}; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.85), 0 0 ${active ? '18px rgba(252,234,13,0.9)' : '10px rgba(252,234,13,0.45)'}; transform: scale(${active ? 1.15 : 1}); pointer-events: none;">
+          <div style="transform: rotate(${rotation}deg); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; pointer-events: none; filter: drop-shadow(0 0 2px rgba(252,234,13,0.5));">
             ${vehicleSvg}
           </div>
         </div>
 
         <!-- Online Green Status Indicator Dot -->
-        <div style="position: absolute; bottom: 1px; right: 1px; width: 11px; height: 11px; background: #10B981; border: 2px solid #05080B; border-radius: 50%; box-shadow: 0 0 6px #10B981; pointer-events: none;"></div>
+        <div style="position: absolute; bottom: 1px; right: 1px; width: 11px; height: 11px; background: #10B981; border: 2px solid #0C0C0C; border-radius: 50%; box-shadow: 0 0 6px #10B981; pointer-events: none;"></div>
       </div>
     `,
     className: 'custom-moto-marker-interactive',
@@ -392,7 +392,7 @@ export default function MapComponent() {
             <Polyline 
               positions={liveRoutePoints}
               pathOptions={{
-                color: isRescue ? '#F97316' : '#F4C542',
+                color: isRescue ? '#F97316' : '#FCEA0D',
                 weight: 10,
                 opacity: 0.38,
                 lineCap: 'round',
@@ -405,7 +405,7 @@ export default function MapComponent() {
             <Polyline 
               positions={liveRoutePoints}
               pathOptions={{
-                color: isRescue ? '#EA580C' : '#F4C542',
+                color: isRescue ? '#EA580C' : '#FCEA0D',
                 weight: 5,
                 opacity: 0.88,
                 lineCap: 'round',
@@ -483,11 +483,11 @@ export default function MapComponent() {
                         className="custom-leaflet-moto-popup"
                         offset={[0, -28]}
                       >
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-[#05080B]/95 border-2 border-[#F4C542] text-xs font-black text-white shadow-[0_4px_20px_rgba(244,197,66,0.5)] animate-in fade-in zoom-in-95 duration-200">
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-[#0C0C0C]/95 border-2 border-[#FCEA0D] text-xs font-black text-white shadow-[0_4px_20px_rgba(252,234,13,0.5)] animate-in fade-in zoom-in-95 duration-200">
                           <VehicleIcon type={vType} className="w-4 h-4 text-gold-primary shrink-0" />
                           <div className="flex flex-col text-left">
                             <span className="tracking-wide text-white font-extrabold leading-tight">{driver.name || 'Conductor'}</span>
-                            <span className="text-[9px] text-[#F4C542] font-semibold leading-tight">{vLabel}</span>
+                            <span className="text-[9px] text-[#FCEA0D] font-semibold leading-tight">{vLabel}</span>
                           </div>
                           <span className="px-1.5 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-500/40 text-[9px] font-bold text-emerald-400 flex items-center gap-1 ml-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />

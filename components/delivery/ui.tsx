@@ -57,7 +57,7 @@ export function GoldButton({
       type={type}
       disabled={disabled || loading}
       onClick={() => { if (!disabled && !loading) { haptics.impact(); onClick?.(); } }}
-      className={`flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-gold-primary px-5 font-display text-base font-extrabold text-background shadow-[0_10px_28px_-10px_rgba(255,198,26,0.7)] touch-manipulation transition-[transform,opacity] duration-150 ease-out active:scale-[0.97] disabled:opacity-40 disabled:shadow-none ${className}`}
+      className={`flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-gold-primary px-5 font-display text-base font-extrabold text-background shadow-[0_10px_28px_-10px_rgba(252,234,13,0.7)] touch-manipulation transition-[transform,opacity] duration-150 ease-out active:scale-[0.97] disabled:opacity-40 disabled:shadow-none ${className}`}
     >
       {loading ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-background/30 border-t-background" aria-label="Cargando" /> : children}
     </button>

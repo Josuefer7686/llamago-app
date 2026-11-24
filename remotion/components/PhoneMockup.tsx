@@ -17,14 +17,14 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({
   rotationY = 0,
   rotationX = 0,
   translateY = 0,
-  glowColor = 'rgba(244,197,66,0.35)',
+  glowColor = 'rgba(252,234,13,0.35)',
 }) => {
   return (
     <div
       style={{
         width: '580px',
         height: '1150px',
-        backgroundColor: '#05080B',
+        backgroundColor: '#0C0C0C',
         borderRadius: '64px',
         border: '14px solid #1b2533',
         position: 'relative',
@@ -40,7 +40,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({
       {/* Side Hardware Buttons */}
       <div style={{ position: 'absolute', left: '-18px', top: '160px', width: '6px', height: '80px', backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: '4px 0 0 4px' }} />
       <div style={{ position: 'absolute', left: '-18px', top: '260px', width: '6px', height: '80px', backgroundColor: 'rgba(255,255,255,0.25)', borderRadius: '4px 0 0 4px' }} />
-      <div style={{ position: 'absolute', right: '-18px', top: '200px', width: '6px', height: '110px', backgroundColor: '#F4C542', borderRadius: '0 4px 4px 0', opacity: 0.8 }} />
+      <div style={{ position: 'absolute', right: '-18px', top: '200px', width: '6px', height: '110px', backgroundColor: '#FCEA0D', borderRadius: '0 4px 4px 0', opacity: 0.8 }} />
 
       {/* Dynamic Notch / Island */}
       <div style={{ position: 'absolute', top: '16px', left: '50%', transform: 'translateX(-50%)', width: '180px', height: '28px', backgroundColor: '#000000', borderRadius: '20px', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -52,7 +52,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 50%)', pointerEvents: 'none', zIndex: 40 }} />
 
       {/* Inner Screen */}
-      <div style={{ width: '100%', height: '100%', backgroundColor: '#05080B', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', paddingTop: '48px', boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', height: '100%', backgroundColor: '#0C0C0C', overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column', paddingTop: '48px', boxSizing: 'border-box' }}>
         {children}
       </div>
 

@@ -27,7 +27,7 @@ export const VEHICLE_OPTIONS: { type: DriverVehicleType; title: string; desc: st
 const vehicleTitle = (t: DriverVehicleType) => VEHICLE_OPTIONS.find((o) => o.type === t)!.title;
 
 const primaryBtn =
-  'w-full min-h-14 rounded-2xl bg-gold-primary text-background font-black text-base flex items-center justify-center gap-2 shadow-[0_10px_24px_-8px_rgba(255,198,26,0.55)] transition active:scale-[0.98] disabled:opacity-40 disabled:shadow-none';
+  'w-full min-h-14 rounded-2xl bg-gold-primary text-background font-black text-base flex items-center justify-center gap-2 shadow-[0_10px_24px_-8px_rgba(252,234,13,0.55)] transition active:scale-[0.98] disabled:opacity-40 disabled:shadow-none';
 const inputCls =
   'w-full min-h-14 rounded-2xl bg-surface-2 border border-white/10 px-4 text-base text-white placeholder-text-secondary focus:outline-none focus:border-gold-primary';
 
@@ -560,7 +560,7 @@ function Intro() {
           className="relative w-24 h-24 mx-auto"
         >
           <span className="absolute inset-0 rounded-full border-2 border-gold-primary/40 animate-radar" aria-hidden />
-          <div className="relative w-24 h-24 rounded-full bg-gold-primary text-background flex items-center justify-center shadow-[0_12px_32px_-8px_rgba(255,198,26,0.65)]">
+          <div className="relative w-24 h-24 rounded-full bg-gold-primary text-background flex items-center justify-center shadow-[0_12px_32px_-8px_rgba(252,234,13,0.65)]">
             <ShieldCheck className="w-12 h-12" />
           </div>
         </motion.div>

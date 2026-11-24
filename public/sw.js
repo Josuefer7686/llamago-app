@@ -1,4 +1,4 @@
-const CACHE_NAME = 'llamago-v4.1';
+const CACHE_NAME = 'llamago-v4.2';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',

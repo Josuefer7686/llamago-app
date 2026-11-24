@@ -421,10 +421,10 @@ export const MessagesView = () => {
             <motion.div 
               animate={{
                 boxShadow: isInputFocused || inputMessage.length > 0
-                  ? '0 0 20px rgba(244,197,66,0.35)'
+                  ? '0 0 20px rgba(252,234,13,0.35)'
                   : '0 0 0px rgba(0,0,0,0)',
                 borderColor: isInputFocused || inputMessage.length > 0
-                  ? '#F4C542'
+                  ? '#FCEA0D'
                   : 'rgba(255,255,255,0.12)',
               }}
               className="flex-1 flex items-center bg-surface-2 border rounded-2xl px-3.5 py-1 transition-all duration-300"
@@ -461,9 +461,9 @@ export const MessagesView = () => {
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.9 }}
               animate={{
-                backgroundColor: inputMessage.trim().length > 0 ? '#F4C542' : 'rgba(255,255,255,0.08)',
-                color: inputMessage.trim().length > 0 ? '#05080B' : '#71717A',
-                boxShadow: inputMessage.trim().length > 0 ? '0 0 16px rgba(244,197,66,0.5)' : 'none',
+                backgroundColor: inputMessage.trim().length > 0 ? '#FCEA0D' : 'rgba(255,255,255,0.08)',
+                color: inputMessage.trim().length > 0 ? '#0C0C0C' : '#71717A',
+                boxShadow: inputMessage.trim().length > 0 ? '0 0 16px rgba(252,234,13,0.5)' : 'none',
               }}
               disabled={!inputMessage.trim()}
               className="p-3 rounded-2xl transition flex items-center justify-center shrink-0 disabled:opacity-50"

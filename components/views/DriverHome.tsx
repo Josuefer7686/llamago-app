@@ -598,7 +598,7 @@ export const DriverHome = () => {
           <div className="flex items-center gap-2">
             {/* Free Trips Gift Badge */}
             {freeTrips > 0 && (
-              <div className="px-2.5 py-1.5 rounded-2xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-gold-primary text-gold-primary backdrop-blur-md text-xs font-black flex items-center gap-1 shadow-lg animate-pulse">
+              <div className="px-2.5 py-1.5 rounded-2xl bg-gradient-to-r from-gold-primary/20 to-gold-light/20 border border-gold-primary text-gold-primary backdrop-blur-md text-xs font-black flex items-center gap-1 shadow-lg animate-pulse">
                 <Bike className="w-3.5 h-3.5" />
                 <span>{freeTrips} gratis</span>
               </div>
@@ -655,7 +655,7 @@ export const DriverHome = () => {
             }
             triggerMapRecenter();
           }}
-          className="pointer-events-auto p-3.5 rounded-2xl bg-surface/95 border-2 border-gold-primary/60 text-gold-primary shadow-[0_12px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(244,197,66,0.35)] backdrop-blur-xl flex items-center justify-center transition active:scale-90 hover:bg-surface hover:border-gold-primary group"
+          className="pointer-events-auto p-3.5 rounded-2xl bg-surface/95 border-2 border-gold-primary/60 text-gold-primary shadow-[0_12px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(252,234,13,0.35)] backdrop-blur-xl flex items-center justify-center transition active:scale-90 hover:bg-surface hover:border-gold-primary group"
           title="Centrar en mi ubicación GPS"
           aria-label="Centrar en mi ubicación GPS"
         >

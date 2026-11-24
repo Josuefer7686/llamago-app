@@ -177,7 +177,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
           <button
             type="button"
             onClick={() => { haptics.impact(); onCart(); }}
-            className="mx-auto flex min-h-14 w-full max-w-[430px] items-center justify-between rounded-2xl bg-gold-primary px-5 font-display font-extrabold text-background shadow-[0_10px_28px_-10px_rgba(255,198,26,0.7)] touch-manipulation transition-transform duration-150 ease-out active:scale-[0.97]"
+            className="mx-auto flex min-h-14 w-full max-w-[430px] items-center justify-between rounded-2xl bg-gold-primary px-5 font-display font-extrabold text-background shadow-[0_10px_28px_-10px_rgba(252,234,13,0.7)] touch-manipulation transition-transform duration-150 ease-out active:scale-[0.97]"
           >
             <span className="flex items-center gap-2.5">
               <span className="grid h-7 min-w-7 place-items-center rounded-full bg-background px-1.5 text-sm text-gold-primary">{count}</span>

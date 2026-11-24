@@ -11,8 +11,8 @@
     "minimal-ui"
   ],
   "scope": "/",
-  "background_color": "#05080B",
-  "theme_color": "#05080B",
+  "background_color": "#0C0C0C",
+  "theme_color": "#0C0C0C",
   "orientation": "portrait",
   "version": "3.0.0",
   "icons": [

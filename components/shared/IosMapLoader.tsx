@@ -11,7 +11,7 @@ export const IosMapLoader = () => {
       <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
       {/* Simulated Map Grid Watermark */}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#F4C542_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#FCEA0D_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
       {/* Main Glass Box Container */}
       <motion.div

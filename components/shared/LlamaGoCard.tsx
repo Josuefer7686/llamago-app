@@ -34,7 +34,7 @@ export const LlamaGoCard = ({
         initial={{ scale: 0.95, opacity: 0, y: 15 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="w-full rounded-3xl p-5.5 sm:p-6 bg-gradient-to-br from-[#241E09] via-[#0E0A02] to-[#05080B] border-2 border-gold-primary/50 shadow-[0_15px_40px_rgba(244,197,66,0.18)] relative overflow-hidden text-white flex flex-col justify-between gap-5 transition-all duration-300 group-hover:border-gold-primary group-hover:shadow-[0_20px_50px_rgba(244,197,66,0.28)]"
+        className="w-full rounded-3xl p-5.5 sm:p-6 bg-gradient-to-br from-[#241E09] via-[#0E0A02] to-[#0C0C0C] border-2 border-gold-primary/50 shadow-[0_15px_40px_rgba(252,234,13,0.18)] relative overflow-hidden text-white flex flex-col justify-between gap-5 transition-all duration-300 group-hover:border-gold-primary group-hover:shadow-[0_20px_50px_rgba(252,234,13,0.28)]"
       >
         {/* Metallic Gold Shimmer Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-primary/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
@@ -69,7 +69,7 @@ export const LlamaGoCard = ({
         {/* CHIP EMV & ACCOUNT NO */}
         <div className="flex items-center justify-between z-10 pt-1">
           {/* Metallic Gold Chip */}
-          <div className="w-11 h-8 rounded-lg bg-gradient-to-tr from-[#D4AF37] via-[#F4C542] to-[#FFE885] border border-gold-primary/60 shadow-md relative overflow-hidden flex items-center justify-center">
+          <div className="w-11 h-8 rounded-lg bg-gradient-to-tr from-[#D4AF37] via-[#FCEA0D] to-[#FFE885] border border-gold-primary/60 shadow-md relative overflow-hidden flex items-center justify-center">
             <div className="w-full h-[1px] bg-background/30 absolute top-2" />
             <div className="w-full h-[1px] bg-background/30 absolute bottom-2" />
             <div className="h-full w-[1px] bg-background/30 absolute left-3" />

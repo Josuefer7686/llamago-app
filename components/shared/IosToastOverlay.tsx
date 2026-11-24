@@ -55,7 +55,7 @@ export const IosToastOverlay: React.FC<IosToastOverlayProps> = ({
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               className="w-52 h-52 bg-surface-2/85 border border-white/15 rounded-3xl p-6 flex flex-col items-center justify-center gap-4 shadow-2xl backdrop-blur-2xl text-center"
             >
-              <IosSpinner size="lg" color="#F4C542" />
+              <IosSpinner size="lg" color="#FCEA0D" />
               <p className="text-xs font-semibold text-white/90 tracking-wide px-2 leading-snug">
                 {loadingText}
               </p>

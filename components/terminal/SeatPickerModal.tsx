@@ -189,7 +189,7 @@ export const SeatPickerModal = ({
           type="button"
           onClick={handleConfirm}
           disabled={!selectedSeat || isProcessing}
-          className="w-full py-3.5 bg-gradient-to-r from-gold-primary via-amber-400 to-yellow-500 text-background rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-gold-primary/25 transition active:scale-95 disabled:opacity-40"
+          className="w-full py-3.5 bg-gradient-to-r from-gold-primary via-gold-primary to-gold-light text-background rounded-2xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-gold-primary/25 transition active:scale-95 disabled:opacity-40"
         >
           <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
           <span>

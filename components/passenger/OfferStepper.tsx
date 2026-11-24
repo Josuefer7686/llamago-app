@@ -58,7 +58,7 @@ export function OfferStepper({ value, onChange, radar = false, caption = 'Tu ofe
             />
           </>
         )}
-        <div className="relative w-28 h-28 rounded-full bg-gold-primary text-background flex flex-col items-center justify-center shadow-[0_12px_32px_-8px_rgba(255,198,26,0.65)]">
+        <div className="relative w-28 h-28 rounded-full bg-gold-primary text-background flex flex-col items-center justify-center shadow-[0_12px_32px_-8px_rgba(252,234,13,0.65)]">
           <span className="text-xs font-bold leading-none opacity-80">{caption}</span>
           <span
             key={value}

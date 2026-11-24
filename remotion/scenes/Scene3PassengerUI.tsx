@@ -39,7 +39,7 @@ export const Scene3PassengerUI: React.FC = () => {
       style={{
         width: '1080px',
         height: '1920px',
-        backgroundColor: '#05080B',
+        backgroundColor: '#0C0C0C',
         color: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
@@ -54,11 +54,11 @@ export const Scene3PassengerUI: React.FC = () => {
     >
       {/* Top Banner Tag */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', zIndex: 10 }}>
-        <span style={{ color: '#F4C542', fontWeight: 900, fontSize: '24px', textTransform: 'uppercase', letterSpacing: '6px', backgroundColor: 'rgba(244,197,66,0.15)', padding: '14px 36px', borderRadius: '100px', border: '2px solid rgba(244,197,66,0.4)', marginBottom: '16px' }}>
+        <span style={{ color: '#FCEA0D', fontWeight: 900, fontSize: '24px', textTransform: 'uppercase', letterSpacing: '6px', backgroundColor: 'rgba(252,234,13,0.15)', padding: '14px 36px', borderRadius: '100px', border: '2px solid rgba(252,234,13,0.4)', marginBottom: '16px' }}>
           Para Pasajeros
         </span>
         <h2 style={{ fontSize: '56px', fontWeight: 900, color: '#FFFFFF', margin: 0 }}>
-          Pide tu viaje en <span style={{ color: '#F4C542' }}>segundos</span>
+          Pide tu viaje en <span style={{ color: '#FCEA0D' }}>segundos</span>
         </h2>
       </div>
 
@@ -71,7 +71,7 @@ export const Scene3PassengerUI: React.FC = () => {
             <div style={{ position: 'absolute', inset: 0, opacity: 0.15, background: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
             {/* Simulated Route Line */}
-            <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, stroke: '#F4C542', strokeWidth: 5, strokeDasharray: '8 8', fill: 'none' }}>
+            <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, stroke: '#FCEA0D', strokeWidth: 5, strokeDasharray: '8 8', fill: 'none' }}>
               <path d="M 80 340 Q 240 220 420 120" />
             </svg>
 
@@ -81,7 +81,7 @@ export const Scene3PassengerUI: React.FC = () => {
             </div>
 
             {/* Destination Marker */}
-            <div style={{ position: 'absolute', right: '80px', top: '80px', backgroundColor: '#F4C542', color: '#000000', padding: '12px', borderRadius: '50%', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'absolute', right: '80px', top: '80px', backgroundColor: '#FCEA0D', color: '#000000', padding: '12px', borderRadius: '50%', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <MapPin style={{ width: '28px', height: '28px', fill: '#000000' }} />
             </div>
 
@@ -93,7 +93,7 @@ export const Scene3PassengerUI: React.FC = () => {
                   position: 'absolute',
                   left: '140px',
                   bottom: '160px',
-                  backgroundColor: '#F4C542',
+                  backgroundColor: '#FCEA0D',
                   color: '#000000',
                   padding: '12px 20px',
                   borderRadius: '24px',
@@ -108,7 +108,7 @@ export const Scene3PassengerUI: React.FC = () => {
                 }}
               >
                 <span>🏍️ Carlos</span>
-                <span style={{ fontSize: '16px', backgroundColor: '#000000', color: '#F4C542', padding: '4px 10px', borderRadius: '12px' }}>2 min</span>
+                <span style={{ fontSize: '16px', backgroundColor: '#000000', color: '#FCEA0D', padding: '4px 10px', borderRadius: '12px' }}>2 min</span>
               </div>
             )}
           </div>
@@ -119,7 +119,7 @@ export const Scene3PassengerUI: React.FC = () => {
             {/* Step 1: Select Service */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px', borderRadius: '24px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '20px', backgroundColor: 'rgba(244,197,66,0.2)', color: '#F4C542', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '20px', backgroundColor: 'rgba(252,234,13,0.2)', color: '#FCEA0D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Bike style={{ width: '36px', height: '36px' }} />
                 </div>
                 <div>
@@ -127,13 +127,13 @@ export const Scene3PassengerUI: React.FC = () => {
                   <p style={{ fontSize: '16px', color: '#8F9AA3', margin: '4px 0 0 0', fontWeight: 600 }}>Transporte rápido en Riberalta</p>
                 </div>
               </div>
-              <span style={{ fontSize: '18px', fontWeight: 800, color: '#F4C542', backgroundColor: 'rgba(244,197,66,0.15)', padding: '6px 16px', borderRadius: '14px' }}>Fijo</span>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#FCEA0D', backgroundColor: 'rgba(252,234,13,0.15)', padding: '6px 16px', borderRadius: '14px' }}>Fijo</span>
             </div>
 
             {/* Step 2: Destination Card */}
             {showDestinationCard && (
-              <div style={{ padding: '20px', borderRadius: '24px', backgroundColor: '#0f1722', border: '2px solid rgba(244,197,66,0.4)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span style={{ fontSize: '14px', textTransform: 'uppercase', fontWeight: 900, color: '#F4C542', letterSpacing: '2px' }}>Ruta Confirmada</span>
+              <div style={{ padding: '20px', borderRadius: '24px', backgroundColor: '#0f1722', border: '2px solid rgba(252,234,13,0.4)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <span style={{ fontSize: '14px', textTransform: 'uppercase', fontWeight: 900, color: '#FCEA0D', letterSpacing: '2px' }}>Ruta Confirmada</span>
                 <div style={{ fontSize: '20px', fontWeight: 900, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#10B981' }} />
                   <span>Plaza Principal ➔ Barrio Belén</span>
@@ -143,10 +143,10 @@ export const Scene3PassengerUI: React.FC = () => {
 
             {/* Step 3: Transparent Fixed Price */}
             {showFareCard && (
-              <div style={{ padding: '20px', borderRadius: '24px', background: 'linear-gradient(90deg, rgba(244,197,66,0.2) 0%, rgba(244,197,66,0.1) 100%)', border: '2px solid rgba(244,197,66,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ padding: '20px', borderRadius: '24px', background: 'linear-gradient(90deg, rgba(252,234,13,0.2) 0%, rgba(252,234,13,0.1) 100%)', border: '2px solid rgba(252,234,13,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
                   <span style={{ fontSize: '14px', textTransform: 'uppercase', fontWeight: 800, color: 'rgba(255,255,255,0.8)' }}>Tarifa Fija Transparente</span>
-                  <div style={{ fontSize: '36px', fontWeight: 900, color: '#F4C542', marginTop: '2px' }}>7.00 BOB</div>
+                  <div style={{ fontSize: '36px', fontWeight: 900, color: '#FCEA0D', marginTop: '2px' }}>7.00 BOB</div>
                 </div>
                 <div style={{ fontSize: '16px', backgroundColor: 'rgba(16,185,129,0.2)', color: '#10B981', fontWeight: 900, padding: '8px 16px', borderRadius: '100px', border: '1px solid rgba(16,185,129,0.4)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <ShieldCheck style={{ width: '22px', height: '22px' }} />
@@ -157,9 +157,9 @@ export const Scene3PassengerUI: React.FC = () => {
 
             {/* Step 4: Driver Found Banner */}
             {showDriverCard ? (
-              <div style={{ padding: '20px', borderRadius: '24px', backgroundColor: '#F4C542', color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 15px 40px rgba(0,0,0,0.5)' }}>
+              <div style={{ padding: '20px', borderRadius: '24px', backgroundColor: '#FCEA0D', color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 15px 40px rgba(0,0,0,0.5)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#000000', color: '#F4C542', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#000000', color: '#FCEA0D', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
                     CM
                   </div>
                   <div>
@@ -173,7 +173,7 @@ export const Scene3PassengerUI: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div style={{ width: '100%', padding: '22px 0', background: 'linear-gradient(90deg, #F4C542 0%, #F59E0B 100%)', color: '#000000', fontWeight: 900, textAlign: 'center', borderRadius: '24px', fontSize: '22px', textTransform: 'uppercase', letterSpacing: '2px', position: 'relative' }}>
+              <div style={{ width: '100%', padding: '22px 0', background: 'linear-gradient(90deg, #FCEA0D 0%, #F59E0B 100%)', color: '#000000', fontWeight: 900, textAlign: 'center', borderRadius: '24px', fontSize: '22px', textTransform: 'uppercase', letterSpacing: '2px', position: 'relative' }}>
                 Confirmar Mototaxi
                 {showTap && <TapEffect x={280} y={35} scale={tapScale} />}
               </div>

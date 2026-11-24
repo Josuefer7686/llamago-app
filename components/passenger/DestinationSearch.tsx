@@ -221,7 +221,7 @@ export function DestinationSearch({ selected, onSelect, onClear, onGo }: Props) 
             }
           }}
           aria-label={hasDestination ? 'Ir a este destino' : 'Buscar destino'}
-          className="h-14 shrink-0 rounded-2xl bg-gold-primary text-background font-black flex items-center justify-center gap-1.5 shadow-[0_8px_20px_-6px_rgba(255,198,26,0.55)] active:scale-95 transition-[width,transform] duration-200 ease-out overflow-hidden"
+          className="h-14 shrink-0 rounded-2xl bg-gold-primary text-background font-black flex items-center justify-center gap-1.5 shadow-[0_8px_20px_-6px_rgba(252,234,13,0.55)] active:scale-95 transition-[width,transform] duration-200 ease-out overflow-hidden"
           style={{ width: hasDestination ? 92 : 56 }}
         >
           {hasDestination ? (

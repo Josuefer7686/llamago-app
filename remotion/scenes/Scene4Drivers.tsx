@@ -18,14 +18,14 @@ export const Scene4Drivers: React.FC = () => {
   const feat2Spring = spring({ frame: frame - 40, fps, config: { damping: 12 } });
 
   return (
-    <div className="w-full h-full bg-[#05080B] text-white flex items-center justify-between p-12 relative overflow-hidden font-sans">
+    <div className="w-full h-full bg-[#0C0C0C] text-white flex items-center justify-between p-12 relative overflow-hidden font-sans">
       {/* Background Gold Ambient */}
       <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/15 blur-[160px] rounded-full pointer-events-none" />
 
       {/* Left Column: Driver Earnings UI Simulation */}
       <div 
         style={{ transform: `scale(${cardSpring})` }}
-        className="w-[380px] p-6 rounded-3xl bg-gradient-to-b from-[#161f2e] to-[#0d1420] border border-amber-400/30 shadow-[0_20px_50px_rgba(244,197,66,0.15)] relative overflow-hidden"
+        className="w-[380px] p-6 rounded-3xl bg-gradient-to-b from-[#161f2e] to-[#0d1420] border border-amber-400/30 shadow-[0_20px_50px_rgba(252,234,13,0.15)] relative overflow-hidden"
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">

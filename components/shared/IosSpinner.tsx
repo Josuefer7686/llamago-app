@@ -5,7 +5,7 @@ interface IosSpinnerProps {
   color?: string;
 }
 
-export const IosSpinner = ({ size = 'md', color = '#F4C542' }: IosSpinnerProps) => {
+export const IosSpinner = ({ size = 'md', color = '#FCEA0D' }: IosSpinnerProps) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-6 h-6',

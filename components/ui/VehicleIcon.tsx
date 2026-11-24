@@ -85,7 +85,7 @@ export const VehicleIcon: React.FC<VehicleIconProps> = ({
  */
 export function getVehicleSvgString(
   type: VehicleType | ServiceType | string = 'MOTOTAXI',
-  strokeColor: string = '#F4C542',
+  strokeColor: string = '#FCEA0D',
   size: number = 22
 ): string {
   if (type === 'MOTOCAR') {

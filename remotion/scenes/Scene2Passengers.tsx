@@ -22,7 +22,7 @@ export const Scene2Passengers: React.FC = () => {
   const driverY = interpolate(frame, [0, 150], [50, -30], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
-    <div className="w-full h-full bg-[#05080B] text-white flex items-center justify-between p-12 relative overflow-hidden font-sans">
+    <div className="w-full h-full bg-[#0C0C0C] text-white flex items-center justify-between p-12 relative overflow-hidden font-sans">
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-amber-500/10 blur-[130px] rounded-full pointer-events-none" />
 
