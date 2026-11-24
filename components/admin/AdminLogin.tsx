@@ -35,7 +35,7 @@ export function AdminLogin({ configured, onSuccess }: { configured: boolean; onS
         <div className="mb-8 flex items-center gap-3">
           <img src="/logo.png" alt="" className="h-12 w-12 rounded-xl" />
           <div className="leading-tight">
-            <p className="font-display text-2xl font-extrabold italic">RIBER <span className="text-gold-primary">GO</span></p>
+            <p className="font-display text-2xl font-extrabold italic">LLAMA <span className="text-gold-primary">GO</span></p>
             <p className="text-sm text-text-secondary">Panel de administración</p>
           </div>
         </div>

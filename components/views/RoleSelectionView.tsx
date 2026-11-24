@@ -68,7 +68,7 @@ export const RoleSelectionView = () => {
                 />
               </div>
               <h2 className="text-2xl font-bold tracking-tight mb-2">
-                ¿Cómo quieres usar <span className="text-white">Riber</span><span className="text-gold-primary">GO</span>?
+                ¿Cómo quieres usar <span className="text-white">Llama</span><span className="text-gold-primary">GO</span>?
               </h2>
               <p className="text-xs text-text-secondary">
                 Selecciona el tipo de cuenta para este registro. Por seguridad, la cuenta queda vinculada permanentemente a este rol.

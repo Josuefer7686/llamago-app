@@ -159,7 +159,7 @@ export const LoginView = () => {
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-            Bienvenido a <span className="text-white">Riber</span><span className="text-gold-primary">GO</span>
+            Bienvenido a <span className="text-white">Llama</span><span className="text-gold-primary">GO</span>
           </h1>
           <p className="text-xs text-text-secondary max-w-[280px] mx-auto leading-relaxed">
             Tu transporte más rápido, seguro y confiable en Riberalta, Beni.

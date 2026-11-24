@@ -52,7 +52,7 @@ export const LlamaGoCard = ({
               className="w-6 h-6 rounded-lg object-contain border border-gold-primary/40 shadow-sm"
             />
             <span className="text-lg font-black tracking-tight flex items-center gap-1">
-              <span className="text-white">Riber</span>
+              <span className="text-white">Llama</span>
               <span className="text-gold-primary">GO</span>
             </span>
             <span className="px-2 py-0.5 rounded-full bg-gold-primary/20 text-[9px] font-black text-gold-primary uppercase tracking-widest border border-gold-primary/30">

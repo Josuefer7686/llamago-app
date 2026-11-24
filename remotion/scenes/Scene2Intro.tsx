@@ -73,7 +73,7 @@ export const Scene2Intro: React.FC = () => {
 
         {/* Brand Name */}
         <h2 style={{ fontSize: '72px', fontWeight: 900, letterSpacing: '-1px', margin: 0 }}>
-          <span style={{ color: '#FFFFFF' }}>Riber</span>
+          <span style={{ color: '#FFFFFF' }}>Llama</span>
           <span style={{ color: '#F4C542' }}>GO</span>
         </h2>
         <p style={{ fontSize: '24px', color: '#F4C542', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '6px', marginTop: '10px' }}>
