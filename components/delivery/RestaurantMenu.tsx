@@ -5,7 +5,7 @@ import { Clock, MapPin, Phone, Star } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { cartCount, cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryService } from '@/services/deliveryService';
-import { bs, deliveryFeeFor, roadKm, unitPriceFor, type CartLine, type MenuItem, type Restaurant } from '@/lib/delivery';
+import { bs, deliveryFeeFor, isStore, roadKm, unitPriceFor, type CartLine, type MenuItem, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, Photo, Skeleton, StatusPill, motion, useStagger } from './ui';
 import { ProductSheet } from './ProductSheet';
@@ -53,7 +53,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
     if (cartRestaurant && cartRestaurant !== r.id && lines.length) { setConflict({ line, now }); return; }
     addLine({ id: r.id, name: r.name }, line);
     if (now) { onCart(); return; }
-    flash('Listo, elige otro producto o toca "Ver mi pedido"');
+    flash(`Listo, elige otro ${isStore(r) ? 'producto' : 'plato'} o toca "Ver mi pedido"`);
   };
 
   /** Un producto sin opciones (una Coca-Cola, un pan) no necesita hoja: un toque y a confirmar. */
@@ -189,7 +189,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
               Ya empezaste un pedido en <b className="text-white">{cartRestaurantName}</b>. Solo puedes pedir a un restaurante a la vez. ¿Borramos lo anterior y empezamos aquí?
             </p>
             <div className="mt-5 grid gap-2">
-              <button type="button" onClick={() => { clear(); addLine({ id: r.id, name: r.name }, conflict.line); const go = conflict.now; setConflict(null); if (go) onCart(); else flash('Listo, elige otro producto o toca "Ver mi pedido"'); }}
+              <button type="button" onClick={() => { clear(); addLine({ id: r.id, name: r.name }, conflict.line); const go = conflict.now; setConflict(null); if (go) onCart(); else flash(`Listo, elige otro ${isStore(r) ? 'producto' : 'plato'} o toca "Ver mi pedido"`); }}
                 className="min-h-12 rounded-2xl bg-gold-primary font-display font-extrabold text-background touch-manipulation active:scale-[0.97]">Sí, empezar aquí</button>
               <button type="button" onClick={() => setConflict(null)} className="min-h-12 rounded-2xl bg-white/[0.07] font-bold touch-manipulation active:scale-[0.97]">No, seguir con el anterior</button>
             </div>
@@ -199,6 +199,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
 
       <ProductSheet
         item={open}
+        store={isStore(r)}
         onClose={() => setOpen(null)}
         onAdd={handleAdd}
       />

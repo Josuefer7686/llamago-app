@@ -10,6 +10,7 @@ import { EASE_OUT, GoldButton, Photo, QtyStepper, motion, useLockScroll } from '
 interface Props {
   item: MenuItem | null;
   onClose: () => void;
+  store?: boolean;
   /** `now`: ir directo a confirmar el pedido; si no, vuelve al menú para elegir otro plato */
   onAdd: (line: CartLine, now: boolean) => void;
 }
@@ -49,15 +50,15 @@ function OptionGroup({
 }
 
 /** Hoja del producto: se arrastra hacia abajo para cerrar y sigue el dedo 1:1. */
-export function ProductSheet({ item, onClose, onAdd }: Props) {
+export function ProductSheet({ item, onClose, onAdd, store }: Props) {
   return (
     <AnimatePresence>
-      {item && <Sheet key={item.id} item={item} onClose={onClose} onAdd={onAdd} />}
+      {item && <Sheet key={item.id} item={item} onClose={onClose} onAdd={onAdd} store={store} />}
     </AnimatePresence>
   );
 }
 
-function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; onAdd: (l: CartLine, now: boolean) => void }) {
+function Sheet({ item, onClose, onAdd, store }: { item: MenuItem; onClose: () => void; onAdd: (l: CartLine, now: boolean) => void; store?: boolean }) {
   const reduce = useReducedMotion();
   const controls = useDragControls();
   useLockScroll();
@@ -157,7 +158,7 @@ function Sheet({ item, onClose, onAdd }: { item: MenuItem; onClose: () => void; 
           </div>
           {item.available && (
             <button type="button" onClick={() => add(false)} className="min-h-11 w-full text-sm font-bold text-gold-primary touch-manipulation active:opacity-70">
-              Agregar y elegir algo más
+              Agregar y elegir otro {store ? 'producto' : 'plato'}
             </button>
           )}
         </div>

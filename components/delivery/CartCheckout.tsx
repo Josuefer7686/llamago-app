@@ -5,7 +5,7 @@ import { Banknote, Check, Crosshair, MapPin, Plus, StickyNote } from 'lucide-rea
 import { useAppStore } from '@/store/useAppStore';
 import { cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryApi } from '@/services/deliveryService';
-import { bs, deliveryFeeFor, roadKm, MAX_NOTE, type Restaurant } from '@/lib/delivery';
+import { bs, deliveryFeeFor, roadKm, isStore, MAX_NOTE, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, GoldButton, Photo, QtyStepper, motion, useStagger } from './ui';
 
@@ -34,6 +34,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
   const [locating, setLocating] = useState(false);
   const [error, setError] = useState('');
   const stagger = useStagger();
+  const thing = isStore(r) ? 'producto' : 'plato';
 
   const subtotal = cartSubtotal(lines);
   const km = r && here ? roadKm({ lat: r.lat, lng: r.lng }, here) : null;
@@ -94,7 +95,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
           {!lines.length && (
             <div className="rounded-3xl bg-surface p-8 text-center">
               <p className="font-display text-lg font-extrabold">Todavía no elegiste nada</p>
-              <p className="mt-1.5 text-sm text-text-secondary">Vuelve y toca <b className="text-gold-primary">Pedir</b> en lo que quieras.</p>
+              <p className="mt-1.5 text-sm text-text-secondary">Vuelve y toca <b className="text-gold-primary">Pedir</b> en el {thing} que quieras.</p>
             </div>
           )}
 
@@ -117,7 +118,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
 
           <button type="button" onClick={() => { haptics.selection(); onBack(); }}
             className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-gold-primary/40 text-[15px] font-bold text-gold-primary touch-manipulation transition-transform duration-150 ease-out active:scale-[0.98]">
-            <Plus className="h-5 w-5" aria-hidden /> Agregar algo más
+            <Plus className="h-5 w-5" aria-hidden /> Agregar otro {thing}
           </button>
 
           <section className="space-y-3 rounded-3xl border border-white/10 bg-surface p-4">
