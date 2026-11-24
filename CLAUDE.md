@@ -311,8 +311,8 @@ Colecciones de viajes interprovinciales y paquetería entre Riberalta y Guayaram
 | **Firebase Admin** | `FIREBASE_SERVICE_ACCOUNT_B64` (JSON de cuenta de servicio en base64; solo servidor) |
 | **Telegram Webhook Secret** | `TELEGRAM_WEBHOOK_SECRET` (cadena larga aleatoria; se registra con `secret_token` en `setWebhook`) |
 | **Webhook URL** | `https://llamago.vercel.app/api/wallet/telegram-webhook` |
-| **Firebase Project ID** | `ribergo-app` |
-| **Firebase Auth Domain** | `ribergo-app.firebaseapp.com` |
+| **Firebase Project ID** | `llamago-bo` |
+| **Firebase Auth Domain** | `llamago-bo.firebaseapp.com` |
 
 ---
 
@@ -377,4 +377,4 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 
 - **Versión actual: 3.0** (`lib/appVersion.ts`: `APP_VERSION`, `DATA_EPOCH = 3`; SW `llamago-v3.0`). Al abrir la app, si la cuenta guardada ya no existe en Firebase se cierra la sesión con el aviso de reinicio.
 
-- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Identificadores técnicos que se conservaron a propósito porque cambiarlos rompe cosas: proyecto de Firebase `ribergo-app` (el ID no se puede renombrar; solo su nombre visible), el sufijo interno `@ribergo.bo` de los correos sintéticos de login por teléfono (cambiarlo dejaría fuera a las cuentas existentes), la clave local `llamago-session-v1` ; el dominio anterior `ribergoo.vercel.app` sigue activo como alias.
+- **Rebranding a LlamaGO (nov 2026):** el producto se llama **LlamaGO** (antes RiberGO). Se creó un proyecto de Firebase nuevo (`llamago-bo`, Firestore en São Paulo, Auth con Google y correo/contraseña) y se reinició toda la base. El correo interno del login por teléfono es `@llamago.bo`, la clave local de sesión `llamago-session-v1` y el dominio `llamago.vercel.app`.

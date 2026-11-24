@@ -910,7 +910,7 @@ export interface ActiveTripInfo {
           </ul>
         </li>
         <li><code>services/mockData.ts</code>: Contiene las coordenadas verificadas de Riberalta (<code>lat: -11.0061, lng: -66.0747</code>) y los destinos más frecuentados por los vecinos riberalteños.</li>
-        <li><code>lib/firebase.ts</code>: Inicializa el SDK de Firebase con las claves del proyecto <code>ribergo-app</code>.</li>
+        <li><code>lib/firebase.ts</code>: Inicializa el SDK de Firebase con las claves del proyecto <code>llamago-bo</code>.</li>
         <li><code>utils/audio.ts</code>: Sintetizador de tonos analógicos puros mediante Web Audio API para confirmar solicitudes y llegadas.</li>
         <li><code>utils/haptics.ts</code>: Genera patrones de vibración física en el celular ante eventos clave de la carrera.</li>
       </ul>
