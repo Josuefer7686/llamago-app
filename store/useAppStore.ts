@@ -195,8 +195,8 @@ interface AppState {
   // Navigation & View
   currentView: AppView;
   setCurrentView: (view: AppView) => void;
-  activeTab: 'HOME' | 'TRIPS' | 'MESSAGES' | 'PROFILE' | 'INCOME';
-  setActiveTab: (tab: 'HOME' | 'TRIPS' | 'MESSAGES' | 'PROFILE' | 'INCOME') => void;
+  activeTab: 'HOME' | 'DELIVERY' | 'TRIPS' | 'MESSAGES' | 'PROFILE' | 'INCOME';
+  setActiveTab: (tab: 'HOME' | 'DELIVERY' | 'TRIPS' | 'MESSAGES' | 'PROFILE' | 'INCOME') => void;
 
   // Auth & Role
   user: UserProfile | null;

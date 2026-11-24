@@ -9,6 +9,8 @@ import { ProfileView } from '@/components/views/ProfileView';
 import { TripsView } from '@/components/views/TripsView';
 import { MessagesView } from '@/components/views/MessagesView';
 import { IncomeView } from '@/components/views/IncomeView';
+import { DeliveryHome } from '@/components/delivery/DeliveryHome';
+import { DriverDelivery } from '@/components/delivery/DriverDelivery';
 import { IosMessageToast, ToastMessageData } from '@/components/shared/IosMessageToast';
 import { IosDynamicIslandNotification } from '@/components/shared/IosDynamicIslandNotification';
 import { IosLocationPermissionModal } from '@/components/modals/IosLocationPermissionModal';
@@ -86,6 +88,8 @@ function MainAppInner() {
     switch (activeTab) {
       case 'HOME':
         return role === 'PASSENGER' ? <PassengerHome /> : <DriverHome />;
+      case 'DELIVERY':
+        return role === 'PASSENGER' ? <DeliveryHome /> : <DriverDelivery />;
       case 'TRIPS':
         return <TripsView />;
       case 'MESSAGES':

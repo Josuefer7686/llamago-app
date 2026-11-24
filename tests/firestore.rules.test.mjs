@@ -173,3 +173,50 @@ test('colecciones desconocidas están cerradas', async () => {
   await assertFails(setDoc(doc(as('pax1'), 'cualquier_cosa/x'), { a: 1 }));
   await assertFails(getDoc(doc(as('pax1'), 'cualquier_cosa/x')));
 });
+
+test('delivery: restaurantes y menú se leen con sesión y nadie los edita', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'restaurants/r1'), { name: 'Demo', active: true });
+    await setDoc(doc(ctx.firestore(), 'menu_items/i1'), { restaurantId: 'r1', price: 10 });
+  });
+  await assertSucceeds(getDoc(doc(as('pax1'), 'restaurants/r1')));
+  await assertSucceeds(getDoc(doc(as('pax1'), 'menu_items/i1')));
+  await assertFails(getDoc(doc(anon(), 'restaurants/r1')));
+  await assertFails(updateDoc(doc(as('pax1'), 'menu_items/i1'), { price: 1 }));
+  await assertFails(setDoc(doc(as('driver1'), 'restaurants/r2'), { name: 'Falso' }));
+});
+
+test('delivery: el pedido solo lo ven su cliente y su repartidor; nadie lo escribe', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'delivery_orders/o1'), { customerId: 'pax1', driverId: 'driver1', status: 'ACCEPTED', total: 40 });
+    await setDoc(doc(ctx.firestore(), 'users/pax2'), { role: 'PASSENGER' });
+  });
+  await assertSucceeds(getDoc(doc(as('pax1'), 'delivery_orders/o1')));
+  await assertSucceeds(getDoc(doc(as('driver1'), 'delivery_orders/o1')));
+  await assertFails(getDoc(doc(as('pax2'), 'delivery_orders/o1')));
+  await assertFails(updateDoc(doc(as('pax1'), 'delivery_orders/o1'), { status: 'DELIVERED' }));
+  await assertFails(setDoc(doc(as('pax1'), 'delivery_orders/o2'), { customerId: 'pax1', total: 0 }));
+});
+
+test('delivery: pedidos por tomar solo los ven los conductores', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'delivery_open/o1'), { restaurantName: 'Demo', deliveryFee: 8 });
+  });
+  await assertSucceeds(getDoc(doc(as('driver1'), 'delivery_open/o1')));
+  await assertFails(getDoc(doc(as('pax1'), 'delivery_open/o1')));
+  await assertFails(setDoc(doc(as('driver1'), 'delivery_open/o9'), { deliveryFee: 99 }));
+});
+
+test('delivery: el chat es solo del cliente y su repartidor, y se cierra al terminar', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => {
+    await setDoc(doc(ctx.firestore(), 'delivery_orders/o1'), { customerId: 'pax1', driverId: 'driver1', status: 'PICKED_UP' });
+    await setDoc(doc(ctx.firestore(), 'delivery_orders/o2'), { customerId: 'pax1', driverId: 'driver1', status: 'DELIVERED' });
+    await setDoc(doc(ctx.firestore(), 'users/pax2'), { role: 'PASSENGER' });
+  });
+  await assertSucceeds(setDoc(doc(as('pax1'), 'delivery_orders/o1/messages/m1'), { senderId: 'pax1', text: 'hola' }));
+  await assertSucceeds(setDoc(doc(as('driver1'), 'delivery_orders/o1/messages/m2'), { senderId: 'driver1', text: 'voy' }));
+  await assertFails(setDoc(doc(as('pax1'), 'delivery_orders/o1/messages/m3'), { senderId: 'driver1', text: 'suplanto' }));
+  await assertFails(setDoc(doc(as('pax2'), 'delivery_orders/o1/messages/m4'), { senderId: 'pax2', text: 'intruso' }));
+  await assertFails(getDoc(doc(as('pax2'), 'delivery_orders/o1/messages/m1')));
+  await assertFails(setDoc(doc(as('pax1'), 'delivery_orders/o2/messages/m5'), { senderId: 'pax1', text: 'tarde' }));
+});

@@ -145,6 +145,46 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // ───────── Delivery ─────────
+    // Restaurantes y menú: los ve cualquiera con sesión; solo el administrador (servidor) los edita.
+    match /restaurants/{restaurantId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /menu_items/{itemId} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    // Pedido completo: solo el cliente y su repartidor. Todo cambio pasa por el servidor.
+    match /delivery_orders/{orderId} {
+      allow read: if signedIn() && (
+        resource.data.get('customerId', '') == request.auth.uid
+        || resource.data.get('driverId', '') == request.auth.uid
+      );
+      allow write: if false;
+
+      match /messages/{messageId} {
+        allow read: if signedIn() && (
+          get(/databases/$(database)/documents/delivery_orders/$(orderId)).data.customerId == request.auth.uid
+          || get(/databases/$(database)/documents/delivery_orders/$(orderId)).data.get('driverId', '') == request.auth.uid
+        );
+        allow create: if signedIn()
+          && request.resource.data.senderId == request.auth.uid
+          && !(get(/databases/$(database)/documents/delivery_orders/$(orderId)).data.status in ['DELIVERED', 'CANCELLED'])
+          && (
+            get(/databases/$(database)/documents/delivery_orders/$(orderId)).data.customerId == request.auth.uid
+            || get(/databases/$(database)/documents/delivery_orders/$(orderId)).data.get('driverId', '') == request.auth.uid
+          );
+        allow update, delete: if false;
+      }
+    }
+    // Pedidos por tomar (sin teléfono ni dirección exacta): solo conductores.
+    match /delivery_open/{orderId} {
+      allow read: if signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', '') == 'DRIVER';
+      allow write: if false;
+    }
+
     // ───────── Terminal interprovincial ─────────
     match /terminal_departures/{departureId} {
       allow read: if signedIn();

@@ -1,11 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Eraser, LayoutDashboard, LogOut } from 'lucide-react';
+import { Eraser, LayoutDashboard, LogOut, UtensilsCrossed } from 'lucide-react';
 import { ADMIN_COLLECTIONS, GROUP_LABELS, type CollectionGroupId, findCollection } from '@/lib/adminCollections';
 import { AdminLogin } from './AdminLogin';
 import { CollectionView } from './CollectionView';
 import { Overview } from './Overview';
+import { DeliveryManager } from './DeliveryManager';
 import type { Names } from './ui';
 
 type Session = 'checking' | 'out' | 'in';
@@ -36,7 +37,7 @@ export function AdminApp() {
   useEffect(() => {
     const read = () => {
       const h = window.location.hash.replace('#', '');
-      setView(h && findCollection(h) ? h : 'overview');
+      setView(h && (h === 'delivery' || findCollection(h)) ? h : 'overview');
     };
     read();
     window.addEventListener('hashchange', read);
@@ -116,7 +117,7 @@ export function AdminApp() {
     return <AdminLogin configured={configured} onSuccess={() => setSession('in')} />;
   }
 
-  const current = view === 'overview' ? null : findCollection(view) ?? null;
+  const current = view === 'overview' || view === 'delivery' ? null : findCollection(view) ?? null;
   const groups = (Object.keys(GROUP_LABELS) as CollectionGroupId[]).map((g) => ({
     id: g,
     items: ADMIN_COLLECTIONS.filter((c) => c.group === g),
@@ -183,7 +184,7 @@ export function AdminApp() {
 
       {/* Navegación en teléfono: tira horizontal */}
       <nav aria-label="Secciones" className="no-scrollbar flex gap-2 overflow-x-auto border-b border-white/10 px-4 py-2.5 md:hidden">
-        {[{ id: 'overview', label: 'Resumen' }, ...ADMIN_COLLECTIONS].map((c) => (
+        {[{ id: 'overview', label: 'Resumen' }, { id: 'delivery', label: 'Restaurantes y menú' }, ...ADMIN_COLLECTIONS].map((c) => (
           <button
             key={c.id}
             onClick={() => go(c.id)}
@@ -201,13 +202,21 @@ export function AdminApp() {
           {groups.map((g) => (
             <div key={g.id} className="mt-6">
               <p className="px-3 pb-1.5 text-xs font-semibold text-text-secondary">{GROUP_LABELS[g.id]}</p>
+              {g.id === 'delivery' && (
+                <button onClick={() => go('delivery')} aria-current={view === 'delivery' ? 'page' : undefined}
+                  className={`flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-[15px] transition-colors ${view === 'delivery' ? 'bg-gold-primary/15 font-bold text-gold-light' : 'text-white/80 hover:bg-white/[0.05]'}`}>
+                  <UtensilsCrossed className="h-4 w-4" aria-hidden /> Restaurantes y menú
+                </button>
+              )}
               {g.items.map((c) => navBtn(c.id, c.label, counts[c.id]))}
             </div>
           ))}
         </nav>
 
         <main className="min-w-0 flex-1 px-4 py-6 md:px-8 md:py-8">
-          {current ? (
+          {view === 'delivery' ? (
+            <DeliveryManager onUnauthorized={loggedOut} />
+          ) : current ? (
             <CollectionView key={current.id} cfg={current} names={names} onUnauthorized={loggedOut} />
           ) : (
             <Overview names={names} onOpen={go} onUnauthorized={loggedOut} />

@@ -21,7 +21,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import { TerminalView } from '@/components/terminal/TerminalView';
 import { NegotiationChatModal } from '@/components/modals/NegotiationChatModal';
-import { Wrench, Bus, AlertTriangle, Info, Siren } from 'lucide-react';
+import { Wrench, Bus, AlertTriangle, Info, Siren, UtensilsCrossed } from 'lucide-react';
 import { VehicleIcon } from '@/components/ui/VehicleIcon';
 import { useAutoLocation } from '@/hooks/useAutoLocation';
 import { calculateDistanceMeters, formatDistance, getBearingDirectionLabel } from '@/utils/geo';
@@ -487,6 +487,21 @@ export const PassengerHome = () => {
             onClear={handleClearDestination}
             onGo={handleGoToDestination}
           />
+        )}
+
+        {isIdle && (
+          <button
+            type="button"
+            onClick={() => { haptics.impact(); setActiveTab('DELIVERY'); }}
+            className="pointer-events-auto flex min-h-14 w-full items-center gap-3 rounded-2xl border border-gold-primary/40 bg-surface/95 px-3.5 text-left shadow-[0_10px_24px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md touch-manipulation transition-transform duration-150 ease-out active:scale-[0.98]"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold-primary text-background"><UtensilsCrossed className="h-5 w-5" aria-hidden /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-display text-[15px] font-extrabold leading-tight">¿Hambre? Pide delivery</span>
+              <span className="block truncate text-xs text-text-secondary">Restaurantes de Riberalta, a tu puerta</span>
+            </span>
+            <ChevronRight className="h-5 w-5 shrink-0 text-gold-primary" aria-hidden />
+          </button>
         )}
 
         {locationError && (

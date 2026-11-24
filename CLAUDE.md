@@ -130,6 +130,15 @@ Visor en vivo de Firestore en español, solo para el dueño. **Lee por el servid
 - Tutorial de bienvenida ([`DriverWalletTutorialModal.tsx`](components/modals/DriverWalletTutorialModal.tsx)): 5 pantallas animadas con simulador de comisión.
 - Sin placa por ahora (en Riberalta casi no existen).
 
+### 3.6e. Delivery (comida a domicilio)
+- Pestaña **Delivery** del pasajero y **Pedidos** del conductor (5.ª pestaña de la barra inferior; punto/contador cuando hay algo nuevo). Atajo "¿Hambre? Pide delivery" en el inicio.
+- Pasajero ([`components/delivery/`](components/delivery)): lista de restaurantes con buscador y categorías → menú con fotos → hoja del producto (tamaño, extras, salsas, cantidad, instrucciones; se cierra arrastrando) → carrito/pago (efectivo por ahora) → seguimiento con mapa, estado, repartidor, chat, llamada y cancelación.
+- Conductor: lista de pedidos por tomar (sonido al entrar uno), tomar → ir al restaurante → "Ya recogí" → "Entregué". Gana el costo de envío; paga 1 Bs de comisión (o descuenta un viaje de regalo) al entregar. Su ubicación llega al cliente cada 10 s.
+- **Todo cambio de estado pasa por el servidor** ([`app/api/delivery/order`](app/api/delivery/order/route.ts), lógica en [`lib/deliveryServer.ts`](lib/deliveryServer.ts)): recalcula precios desde `menu_items`, valida, evita que dos repartidores tomen el mismo pedido y escribe `driver_boxes`. Envío = 4 Bs + 2 Bs/km de calle (mín. 6, máx. 40; [`lib/delivery.ts`](lib/delivery.ts)).
+- Datos: `restaurants`, `menu_items`, `delivery_orders` (+ `messages`), `delivery_open` (copia pública sin teléfono ni dirección exacta, solo la leen conductores). Reglas en `firestore.rules` (32 pruebas).
+- **Panel `/admin` → Delivery → Restaurantes y menú** ([`DeliveryManager.tsx`](components/admin/DeliveryManager.tsx), API `/api/admin/delivery`): alta/edición de restaurantes y platos con fotos, abierto/cerrado, agotado y cancelar pedidos en curso. Los de demostración (`demo: true`) se crean con `node scripts/seed-delivery.mjs` y se quitan con `--remove`.
+- `node scripts/publish-rules.mjs` publica `firestore.rules` en el proyecto de `.env.local` sin abrir la consola.
+
 ### 3.7. Directorio `components/map/`
 - [`MapComponent.tsx`](components/map/MapComponent.tsx): Componente Leaflet con marcadores personalizados (pasajero, conductores cercanos, rutas trazadas y radio de búsqueda).
 - [`MapView.tsx`](components/map/MapView.tsx): Envoltorio cliente con importación dinámica (`next/dynamic` con `ssr: false`) para evitar errores de compilación del objeto `window` en Next.js.
@@ -370,7 +379,7 @@ curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
 - **El webhook exige** la cabecera `X-Telegram-Bot-Api-Secret-Token` y que quien pulse el botón sea `TELEGRAM_ADMIN_CHAT_ID`. Monto y conductor salen del documento `wallet_recharges`, jamás del texto del mensaje.
 - **`/api/wallet/request-topup`** valida montos permitidos (10/20/50/100 BOB), tamaño e imagen, y lee el saldo del servidor.
 - **Comisiones** (`deductTripCommission`, `decrementDriverFreeTrips`) usan transacciones sobre el saldo real.
-- **Reglas de Firestore (`firestore.rules`) cerradas.** Todo exige sesión; sin regla comodín. El saldo (`walletBalance`) y los viajes de regalo solo pueden **bajar** desde el cliente; subirlos es exclusivo del servidor. `wallet_recharges` y `system_config` son solo-servidor. El rol se elige una vez. Los viajes/chat solo los editan sus participantes. Hay 28 pruebas: `npm run test:rules` (necesita Java).
+- **Reglas de Firestore (`firestore.rules`) cerradas.** Todo exige sesión; sin regla comodín. El saldo (`walletBalance`) y los viajes de regalo solo pueden **bajar** desde el cliente; subirlos es exclusivo del servidor. `wallet_recharges` y `system_config` son solo-servidor. El rol se elige una vez. Los viajes/chat solo los editan sus participantes. Hay 32 pruebas: `npm run test:rules` (necesita Java).
 - **Firebase Admin (servidor):** `lib/firebaseAdmin.ts` lee la credencial de `FIREBASE_SERVICE_ACCOUNT_B64` (JSON de la cuenta de servicio en base64). Lo usan el webhook y `request-topup`, porque el Admin SDK ignora las reglas. Sin esa variable ambas rutas responden 503.
 - **Riesgos que quedan (aceptados por ahora):** la comisión por viaje y las calificaciones se escriben desde el cliente (un conductor tramposo podría no descontarse la comisión o un pasajero manipular una calificación). Para blindarlo hay que moverlos a rutas de servidor.
 - Nunca subas tokens, claves ni `.env*` al repositorio. Si se filtra un token, revócalo en @BotFather (`/revoke`).

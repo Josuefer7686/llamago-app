@@ -35,7 +35,18 @@ const ridesCols: Col[] = [
   { label: 'Pedido', render: when('createdAtMs', 'createdAt') },
 ];
 
+const orderStatus = (d: AdminDoc) => <Chip tone={d.data.status === 'DELIVERED' ? 'good' : d.data.status === 'CANCELLED' ? 'bad' : 'warn'}>{({ PLACED: 'Buscando repartidor', ACCEPTED: 'Preparando', PICKED_UP: 'En camino', DELIVERED: 'Entregado', CANCELLED: 'Cancelado' } as Record<string, string>)[String(d.data.status)] || String(d.data.status)}</Chip>;
+
 export const COLUMNS: Record<string, Col[]> = {
+  delivery_orders: [
+    { label: 'Estado', render: orderStatus },
+    { label: 'Restaurante', render: (d) => d.data.restaurantName },
+    { label: 'Cliente', render: (d, n) => <Person name={d.data.customerName} id={d.data.customerId} names={n} /> },
+    { label: 'Repartidor', render: (d, n) => (d.data.driverId ? <Person name={d.data.driverName} id={d.data.driverId} names={n} /> : dim('Sin asignar')) },
+    { label: 'Entrega en', wrap: true, render: (d) => d.data.address?.text },
+    { label: 'Total', align: 'right', render: (d) => money(d.data.total) },
+    { label: 'Pedido', render: when('createdAtMs') },
+  ],
   driver_vehicles: [
     { label: 'Pidió', render: when('createdAtMs') },
     { label: 'Estado', render: (d) => <StatusChip status={d.data.status} /> },

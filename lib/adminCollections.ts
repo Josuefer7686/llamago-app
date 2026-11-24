@@ -3,7 +3,7 @@
  * en lenguaje sencillo. Es seguro importarlo desde el navegador (sin secretos).
  */
 
-export type CollectionGroupId = 'seguridad' | 'personas' | 'viajes' | 'dinero' | 'terminal' | 'sistema';
+export type CollectionGroupId = 'seguridad' | 'personas' | 'viajes' | 'delivery' | 'dinero' | 'terminal' | 'sistema';
 
 export interface AdminCollection {
   /** Identificador estable que usa la URL del panel */
@@ -22,6 +22,7 @@ export const GROUP_LABELS: Record<CollectionGroupId, string> = {
   seguridad: 'Seguridad',
   personas: 'Personas',
   viajes: 'Viajes',
+  delivery: 'Delivery',
   dinero: 'Dinero',
   terminal: 'Terminal interprovincial',
   sistema: 'Sistema',
@@ -82,6 +83,11 @@ export const ADMIN_COLLECTIONS: AdminCollection[] = [
     id: 'messages', path: 'messages', kind: 'group', group: 'viajes',
     label: 'Mensajes del chat',
     description: 'Lo que se escriben pasajero y conductor durante un viaje, de todos los viajes juntos.',
+  },
+  {
+    id: 'delivery_orders', path: 'delivery_orders', kind: 'collection', group: 'delivery',
+    label: 'Pedidos de delivery',
+    description: 'Cada pedido de comida: qué pidió, de qué restaurante, a dónde va, quién lo lleva y en qué estado está. Los restaurantes y su menú se editan en "Restaurantes y menú".',
   },
   {
     id: 'wallet_recharges', path: 'wallet_recharges', kind: 'collection', group: 'dinero',
