@@ -13,6 +13,8 @@ interface Props {
   store?: boolean;
   /** `now`: ir directo a confirmar el pedido; si no, vuelve al menú para elegir otro plato */
   onAdd: (line: CartLine, now: boolean) => void;
+  /** Ya hay un pedido empezado: el botón dice "Añadir" y vuelve al menú */
+  hasOrder?: boolean;
 }
 
 function OptionGroup({
@@ -50,15 +52,15 @@ function OptionGroup({
 }
 
 /** Hoja del producto: se arrastra hacia abajo para cerrar y sigue el dedo 1:1. */
-export function ProductSheet({ item, onClose, onAdd, store }: Props) {
+export function ProductSheet({ item, onClose, onAdd, store, hasOrder }: Props) {
   return (
     <AnimatePresence>
-      {item && <Sheet key={item.id} item={item} onClose={onClose} onAdd={onAdd} store={store} />}
+      {item && <Sheet key={item.id} item={item} onClose={onClose} onAdd={onAdd} store={store} hasOrder={hasOrder} />}
     </AnimatePresence>
   );
 }
 
-function Sheet({ item, onClose, onAdd, store }: { item: MenuItem; onClose: () => void; onAdd: (l: CartLine, now: boolean) => void; store?: boolean }) {
+function Sheet({ item, onClose, onAdd, store, hasOrder }: { item: MenuItem; onClose: () => void; onAdd: (l: CartLine, now: boolean) => void; store?: boolean; hasOrder?: boolean }) {
   const reduce = useReducedMotion();
   const controls = useDragControls();
   useLockScroll();
@@ -152,11 +154,11 @@ function Sheet({ item, onClose, onAdd, store }: { item: MenuItem; onClose: () =>
         <div className="shrink-0 space-y-2 border-t border-white/10 bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
           <div className="flex items-center gap-3">
             <QtyStepper qty={qty} onChange={(n) => setQty(Math.max(1, n))} />
-            <GoldButton onClick={() => add(true)} disabled={!item.available}>
-              {item.available ? <>Pedir <span className="tabular-nums">· {bs(Math.round(price.unit * qty * 100) / 100)}</span></> : 'Agotado'}
+            <GoldButton onClick={() => add(!hasOrder)} disabled={!item.available}>
+              {item.available ? <>{hasOrder ? 'Añadir al pedido' : 'Pedir'} <span className="tabular-nums">· {bs(Math.round(price.unit * qty * 100) / 100)}</span></> : 'Agotado'}
             </GoldButton>
           </div>
-          {item.available && (
+          {item.available && !hasOrder && (
             <button type="button" onClick={() => add(false)} className="min-h-11 w-full text-sm font-bold text-gold-primary touch-manipulation active:opacity-70">
               Agregar y elegir otro {store ? 'producto' : 'plato'}
             </button>
