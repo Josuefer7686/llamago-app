@@ -133,6 +133,8 @@ export interface OpenOrder {
   deliveryFee: number;
   total: number;
   promo?: boolean;
+  /** Parte del envío que el repartidor recibe como crédito (promo de bienvenida) */
+  gift?: number;
   paymentMethod: DeliveryPayment;
   distanceKm: number;
   createdAtMs: number;
@@ -181,12 +183,15 @@ export function deliveryFeeFor(km: number): number {
   return Math.min(40, Math.max(6, Math.round(4 + 2 * km)));
 }
 
-/** Promoción de bienvenida: los primeros pedidos del cliente tienen el envío a Bs 1. */
+/**
+ * Promoción de bienvenida: los primeros pedidos del cliente tienen el envío a MITAD de precio.
+ * La otra mitad (máx. Bs 10) NO es plata de LlamaGO: se le da al repartidor como CRÉDITO en su billetera
+ * (sirve para pagar comisiones dentro de la app, no se puede retirar en efectivo).
+ */
 export const PROMO_ORDERS = 5;
-export const PROMO_CUSTOMER_FEE = 1;
-/** LlamaGO cubre el envío del repartidor hasta este monto (≈ 8 km); si pasa, el cliente paga solo lo que sobra. */
-export const PROMO_COVER_MAX = 20;
-export const promoCustomerFee = (fee: number) => PROMO_CUSTOMER_FEE + Math.max(0, fee - PROMO_COVER_MAX);
+export const PROMO_MAX_GIFT = 10;
+export const promoGift = (fee: number) => Math.min(PROMO_MAX_GIFT, Math.floor(fee / 2));
+export const promoCustomerFee = (fee: number) => fee - promoGift(fee);
 
 export const bs = (n: number) => `Bs ${Number.isInteger(n) ? n : n.toFixed(2)}`;
 

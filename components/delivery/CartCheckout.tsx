@@ -163,7 +163,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
 
           {promo.active && (
             <p className="rounded-2xl bg-gold-primary/10 px-4 py-3 text-sm font-semibold text-gold-primary">
-              🎁 Regalo de bienvenida: envío a Bs {promo.PROMO_CUSTOMER_FEE}. Te quedan {promo.left} pedido{promo.left === 1 ? '' : 's'} así.
+              🎁 Regalo de bienvenida: envío a mitad de precio. Te quedan {promo.left} pedido{promo.left === 1 ? '' : 's'} así.
             </p>
           )}
           <section className="space-y-2 rounded-3xl bg-surface-2 p-4 text-[15px]" aria-label="Resumen">

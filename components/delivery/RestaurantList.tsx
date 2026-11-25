@@ -110,7 +110,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
         {promo.active && (
           <div className="flex items-center gap-3 rounded-2xl bg-gold-primary px-4 py-3 text-background">
             <span className="text-2xl" aria-hidden>🎁</span>
-            <p className="font-display text-[15px] font-extrabold leading-tight">Tus primeros {promo.left} pedidos: envío a Bs {promo.PROMO_CUSTOMER_FEE}, sin importar la distancia</p>
+            <p className="font-display text-[15px] font-extrabold leading-tight">Tus primeros {promo.left} pedidos: ¡envío a mitad de precio!</p>
           </div>
         )}
         {activeOrder && (

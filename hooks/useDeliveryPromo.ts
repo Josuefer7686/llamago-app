@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { deliveryApi } from '@/services/deliveryService';
-import { PROMO_COVER_MAX, PROMO_CUSTOMER_FEE, promoCustomerFee } from '@/lib/delivery';
+import { promoCustomerFee } from '@/lib/delivery';
 
 interface PromoState {
   left: number | null;
@@ -33,7 +33,5 @@ export function useDeliveryPromo() {
     refresh: () => refresh(true),
     /** Lo que pagaría el cliente por un envío normal de `fee` Bs */
     customerFee: (fee: number) => ((left ?? 0) > 0 ? promoCustomerFee(fee) : fee),
-    PROMO_COVER_MAX,
-    PROMO_CUSTOMER_FEE,
   };
 }

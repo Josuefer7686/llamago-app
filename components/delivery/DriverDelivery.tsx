@@ -26,7 +26,7 @@ function OpenCard({ o, i, here, onTake, busy }: { o: OpenOrder; i: number; here:
           </div>
           <div className="shrink-0 text-right">
             <p className="font-display text-2xl font-extrabold tabular-nums text-gold-primary">{bs(o.deliveryFee)}</p>
-            <p className="text-[11px] font-semibold text-text-secondary">tu ganancia{o.promo ? " · sin comisión" : ""}</p>
+            <p className="text-[11px] font-semibold text-text-secondary">{o.promo && o.gift ? `${bs(o.deliveryFee - o.gift)} efectivo + ${bs(o.gift)} crédito · sin comisión` : "tu ganancia"}</p>
           </div>
         </div>
         <div className="mt-3 space-y-1.5 text-sm">
@@ -110,7 +110,7 @@ function ActiveOrder({ o }: { o: DeliveryOrder }) {
             </ul>
             {o.note && <p className="mt-2 rounded-xl bg-white/[0.06] px-3 py-2 text-xs text-text-secondary">Nota del cliente: {o.note}</p>}
             <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 font-display text-lg font-extrabold"><span className="flex items-center gap-2"><Wallet className="h-5 w-5 text-gold-primary" aria-hidden /> Cobrar al entregar</span><span className="tabular-nums text-gold-primary">{bs(o.total)}</span></div>
-            <p className="mt-1 text-xs text-text-secondary">Pagas el pedido en el local con tu dinero y cobras el total al cliente: tu ganancia es el envío ({bs(o.deliveryFee)}).{o.promo ? " Es un pedido de bienvenida: el cliente paga poco de envío, pero LlamaGO te acredita el resto en tu billetera al entregar y no te cobra comisión." : ""}</p>
+            <p className="mt-1 text-xs text-text-secondary">Pagas el pedido en el local con tu dinero y cobras el total al cliente: tu ganancia es el envío ({bs(o.deliveryFee)}).{o.promo ? ` Es un pedido de bienvenida: el cliente paga la mitad del envío en efectivo y LlamaGO te regala la otra mitad (${bs(Math.max(0, o.deliveryFee - (o.customerFee ?? o.deliveryFee)))}) como crédito en tu billetera al entregar. Además no te cobra comisión.` : ""}</p>
           </section>
 
           {error && <p role="alert" className="rounded-2xl bg-red-400/10 px-4 py-3 text-sm text-red-200">{error}</p>}

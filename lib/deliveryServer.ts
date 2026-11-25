@@ -3,7 +3,7 @@ import { FieldValue, type Firestore } from 'firebase-admin/firestore';
 import { notifyAdmin } from '@/lib/safety';
 import { driverUids, sendPush } from '@/lib/push';
 import {
-  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, MAX_TIP, PROMO_ORDERS, TIP_OPTIONS, promoCustomerFee, bs, deliveryFeeFor, roadKm, unitPriceFor,
+  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, MAX_TIP, PROMO_ORDERS, TIP_OPTIONS, promoCustomerFee, promoGift, bs, deliveryFeeFor, roadKm, unitPriceFor,
   type DeliveryOrder, type MenuItem, type OpenOrder, type Restaurant,
 } from '@/lib/delivery';
 
@@ -94,7 +94,7 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
     addressText: text, destLoc: { lat: round3(lat), lng: round3(lng) },
     itemsCount: items.reduce((t, i) => t + i.qty, 0),
     itemsSummary: items.slice(0, 4).map((i) => `${i.qty}× ${i.name}`).join(', ') + (items.length > 4 ? '…' : ''),
-    deliveryFee: fee, total: order.total, promo, paymentMethod: payment, distanceKm: km, createdAtMs: order.createdAtMs,
+    deliveryFee: fee, total: order.total, promo, gift: promo ? promoGift(fee) : 0, paymentMethod: payment, distanceKm: km, createdAtMs: order.createdAtMs,
   };
   const batch = db.batch();
   batch.set(db.collection('delivery_orders').doc(id), order);
@@ -159,7 +159,7 @@ export async function releaseOrder(db: Firestore, uid: string, orderId: string):
         addressText: o.address.text, destLoc: { lat: round3(o.address.lat), lng: round3(o.address.lng) },
         itemsCount: o.items.reduce((t, i) => t + i.qty, 0),
         itemsSummary: o.items.slice(0, 4).map((i) => `${i.qty}× ${i.name}`).join(', '),
-        deliveryFee: o.deliveryFee, total: o.total, promo: !!o.promo, paymentMethod: o.paymentMethod, distanceKm: o.distanceKm, createdAtMs: Date.now(),
+        deliveryFee: o.deliveryFee, total: o.total, promo: !!o.promo, gift: o.promo ? Math.max(0, o.deliveryFee - (o.customerFee ?? o.deliveryFee)) : 0, paymentMethod: o.paymentMethod, distanceKm: o.distanceKm, createdAtMs: Date.now(),
       } satisfies OpenOrder);
     });
   } catch (e: any) {
@@ -203,7 +203,7 @@ export async function deliverOrder(db: Firestore, uid: string, orderId: string):
       const free = Number(user.freeTripsRemaining || 0);
       const balance = Number(user.walletBalance || 0);
       if (o.promo) {
-        // Promoción de bienvenida: sin comisión, y LlamaGO le acredita la diferencia entre el envío normal y lo que pagó el cliente.
+        // Promoción de bienvenida: sin comisión, y recibe como CRÉDITO la mitad del envío que no pagó el cliente (no es efectivo).
         const gift = Math.max(0, Math.round((o.deliveryFee - (o.customerFee ?? o.deliveryFee)) * 100) / 100);
         tx.update(userRef, { walletBalance: Math.round((balance + gift) * 100) / 100 });
       } else if (free > 0) tx.update(userRef, { freeTripsRemaining: free - 1 });
