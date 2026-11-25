@@ -257,6 +257,15 @@ body.theme-light .leaflet-container {
 .lobby-drift-b { animation: lobby-drift-b 18s ease-in-out infinite; }
 .lobby-road { animation: lobby-road 1.1s linear infinite; }
 .lobby-shine::after { content: ''; position: absolute; inset: 0; width: 40%; background: linear-gradient(90deg, transparent, rgba(252,234,13,0.55), transparent); animation: lobby-shine 3.6s ease-in-out 1.6s infinite; pointer-events: none; }
+@keyframes lobby-bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-2.5px) } }
+@keyframes lobby-spin { to { transform: rotate(360deg) } }
+@keyframes lobby-speed { 0% { transform: translateX(8px); opacity: 0 } 40% { opacity: .8 } 100% { transform: translateX(-14px); opacity: 0 } }
+.lobby-bike-body { animation: lobby-bob .55s ease-in-out infinite; }
+.lobby-wheel { animation: lobby-spin .5s linear infinite; }
+.lobby-speed line { animation: lobby-speed .9s ease-out infinite; }
+.lobby-speed line:nth-child(2) { animation-delay: .3s; }
+.lobby-speed line:nth-child(3) { animation-delay: .6s; }
 @media (prefers-reduced-motion: reduce) {
+  .lobby-bike-body, .lobby-wheel, .lobby-speed line { animation: none; }
   .lobby-float, .lobby-pulse, .lobby-drift-a, .lobby-drift-b, .lobby-road, .lobby-shine::after { animation: none; }
 }

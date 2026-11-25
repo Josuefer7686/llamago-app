@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { APP_VERSION } from '@/lib/appVersion';
 
 
-const LINES = ['Tu mototaxi, en minutos', 'Comida y compras a tu puerta', 'Viaja seguro por Riberalta'];
+const LINES = ['Tu mototaxi, en minutos', 'Comida y compras a tu puerta', 'Viaja seguro por Bolivia'];
 
 /** Frase que cambia sola cada pocos segundos. */
 function RotatingLine() {
@@ -49,12 +49,52 @@ function LobbyBackdrop() {
   );
 }
 
-/** Calle con rayas que avanzan: la app "en movimiento". */
+/** Moto de delivery con repartidor y casco, rodando sobre la calle. */
+function DeliveryBike() {
+  return (
+    <svg viewBox="0 0 140 76" className="lobby-bike h-24 w-auto" role="img" aria-label="Repartidor en moto con casco, viajando seguro">
+      {/* líneas de velocidad */}
+      <g className="lobby-speed" stroke="#FCEA0D" strokeLinecap="round" strokeWidth="3" opacity="0.7">
+        <line x1="2" y1="30" x2="16" y2="30" />
+        <line x1="0" y1="40" x2="12" y2="40" />
+        <line x1="6" y1="50" x2="18" y2="50" />
+      </g>
+      <g className="lobby-bike-body">
+        {/* caja de delivery */}
+        <rect x="22" y="12" width="32" height="26" rx="4" fill="#FCEA0D" />
+        <rect x="26" y="16" width="24" height="3" rx="1.5" fill="#0C0C0C" />
+        <path d="M33 28l5 5 9-10" fill="none" stroke="#0C0C0C" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+        {/* chasis, horquilla, manubrio y asiento */}
+        <path d="M36 56l22-18h24l12 18M82 38l8-16h10" fill="none" stroke="#FCEA0D" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="56" y="31" width="26" height="7" rx="3.5" fill="#FCEA0D" />
+        {/* repartidor */}
+        <path d="M64 33l8-18" fill="none" stroke="#FCEA0D" strokeWidth="9" strokeLinecap="round" />
+        <path d="M66 34l16 6-2 14" fill="none" stroke="#FCEA0D" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M76 17l16 7" fill="none" stroke="#FCEA0D" strokeWidth="5" strokeLinecap="round" />
+        <circle cx="76" cy="5" r="8.5" fill="#FCEA0D" />
+        <path d="M77 3.5h8.5a1 1 0 0 1 0 5H77z" fill="#0C0C0C" />
+        {/* ruedas */}
+        {[36, 100].map((cx) => (
+          <g key={cx}>
+            <circle cx={cx} cy="58" r="13" fill="#0C0C0C" stroke="#FCEA0D" strokeWidth="4.5" />
+            <g className="lobby-wheel" style={{ transformOrigin: `${cx}px 58px` }} stroke="#FCEA0D" strokeWidth="2.6" strokeLinecap="round">
+              <line x1={cx - 8} y1="58" x2={cx + 8} y2="58" />
+              <line x1={cx} y1="50" x2={cx} y2="66" />
+            </g>
+          </g>
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+/** Calle con rayas que avanzan y la moto de delivery: la app "en movimiento". */
 function RoadStrip() {
   return (
-    <div className="pb-safe relative z-10 pt-6" aria-hidden>
-      <div className="relative mx-auto h-8 w-full max-w-sm overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_20%,black_80%,transparent)]">
-        <div className="lobby-road absolute left-0 top-1/2 h-[3px] w-[200%] -translate-y-1/2 [background-image:repeating-linear-gradient(90deg,#FCEA0D_0_26px,transparent_26px_52px)]" />
+    <div className="pb-safe relative z-10 pt-4" aria-hidden>
+      <div className="relative mx-auto h-[112px] w-full max-w-sm overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_20%,black_80%,transparent)]">
+        <div className="absolute inset-x-0 top-0 flex justify-center"><DeliveryBike /></div>
+        <div className="lobby-road absolute left-0 top-[104px] h-[3px] w-[200%] [background-image:repeating-linear-gradient(90deg,#FCEA0D_0_26px,transparent_26px_52px)]" />
       </div>
       <p className="mt-2 text-center text-[11px] font-semibold tracking-[0.18em] text-text-secondary/80">RIBERALTA · BENI · BOLIVIA</p>
     </div>
