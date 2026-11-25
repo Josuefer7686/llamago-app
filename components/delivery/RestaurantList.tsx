@@ -40,7 +40,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
 
   return (
     <div className="h-full overflow-y-auto overscroll-contain pb-8">
-      <header className="sticky top-0 z-20 bg-background/95 px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))] backdrop-blur-md">
+      <header className="px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="mx-auto flex max-w-[430px] items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 text-xs font-semibold text-text-secondary">
