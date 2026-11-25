@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebaseAdmin';
 import { verifyCaller } from '@/lib/safety';
 import {
-  acceptOrder, cancelOrder, createOrder, deliverOrder, pickupOrder, promoLeft, releaseOrder, updateDriverLocation,
+  acceptOrder, cancelOrder, createOrder, deliverOrder, pickupOrder, promoLeft, releaseOrder, tipOrder, updateDriverLocation,
 } from '@/lib/deliveryServer';
 
 export const runtime = 'nodejs';
@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     case 'release': res = await releaseOrder(db, uid, orderId); break;
     case 'pickup': res = await pickupOrder(db, uid, orderId); break;
     case 'deliver': res = await deliverOrder(db, uid, orderId); break;
+    case 'tip': res = await tipOrder(db, uid, orderId, Number(body.amount)); break;
     case 'cancel': res = await cancelOrder(db, uid, orderId, String(body.reason || '')); break;
     case 'location': res = await updateDriverLocation(db, uid, orderId, Number(body.lat), Number(body.lng)); break;
     default: res = { ok: false, error: 'Acción inválida.' };

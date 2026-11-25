@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Check, ChevronDown, MessageCircle, Phone, ReceiptText } from 'lucide-react';
 import { deliveryService } from '@/services/deliveryService';
 import { deliveryApi } from '@/services/deliveryService';
-import { STATUS_LABEL, bs, distanceKm, isActiveOrder, type DeliveryOrder } from '@/lib/delivery';
+import { MAX_TIP, STATUS_LABEL, TIP_OPTIONS, bs, distanceKm, isActiveOrder, type DeliveryOrder } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { audio } from '@/utils/audio';
 import { BackButton, GoldButton, Skeleton, initials, motion } from './ui';
@@ -82,6 +82,15 @@ export function OrderTracking({ orderId, onBack }: { orderId: string; onBack: ()
   const canCancel = o.status === 'PLACED' || o.status === 'ACCEPTED';
   const waitedMin = Math.floor((now - o.createdAtMs) / 60000);
 
+  const addTip = async (amount: number) => {
+    if (!o || busy) return;
+    haptics.impact(); setBusy(true); setError('');
+    const r = await deliveryApi('tip', { orderId: o.id, amount });
+    setBusy(false);
+    if (!r.ok) { haptics.error(); setError(r.error || 'No se pudo subir el envío.'); return; }
+    haptics.success();
+  };
+
   const cancel = async () => {
     setBusy(true); setError('');
     const r = await deliveryApi('cancel', { orderId: o.id, reason: 'Cancelado por el cliente' });
@@ -129,6 +138,26 @@ export function OrderTracking({ orderId, onBack }: { orderId: string; onBack: ()
             </ol>
           )}
 
+          {o.status === 'PLACED' && waitedMin >= 1 && (
+            <section className="space-y-3 rounded-3xl border border-gold-primary/40 bg-gold-primary/10 p-4" aria-label="Subir envío">
+              <div>
+                <h2 className="font-display text-lg font-extrabold leading-tight">¿Nadie acepta todavía?</h2>
+                <p className="mt-1 text-sm leading-snug text-white/80">
+                  Dale un <b>extra al repartidor</b> y alguien tomará tu pedido más rápido. Todo ese dinero es para él.
+                </p>
+              </div>
+              {(o.tip ?? 0) > 0 && <p className="text-sm font-bold text-gold-primary">Ya ofreciste {bs(o.tip ?? 0)} extra. Avisamos de nuevo a los repartidores.</p>}
+              <div className="grid grid-cols-3 gap-2">
+                {TIP_OPTIONS.filter((a) => (o.tip ?? 0) + a <= MAX_TIP).map((a) => (
+                  <button key={a} type="button" disabled={busy} onClick={() => void addTip(a)}
+                    className="min-h-14 rounded-2xl bg-gold-primary font-display text-lg font-extrabold text-background touch-manipulation transition-transform duration-150 ease-out active:scale-[0.96] disabled:opacity-50">
+                    +{bs(a)}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
           {o.status === 'PLACED' && waitedMin >= 8 && (
             <p className="rounded-2xl bg-white/[0.06] px-4 py-3 text-sm leading-snug text-text-secondary">Estamos tardando más de lo normal en encontrar un repartidor. Puedes seguir esperando o cancelar.</p>
           )}
@@ -164,6 +193,7 @@ export function OrderTracking({ orderId, onBack }: { orderId: string; onBack: ()
                   </div>
                 ))}
                 <div className="flex justify-between border-t border-white/10 pt-2 text-text-secondary"><span>Envío{o.promo ? " (regalo de bienvenida 🎁)" : ""}</span><span className="tabular-nums">{o.promo && (o.customerFee ?? o.deliveryFee) < o.deliveryFee ? <><s className="mr-1.5 text-xs opacity-60">{bs(o.deliveryFee)}</s>{bs(o.customerFee ?? o.deliveryFee)}</> : bs(o.customerFee ?? o.deliveryFee)}</span></div>
+                {(o.tip ?? 0) > 0 && <div className="flex justify-between text-text-secondary"><span>Incluye extra para el repartidor</span><span className="tabular-nums">{bs(o.tip ?? 0)}</span></div>}
                 <div className="flex justify-between font-display text-base font-extrabold"><span>Total en efectivo</span><span className="tabular-nums text-gold-primary">{bs(o.total)}</span></div>
                 <p className="pt-1 text-xs text-text-secondary">Entrega en: {o.address.text}{o.address.reference ? ` (${o.address.reference})` : ''}</p>
               </div>

@@ -99,6 +99,8 @@ export interface DeliveryOrder {
   customerFee?: number;
   /** Pedido de la promoción de bienvenida: LlamaGO cubre la diferencia */
   promo?: boolean;
+  /** Extra que el cliente ofreció al repartidor (va 100 % para él) */
+  tip?: number;
   total: number;
   distanceKm: number;
   address: { text: string; reference: string; lat: number; lng: number };
@@ -153,6 +155,9 @@ export const STATUS_LABEL: Record<OrderStatus, string> = {
   CANCELLED: 'Cancelado',
 };
 
+/** Montos que el cliente puede sumar al envío, y el tope total de extra por pedido. */
+export const TIP_OPTIONS = [2, 5, 10] as const;
+export const MAX_TIP = 20;
 export const MAX_ITEM_QTY = 20;
 export const MAX_NOTE = 140;
 export const COMMISSION_BS = 1;

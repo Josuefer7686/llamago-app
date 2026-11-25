@@ -3,7 +3,7 @@ import { FieldValue, type Firestore } from 'firebase-admin/firestore';
 import { notifyAdmin } from '@/lib/safety';
 import { driverUids, sendPush } from '@/lib/push';
 import {
-  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, PROMO_ORDERS, promoCustomerFee, bs, deliveryFeeFor, roadKm, unitPriceFor,
+  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, MAX_TIP, PROMO_ORDERS, TIP_OPTIONS, promoCustomerFee, bs, deliveryFeeFor, roadKm, unitPriceFor,
   type DeliveryOrder, type MenuItem, type OpenOrder, type Restaurant,
 } from '@/lib/delivery';
 
@@ -233,6 +233,31 @@ export async function deliverOrder(db: Firestore, uid: string, orderId: string):
     const o = (await ref.get()).data();
     if (o) await sendPush([o.customerId], { title: '¡Pedido entregado! ✅', body: 'Que lo disfrutes. Gracias por pedir con LlamaGO.', tag: `del-${orderId}`, urgent: true });
   })());
+  return { ok: true };
+}
+
+/** El cliente suma un extra al envío mientras nadie acepta: va 100 % al repartidor y se vuelve a avisar a todos. */
+export async function tipOrder(db: Firestore, uid: string, orderId: string, amount: number): Promise<Res> {
+  if (!(TIP_OPTIONS as readonly number[]).includes(amount)) return fail('Monto no válido.');
+  const ref = db.collection('delivery_orders').doc(orderId);
+  let restaurant = '', fee = 0, total = 0;
+  try {
+    await db.runTransaction(async (tx) => {
+      const o = (await tx.get(ref)).data() as DeliveryOrder | undefined;
+      if (!o || o.customerId !== uid) throw new Error('Pedido no encontrado.');
+      if (o.status !== 'PLACED') throw new Error('Este pedido ya no está buscando repartidor.');
+      const tip = Number(o.tip || 0);
+      if (tip + amount > MAX_TIP) throw new Error(`Ya ofreciste el máximo extra (${bs(MAX_TIP)}).`);
+      fee = o.deliveryFee + amount;
+      total = Math.round((o.total + amount) * 100) / 100;
+      restaurant = o.restaurantName;
+      tx.update(ref, { tip: tip + amount, deliveryFee: fee, customerFee: (o.customerFee ?? o.deliveryFee) + amount, total });
+      tx.set(db.collection('delivery_open').doc(orderId), { deliveryFee: fee, total, createdAtMs: Date.now() }, { merge: true });
+    });
+  } catch (e: any) {
+    return fail(e?.message || 'No se pudo subir el envío.');
+  }
+  await pushSafe((async () => sendPush(await driverUids(), { title: '💸 Subieron el envío', body: `${restaurant} · ahora ganas ${bs(fee)}`, tag: `del-${orderId}`, urgent: true }))());
   return { ok: true };
 }
 
