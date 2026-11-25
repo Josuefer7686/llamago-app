@@ -178,9 +178,9 @@ export function distanceKm(a: { lat: number; lng: number }, b: { lat: number; ln
 export const roadKm = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) =>
   Math.round(distanceKm(a, b) * 1.3 * 10) / 10;
 
-/** Costo de envío en Bs: base 4 + 2 por km, mínimo 6 y máximo 40, siempre entero. */
+/** Costo de envío en Bs: base 3 + 1,5 por km, mínimo 7 y máximo 40, siempre entero (más barato que la competencia, que cobra 10-20 Bs). */
 export function deliveryFeeFor(km: number): number {
-  return Math.min(40, Math.max(6, Math.round(4 + 2 * km)));
+  return Math.min(40, Math.max(7, Math.round(3 + 1.5 * km)));
 }
 
 /**
