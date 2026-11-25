@@ -52,7 +52,7 @@ function LobbyBackdrop() {
 /** Moto de delivery con repartidor y casco, rodando sobre la calle. */
 function DeliveryBike() {
   return (
-    <svg viewBox="0 0 140 76" className="lobby-bike h-24 w-auto" role="img" aria-label="Repartidor en moto con casco, viajando seguro">
+    <svg viewBox="0 -10 140 86" className="lobby-bike h-24 w-auto overflow-visible" role="img" aria-label="Repartidor en moto con casco, viajando seguro">
       {/* líneas de velocidad */}
       <g className="lobby-speed" stroke="#FCEA0D" strokeLinecap="round" strokeWidth="3" opacity="0.7">
         <line x1="2" y1="30" x2="16" y2="30" />
@@ -94,7 +94,7 @@ function RoadStrip() {
     <div className="pb-safe relative z-10 pt-4" aria-hidden>
       <div className="relative mx-auto h-[112px] w-full max-w-sm overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_20%,black_80%,transparent)]">
         <div className="absolute inset-x-0 top-0 flex justify-center"><DeliveryBike /></div>
-        <div className="lobby-road absolute left-0 top-[104px] h-[3px] w-[200%] [background-image:repeating-linear-gradient(90deg,#FCEA0D_0_26px,transparent_26px_52px)]" />
+        <div className="lobby-road absolute left-0 top-[98px] h-[3px] w-[200%] [background-image:repeating-linear-gradient(90deg,#FCEA0D_0_26px,transparent_26px_52px)]" />
       </div>
       <p className="mt-2 text-center text-[11px] font-semibold tracking-[0.18em] text-text-secondary/80">RIBERALTA · BENI · BOLIVIA</p>
     </div>
