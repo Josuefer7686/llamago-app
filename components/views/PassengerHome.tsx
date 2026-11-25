@@ -447,7 +447,7 @@ export const PassengerHome = () => {
       <div className="relative z-30 px-4 pt-[max(1rem,env(safe-area-inset-top))] pointer-events-none space-y-3 max-w-[430px] mx-auto w-full">
         <div className="flex items-center justify-between gap-3 pointer-events-auto">
           <div className="flex items-center min-w-0 py-1.5 px-3 rounded-2xl bg-gold-primary shadow-[0_8px_20px_-8px_rgba(252,234,13,0.6)]">
-            <img src="/wordmark-dark.png" alt="LlamaGO: pide, viaja y disfruta" className="h-[60px] w-auto object-contain" />
+            <img src="/logo-wide-dark.png" alt="LlamaGO: pide, viaja y disfruta" className="h-12 w-auto object-contain" />
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
