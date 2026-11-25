@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { ChevronLeft, ImagePlus, Pencil, Plus, Trash2 } from 'lucide-react';
-import { DELIVERY_CATEGORIES, STATUS_LABEL, bs, isStore, type MenuItem, type OrderStatus, type Restaurant } from '@/lib/delivery';
+import { BarChart3, ChevronLeft, Copy, ImagePlus, Megaphone, Pencil, Plus, Trash2 } from 'lucide-react';
+import { AD_PLANS, DELIVERY_CATEGORIES, STATUS_LABEL, activePlan, bs, isStore, type AdPlan, type MenuItem, type OrderStatus, type Restaurant } from '@/lib/delivery';
 import { compressToLimit } from '@/lib/imageUtils';
 
 type ActiveOrder = { id: string; restaurantName: string; customerName: string; status: OrderStatus; total: number; createdAtMs: number; driverName: string };
@@ -82,7 +82,7 @@ function RestaurantForm({ initial, onDone }: { initial: Partial<Restaurant>; onD
     kind: initial.kind === 'STORE' ? 'STORE' : 'RESTAURANT', name: initial.name || '', description: initial.description || '', category: initial.category || 'Almuerzos',
     coverUrl: initial.coverUrl || '', address: initial.address || '', coords: initial.lat ? `${initial.lat}, ${initial.lng}` : '',
     phone: initial.phone || '', hours: initial.hours || '', prepMinutes: String(initial.prepMinutes ?? 20), minOrder: String(initial.minOrder ?? ''),
-    rating: String(initial.rating ?? ''), open: initial.open ?? true, active: initial.active ?? true,
+    rating: String(initial.rating ?? ''), open: initial.open ?? true, active: initial.active ?? true, adHeadline: initial.adHeadline || '',
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -120,6 +120,11 @@ function RestaurantForm({ initial, onDone }: { initial: Partial<Restaurant>; onD
             <select className={input} value={f.category} onChange={(e) => set('category', e.target.value)}>{DELIVERY_CATEGORIES.filter((c) => c !== 'Todos').map((c) => <option key={c}>{c}</option>)}</select></div>
         ) : <div />}
         <div><label className={label}>Tiempo de preparación (min)</label><input className={input} inputMode="numeric" value={f.prepMinutes} onChange={(e) => set('prepMinutes', e.target.value)} /></div>
+      </div>
+      <div>
+        <label className={label}>Frase del anuncio (opcional)</label>
+        <input className={input} value={f.adHeadline} onChange={(e) => set('adHeadline', e.target.value)} maxLength={70} placeholder="Ej.: Las mejores hamburguesas de Riberalta" />
+        <p className="mt-1.5 text-xs text-text-secondary">Se muestra en el carrusel y en “Mientras esperas” cuando el negocio tiene plan. Si la dejas vacía se usa la descripción.</p>
       </div>
       <PhotoField value={f.coverUrl} onChange={(v) => set('coverUrl', v)} text="Foto de portada" />
       <div><label className={label}>Dirección</label><input className={input} value={f.address} onChange={(e) => set('address', e.target.value)} maxLength={120} placeholder="Calle y barrio" /></div>
@@ -193,6 +198,8 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
   const [editR, setEditR] = useState<Partial<Restaurant> | null>(null);
   const [editI, setEditI] = useState<Partial<MenuItem> | null>(null);
   const [msg, setMsg] = useState('');
+  const [tab, setTab] = useState<'list' | 'results'>('list');
+  const [planOf, setPlanOf] = useState<Restaurant | null>(null);
 
   const guard = useCallback((e: unknown) => { if (e instanceof Error && e.message === 'UNAUTHORIZED') onUnauthorized(); }, [onUnauthorized]);
   const load = useCallback(() => api('GET').then((j) => { if (j.ok) { setRestaurants(j.restaurants); setOrders(j.activeOrders); } }).catch(guard), [guard]);
@@ -252,7 +259,15 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
         <button onClick={() => setEditR({})} className="flex h-11 items-center gap-2 rounded-xl bg-gold-primary px-4 text-sm font-black text-background"><Plus className="h-4 w-4" aria-hidden /> Nuevo negocio</button>
       </div>
 
-      {!!orders.length && (
+      <div className="flex gap-2" role="tablist" aria-label="Sección">
+        {([['list', 'Negocios y menú', null], ['results', 'Publicidad y resultados', BarChart3]] as const).map(([k, t, Icon]) => (
+          <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={`flex h-11 items-center gap-2 rounded-xl border px-4 text-sm font-bold ${tab === k ? 'border-gold-primary bg-gold-primary/10 text-gold-light' : 'border-white/10 text-white/80'}`}>{Icon && <Icon className="h-4 w-4" aria-hidden />}{t}</button>
+        ))}
+      </div>
+
+      {tab === 'results' && <Results onUnauthorized={onUnauthorized} />}
+
+      {tab === 'list' && !!orders.length && (
         <section className="rounded-2xl border border-gold-primary/30 bg-gold-primary/5 p-4">
           <h2 className="mb-3 font-display text-base font-extrabold">Pedidos en curso ({orders.length})</h2>
           <ul className="space-y-2">
@@ -267,15 +282,15 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
         </section>
       )}
 
-      {restaurants === null && <p className="text-text-secondary">Cargando…</p>}
-      {restaurants && !restaurants.length && <p className="rounded-2xl border border-white/10 bg-surface p-8 text-center text-text-secondary">Todavía no hay negocios. Crea el primero con “Nuevo negocio”.</p>}
-      <ul className="grid gap-3 lg:grid-cols-2">
+      {tab === 'list' && restaurants === null && <p className="text-text-secondary">Cargando…</p>}
+      {tab === 'list' && restaurants && !restaurants.length && <p className="rounded-2xl border border-white/10 bg-surface p-8 text-center text-text-secondary">Todavía no hay negocios. Crea el primero con “Nuevo negocio”.</p>}
+      {tab === 'list' && <ul className="grid gap-3 lg:grid-cols-2">
         {(restaurants || []).sort((a, b) => a.name.localeCompare(b.name)).map((r) => (
           <li key={r.id} className="flex gap-3 rounded-2xl border border-white/10 bg-surface p-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {r.coverUrl ? <img src={r.coverUrl} alt="" className="h-24 w-24 shrink-0 rounded-xl object-cover" /> : <div className="h-24 w-24 shrink-0 rounded-xl bg-surface-2" />}
             <div className="min-w-0 flex-1">
-              <p className="flex items-center gap-2 truncate font-bold">{r.name}{isStore(r) && <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-[11px] font-bold text-sky-300">Tienda</span>}{r.demo && <span className="rounded-full bg-gold-primary/15 px-2 py-0.5 text-[11px] font-bold text-gold-primary">Demo</span>}{!r.active && <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-text-secondary">Oculto</span>}</p>
+              <p className="flex items-center gap-2 truncate font-bold">{r.name}{isStore(r) && <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-[11px] font-bold text-sky-300">Tienda</span>}{r.demo && <span className="rounded-full bg-gold-primary/15 px-2 py-0.5 text-[11px] font-bold text-gold-primary">Demo</span>}{!r.active && <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-bold text-text-secondary">Oculto</span>}{activePlan(r) && <span className="rounded-full bg-gold-primary/15 px-2 py-0.5 text-[11px] font-bold text-gold-primary">{AD_PLANS[activePlan(r)!].label} · {daysLeft(r.planUntilMs)} d</span>}</p>
               <p className="truncate text-xs text-text-secondary">{r.category} · {r.address}</p>
               <div className="mt-2 flex items-center gap-2">
                 <Switch on={r.open} label={`${r.name} abierto`} onChange={async (v) => { if (await act({ action: 'setOpen', id: r.id, open: v }, v ? 'Abierto' : 'Cerrado')) load(); }} />
@@ -284,15 +299,135 @@ export function DeliveryManager({ onUnauthorized }: { onUnauthorized: () => void
               <div className="mt-2 flex gap-2">
                 <button onClick={() => setMenuOf(r)} className="h-9 rounded-lg bg-white/[0.08] px-3 text-sm font-semibold">Menú</button>
                 <button onClick={() => setEditR(r)} className="h-9 rounded-lg border border-white/10 px-3 text-sm font-semibold">Editar</button>
+                <button onClick={() => setPlanOf(r)} className="flex h-9 items-center gap-1.5 rounded-lg border border-gold-primary/40 px-3 text-sm font-semibold text-gold-light"><Megaphone className="h-3.5 w-3.5" aria-hidden /> Plan</button>
+                <button onClick={() => setPlanOf(r)} className="flex h-9 items-center gap-1.5 rounded-lg border border-gold-primary/40 px-3 text-sm font-semibold text-gold-light"><Megaphone className="h-3.5 w-3.5" aria-hidden /> Plan</button>
                 <button onClick={async () => { if (window.confirm(`¿Borrar "${r.name}" y todo su menú? No se puede deshacer.`) && await act({ action: 'deleteRestaurant', id: r.id }, 'Restaurante borrado')) load(); }} aria-label="Borrar restaurante" className="ml-auto grid h-9 w-9 place-items-center rounded-lg border border-white/10 text-red-300"><Trash2 className="h-4 w-4" aria-hidden /></button>
               </div>
             </div>
           </li>
         ))}
-      </ul>
+      </ul>}
 
       {editR && <Modal title={editR.id ? 'Editar negocio' : 'Nuevo negocio'} onClose={() => setEditR(null)}><RestaurantForm initial={editR} onDone={() => { setEditR(null); flash('Restaurante guardado'); load(); }} /></Modal>}
+      {planOf && <Modal title={`Plan de ${planOf.name}`} onClose={() => setPlanOf(null)}><PlanModal r={planOf} onClose={() => setPlanOf(null)} onDone={(m) => { setPlanOf(null); flash(m); load(); }} /></Modal>}
       {msg && <div role="status" className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-white/10 bg-surface px-4 py-3 text-sm shadow-xl">{msg}</div>}
+    </div>
+  );
+}
+
+const daysLeft = (ms?: number) => Math.max(0, Math.ceil(((ms || 0) - Date.now()) / 86400000));
+const dateEs = (ms: number) => new Date(ms).toLocaleDateString('es-BO', { day: '2-digit', month: 'short' });
+
+function PlanModal({ r, onClose, onDone }: { r: Restaurant; onClose: () => void; onDone: (m: string) => void }) {
+  const cur = activePlan(r);
+  const [plan, setPlan] = useState<AdPlan>(cur || 'DESTACADO');
+  const [weeks, setWeeks] = useState(1);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  const [title, setTitle] = useState('¿Tienes hambre? 🍔');
+  const [body, setBody] = useState(`Pide en ${r.name}${r.adHeadline ? `: ${r.adHeadline}` : ''}`);
+  const total = AD_PLANS[plan].weekly * weeks;
+
+  const run = async (payload: unknown, ok: (j: any) => string) => {
+    setBusy(true); setErr('');
+    const j = await api('POST', payload).catch(() => ({ ok: false, error: 'Sin conexión.' }));
+    setBusy(false);
+    if (!j.ok) { setErr(j.error || 'No se pudo.'); return; }
+    onDone(ok(j));
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="rounded-xl bg-surface-2 p-4 text-sm">
+        {cur ? <p>Plan actual: <b className="text-gold-primary">{AD_PLANS[cur].label}</b> · vence el {dateEs(r.planUntilMs!)} (faltan {daysLeft(r.planUntilMs)} días)</p> : <p className="text-text-secondary">Este negocio no tiene plan. Aparece normal en la lista, gratis.</p>}
+      </div>
+      <div>
+        <span className={label}>Plan</span>
+        <div className="grid gap-2" role="radiogroup" aria-label="Plan">
+          {(Object.keys(AD_PLANS) as AdPlan[]).map((k) => (
+            <button key={k} type="button" role="radio" aria-checked={plan === k} onClick={() => setPlan(k)}
+              className={`rounded-xl border p-3 text-left ${plan === k ? 'border-gold-primary bg-gold-primary/10' : 'border-white/10'}`}>
+              <span className="flex items-baseline justify-between"><b>{AD_PLANS[k].label}</b><span className="font-display font-extrabold text-gold-primary">{bs(AD_PLANS[k].weekly)} / semana</span></span>
+              <span className="mt-1 block text-xs text-text-secondary">{AD_PLANS[k].perks}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <span className={label}>Semanas que pagó</span>
+        <div className="grid grid-cols-4 gap-2">
+          {[1, 2, 4, 8].map((w) => <button key={w} type="button" onClick={() => setWeeks(w)} className={`h-11 rounded-xl border font-bold ${weeks === w ? 'border-gold-primary bg-gold-primary/10 text-gold-light' : 'border-white/10'}`}>{w}</button>)}
+        </div>
+      </div>
+      {err && <p role="alert" className="rounded-xl bg-red-400/10 px-3 py-2 text-sm text-red-200">{err}</p>}
+      <button disabled={busy} onClick={() => { if (window.confirm(`¿Ya te pagó ${bs(total)}? Se activa ${AD_PLANS[plan].label} por ${weeks} semana${weeks > 1 ? 's' : ''} y queda registrado el cobro.`)) void run({ action: 'setPlan', id: r.id, plan, weeks }, () => `Plan ${AD_PLANS[plan].label} activado (${bs(total)})`); }}
+        className="h-12 w-full rounded-xl bg-gold-primary font-black text-background disabled:opacity-50">{busy ? 'Guardando…' : `Activar y registrar cobro de ${bs(total)}`}</button>
+      {cur && <button disabled={busy} onClick={() => { if (window.confirm('¿Quitar el plan ahora? No se devuelve el cobro registrado.')) void run({ action: 'clearPlan', id: r.id }, () => 'Plan quitado'); }} className="h-11 w-full rounded-xl border border-white/10 text-sm font-semibold text-red-300 disabled:opacity-50">Quitar plan</button>}
+
+      {cur === 'PREMIUM' && (
+        <div className="space-y-3 rounded-xl border border-gold-primary/30 bg-gold-primary/5 p-4">
+          <p className="flex items-center gap-2 font-bold"><Megaphone className="h-4 w-4 text-gold-primary" aria-hidden /> Aviso al celular (1 por semana)</p>
+          <p className="text-xs text-text-secondary">Les llega a los clientes que tienen los avisos activados y no recibieron 3 esta semana. Al tocarlo se abre el menú de este restaurante.</p>
+          <input className={input} value={title} onChange={(e) => setTitle(e.target.value)} maxLength={60} aria-label="Título del aviso" />
+          <input className={input} value={body} onChange={(e) => setBody(e.target.value)} maxLength={120} aria-label="Texto del aviso" />
+          <button disabled={busy} onClick={() => { if (window.confirm('¿Enviar el aviso ahora a los clientes?')) void run({ action: 'sendPromo', id: r.id, title, body }, (j) => `Aviso enviado a ${j.people} personas`); }}
+            className="h-11 w-full rounded-xl bg-white/[0.1] font-bold disabled:opacity-50">Enviar aviso ahora</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type Row = { id: string; name: string; plan: AdPlan | null; planUntilMs: number; views: number; clicks: number; later: number; pushes: number; orders: number; adOrders: number; sales: number };
+
+function Results({ onUnauthorized }: { onUnauthorized: () => void }) {
+  const [days, setDays] = useState(7);
+  const [data, setData] = useState<{ income: number; payments: number; rows: Row[] } | null>(null);
+  const [copied, setCopied] = useState('');
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- carga de resultados al cambiar el período
+  useEffect(() => { setData(null); api('GET', undefined, `?stats=1&days=${days}`).then((j) => j.ok && setData(j)).catch((e) => { if (e instanceof Error && e.message === 'UNAUTHORIZED') onUnauthorized(); }); }, [days, onUnauthorized]);
+
+  const rows = (data?.rows || []).filter((r) => r.plan || r.views || r.clicks || r.orders).sort((a, b) => Number(!!b.plan) - Number(!!a.plan) || b.views - a.views);
+  const report = (r: Row) => {
+    const ctr = r.views ? Math.round((r.clicks / r.views) * 100) : 0;
+    return `📊 ${r.name} en LlamaGO — últimos ${days} días\n👀 ${r.views} veces vieron tu anuncio\n👆 ${r.clicks} personas lo tocaron (${ctr}%)\n🛵 ${r.orders} pedidos en total, ${r.adOrders} vinieron directo de tu anuncio\n💰 ${bs(r.sales)} en ventas de comida\n¡Gracias por ser parte de LlamaGO!`;
+  };
+  const copy = async (r: Row) => { try { await navigator.clipboard.writeText(report(r)); setCopied(r.id); window.setTimeout(() => setCopied(''), 2000); } catch { window.prompt('Copia el informe:', report(r)); } };
+
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex gap-2" role="tablist" aria-label="Período">
+          {[7, 30].map((d) => <button key={d} role="tab" aria-selected={days === d} onClick={() => setDays(d)} className={`h-10 rounded-xl border px-4 text-sm font-bold ${days === d ? 'border-gold-primary bg-gold-primary/10 text-gold-light' : 'border-white/10'}`}>Últimos {d} días</button>)}
+        </div>
+      </div>
+      {!data && <p className="text-text-secondary">Cargando…</p>}
+      {data && (
+        <>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-gold-primary/30 bg-gold-primary/5 p-4"><p className="text-sm text-text-secondary">Cobrado por planes</p><p className="font-display text-3xl font-extrabold text-gold-primary">{bs(data.income)}</p><p className="text-xs text-text-secondary">{data.payments} cobro{data.payments === 1 ? '' : 's'}</p></div>
+            <div className="rounded-2xl border border-white/10 bg-surface p-4"><p className="text-sm text-text-secondary">Vistas de anuncios</p><p className="font-display text-3xl font-extrabold">{data.rows.reduce((t, r) => t + r.views, 0)}</p></div>
+            <div className="rounded-2xl border border-white/10 bg-surface p-4"><p className="text-sm text-text-secondary">Pedidos desde anuncios</p><p className="font-display text-3xl font-extrabold">{data.rows.reduce((t, r) => t + r.adOrders, 0)}</p></div>
+          </div>
+          {!rows.length && <p className="rounded-2xl border border-white/10 bg-surface p-6 text-center text-text-secondary">Todavía no hay datos. Activa un plan a un restaurante y aquí verás sus vistas, toques y pedidos.</p>}
+          <ul className="space-y-3">
+            {rows.map((r) => (
+              <li key={r.id} className="rounded-2xl border border-white/10 bg-surface p-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-display text-lg font-extrabold">{r.name}</p>
+                  {r.plan ? <span className="rounded-full bg-gold-primary/15 px-2.5 py-0.5 text-xs font-bold text-gold-primary">{AD_PLANS[r.plan].label} · {daysLeft(r.planUntilMs)} días</span> : <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-bold text-text-secondary">Sin plan</span>}
+                  <button onClick={() => copy(r)} className="ml-auto flex h-9 items-center gap-1.5 rounded-lg border border-white/10 px-3 text-sm font-semibold"><Copy className="h-4 w-4" aria-hidden /> {copied === r.id ? '¡Copiado!' : 'Copiar informe'}</button>
+                </div>
+                <dl className="mt-3 grid grid-cols-3 gap-3 text-center sm:grid-cols-6">
+                  {([['Vistas', r.views], ['Toques', r.clicks], ['Guardaron', r.later], ['Pedidos', r.orders], ['De anuncios', r.adOrders], ['Ventas', bs(r.sales)]] as const).map(([k, v]) => (
+                    <div key={k} className="rounded-xl bg-surface-2 py-2"><dd className="font-display text-xl font-extrabold tabular-nums">{v}</dd><dt className="text-[11px] text-text-secondary">{k}</dt></div>
+                  ))}
+                </dl>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 }

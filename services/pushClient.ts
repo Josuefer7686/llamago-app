@@ -69,3 +69,19 @@ export function pushEvent(event: 'ride_new' | 'ride_update' | 'ride_chat' | 'del
     });
   })().catch(() => {});
 }
+
+const PROMO_KEY = 'llamago-promos-v1';
+export const getPromoPref = (): boolean => { try { return localStorage.getItem(PROMO_KEY) !== 'off'; } catch { return true; } };
+/** Activa o apaga los avisos de ofertas de restaurantes (máx. 3 por semana). */
+export async function setPromoPref(on: boolean): Promise<void> {
+  try { localStorage.setItem(PROMO_KEY, on ? 'on' : 'off'); } catch { /* ok */ }
+  try {
+    const t = await token();
+    if (!t) return;
+    await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
+      body: JSON.stringify({ action: 'prefs', promos: on }),
+    });
+  } catch { /* se reintenta al volver a tocar */ }
+}

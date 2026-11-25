@@ -2,7 +2,8 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebaseAdmin';
 import { isAdminRequest } from '@/lib/adminAuth';
-import { DELIVERY_CATEGORIES, type ItemOption } from '@/lib/delivery';
+import { AD_PLANS, DELIVERY_CATEGORIES, MAX_PROMOS_PER_WEEK, activePlan, dayKey, type AdPlan, type ItemOption, type Restaurant } from '@/lib/delivery';
+import { sendPush } from '@/lib/push';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -24,6 +25,36 @@ export async function GET(req: NextRequest) {
   if (!isAdminRequest(req)) return NextResponse.json({ ok: false }, { status: 401 });
   const db = getAdminDb();
   if (!db) return NextResponse.json({ ok: false, error: 'Firebase Admin sin configurar' }, { status: 503 });
+  if (req.nextUrl.searchParams.get('stats')) {
+    const days = Math.min(90, Math.max(1, Number(req.nextUrl.searchParams.get('days')) || 7));
+    const since = Date.now() - days * 86400000;
+    const [rs, st, ords, pays] = await Promise.all([
+      db.collection('restaurants').get(),
+      db.collection('restaurant_stats').where('day', '>=', dayKey(since)).get(),
+      db.collection('delivery_orders').where('createdAtMs', '>=', since).get(),
+      db.collection('plan_payments').where('createdAtMs', '>=', since).get(),
+    ]);
+    const rows = new Map<string, any>();
+    for (const d of rs.docs) {
+      const r = { id: d.id, ...d.data() } as Restaurant;
+      rows.set(d.id, { id: d.id, name: r.name, plan: activePlan(r), planUntilMs: r.planUntilMs || 0, views: 0, clicks: 0, later: 0, pushes: 0, orders: 0, adOrders: 0, sales: 0, slots: {} as Record<string, { views?: number; clicks?: number }> });
+    }
+    for (const d of st.docs) {
+      const s = d.data(); const row = rows.get(s.restaurantId);
+      if (!row) continue;
+      row.views += s.views || 0; row.clicks += s.clicks || 0; row.later += s.later || 0; row.pushes += s.pushes || 0;
+      for (const [k, v] of Object.entries((s.slots || {}) as Record<string, any>)) {
+        row.slots[k] = { views: (row.slots[k]?.views || 0) + (v.views || 0), clicks: (row.slots[k]?.clicks || 0) + (v.clicks || 0) };
+      }
+    }
+    for (const d of ords.docs) {
+      const o = d.data(); const row = rows.get(o.restaurantId);
+      if (!row || o.status === 'CANCELLED') continue;
+      row.orders += 1; row.sales += Number(o.subtotal) || 0; if (o.adRef) row.adOrders += 1;
+    }
+    const income = pays.docs.reduce((t, d) => t + (Number(d.data().amount) || 0), 0);
+    return NextResponse.json({ ok: true, days, income, payments: pays.docs.length, rows: [...rows.values()] });
+  }
   const restaurantId = String(req.nextUrl.searchParams.get('restaurantId') || '');
   if (restaurantId) {
     const snap = await db.collection('menu_items').where('restaurantId', '==', restaurantId).get();
@@ -66,6 +97,7 @@ export async function POST(req: NextRequest) {
         prepMinutes: prep >= 5 && prep <= 90 ? prep : 20, minOrder,
         rating: Number(r.rating) >= 1 && Number(r.rating) <= 5 ? Math.round(Number(r.rating) * 10) / 10 : 0,
         demo: !!r.demo,
+        adHeadline: text(r.adHeadline, 70),
       };
       const id = text(r.id, 60) || `rest-${Date.now().toString(36)}`;
       await db.collection('restaurants').doc(id).set(data, { merge: true });
@@ -127,6 +159,52 @@ export async function POST(req: NextRequest) {
       await db.collection('delivery_open').doc(id).delete();
       if (o.promo && o.customerId) await db.collection('delivery_promos').doc(o.customerId).set({ used: FieldValue.increment(-1) }, { merge: true });
       return NextResponse.json({ ok: true });
+    }
+    case 'setPlan': {
+      const id = text(b.id, 60);
+      const plan = String(b.plan) as AdPlan;
+      const weeks = Math.round(Number(b.weeks));
+      if (!id || !(plan in AD_PLANS)) return bad('Elige el plan.');
+      if (!(weeks >= 1 && weeks <= 12)) return bad('Elige cuántas semanas.');
+      const ref = db.collection('restaurants').doc(id);
+      const r = (await ref.get()).data() as Restaurant | undefined;
+      if (!r) return bad('El restaurante no existe.');
+      // Si ya tiene ese plan vigente, las semanas se suman al final; si no, empiezan hoy.
+      const base = r.plan === plan && (r.planUntilMs || 0) > Date.now() ? r.planUntilMs! : Date.now();
+      const until = base + weeks * 7 * 86400000;
+      const amount = AD_PLANS[plan].weekly * weeks;
+      await ref.update({ plan, planUntilMs: until });
+      await db.collection('plan_payments').add({ restaurantId: id, restaurantName: r.name, plan, weeks, amount, createdAtMs: Date.now() });
+      return NextResponse.json({ ok: true, until, amount });
+    }
+    case 'clearPlan': {
+      const id = text(b.id, 60);
+      if (!id) return bad('Falta el restaurante.');
+      await db.collection('restaurants').doc(id).update({ plan: FieldValue.delete(), planUntilMs: FieldValue.delete() });
+      return NextResponse.json({ ok: true });
+    }
+    case 'sendPromo': {
+      // Aviso al celular de los clientes: solo para planes Premium, 1 por semana, máx. 3 avisos por persona cada 7 días.
+      const id = text(b.id, 60);
+      const ref = db.collection('restaurants').doc(id);
+      const r = (await ref.get()).data() as (Restaurant & { lastPromoMs?: number }) | undefined;
+      if (!r) return bad('El restaurante no existe.');
+      if (activePlan(r) !== 'PREMIUM') return bad('Los avisos al celular son solo del plan Premium vigente.');
+      if (Date.now() - (r.lastPromoMs || 0) < 6 * 86400000) return bad('Este restaurante ya usó su aviso de la semana.');
+      const title = text(b.title, 60) || `¿Tienes hambre? 🍔`;
+      const body = text(b.body, 120) || `Pide en ${r.name}${r.adHeadline ? `: ${r.adHeadline}` : ''}`;
+      const week = Date.now() - 7 * 86400000;
+      const users = await db.collection('users').where('role', '==', 'PASSENGER').limit(500).get();
+      const subs = users.docs.length ? await db.getAll(...users.docs.map((u) => db.collection('push_subscriptions').doc(u.id))) : [];
+      const targets = subs.filter((s) => s.exists && Object.keys(s.data()?.subs || {}).length && s.data()?.promos !== false
+        && ((s.data()?.promoSent as number[] | undefined) || []).filter((t) => t > week).length < MAX_PROMOS_PER_WEEK);
+      const sent = await sendPush(targets.map((s) => s.id), { title, body, url: `/?r=${encodeURIComponent(id)}`, tag: `promo-${id}` });
+      const batch = db.batch();
+      for (const s of targets) batch.set(s.ref, { promoSent: [...((s.data()?.promoSent as number[] | undefined) || []).filter((t) => t > week), Date.now()] }, { merge: true });
+      batch.update(ref, { lastPromoMs: Date.now() });
+      batch.set(db.collection('restaurant_stats').doc(`${id}_${dayKey()}`), { restaurantId: id, day: dayKey(), pushes: FieldValue.increment(targets.length) }, { merge: true });
+      await batch.commit();
+      return NextResponse.json({ ok: true, sent, people: targets.length });
     }
     default:
       return bad('Acción inválida.');

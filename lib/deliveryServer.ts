@@ -3,8 +3,8 @@ import { FieldValue, type Firestore } from 'firebase-admin/firestore';
 import { notifyAdmin } from '@/lib/safety';
 import { driverUids, sendPush } from '@/lib/push';
 import {
-  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, MAX_TIP, PROMO_ORDERS, TIP_OPTIONS, promoCustomerFee, promoGift, bs, deliveryFeeFor, roadKm, unitPriceFor,
-  type DeliveryOrder, type MenuItem, type OpenOrder, type Restaurant,
+  ACTIVE_STATUSES, AD_SLOTS, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, MAX_TIP, PROMO_ORDERS, TIP_OPTIONS, promoCustomerFee, promoGift, bs, deliveryFeeFor, roadKm, unitPriceFor,
+  type AdSlot, type DeliveryOrder, type MenuItem, type OpenOrder, type Restaurant,
 } from '@/lib/delivery';
 
 type Res = { ok: boolean; error?: string; id?: string };
@@ -75,6 +75,7 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
   if (km > 12) return fail('Tu dirección está muy lejos de este restaurante.');
   const fee = deliveryFeeFor(km);
   const payment = body.paymentMethod === 'QR' ? 'QR' : 'CASH';
+  const adRef = (AD_SLOTS as readonly string[]).includes(body.adRef) ? (body.adRef as AdSlot) : undefined;
   const promo = (await promoLeft(db, uid)) > 0;
   const customerFee = promo ? promoCustomerFee(fee) : fee;
 
@@ -84,7 +85,7 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
     customerPhone: clean(user.phone, 30),
     restaurantId: rest.id, restaurantName: rest.name, restaurantAddress: rest.address,
     restaurantPhone: rest.phone || '', restaurantLoc: { lat: rest.lat, lng: rest.lng },
-    items, subtotal, deliveryFee: fee, customerFee, promo, total: Math.round((subtotal + customerFee) * 100) / 100, distanceKm: km,
+    items, subtotal, deliveryFee: fee, customerFee, promo, ...(adRef ? { adRef } : {}), total: Math.round((subtotal + customerFee) * 100) / 100, distanceKm: km,
     address: { text, reference: clean(a.reference, 120), lat, lng },
     paymentMethod: payment, note: clean(body.note, MAX_NOTE),
     status: 'PLACED', createdAtMs: Date.now(),

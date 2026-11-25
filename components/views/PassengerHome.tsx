@@ -23,6 +23,9 @@ import { TerminalView } from '@/components/terminal/TerminalView';
 import { NegotiationChatModal } from '@/components/modals/NegotiationChatModal';
 import { Wrench, Bus, AlertTriangle, Info, Siren, UtensilsCrossed } from 'lucide-react';
 import { VehicleIcon } from '@/components/ui/VehicleIcon';
+import { useSponsoredRestaurant } from '@/hooks/useSponsoredRestaurant';
+import { SeenTracker, SponsoredTag } from '@/components/delivery/Ads';
+import { setPendingRestaurant, trackClick } from '@/services/adClient';
 import { useAutoLocation } from '@/hooks/useAutoLocation';
 import { calculateDistanceMeters, formatDistance, getBearingDirectionLabel } from '@/utils/geo';
 import { DriverData } from '@/services/mockData';
@@ -382,6 +385,7 @@ export const PassengerHome = () => {
     resetRide();
   };
 
+  const ad = useSponsoredRestaurant();
   const isIdle =
     passengerState === 'IDLE' || passengerState === 'LOCATION_READY' || passengerState === 'LOCATION_LOADING';
   const isPlanning = isIdle || passengerState === 'CONFIRMING';
@@ -484,18 +488,27 @@ export const PassengerHome = () => {
         )}
 
         {isIdle && (
-          <button
-            type="button"
-            onClick={() => { haptics.impact(); setActiveTab('DELIVERY'); }}
-            className="pointer-events-auto flex min-h-14 w-full items-center gap-3 rounded-2xl border border-gold-primary/40 bg-surface/95 px-3.5 text-left shadow-[0_10px_24px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md touch-manipulation transition-transform duration-150 ease-out active:scale-[0.98]"
-          >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold-primary text-background"><UtensilsCrossed className="h-5 w-5" aria-hidden /></span>
-            <span className="min-w-0 flex-1">
-              <span className="block font-display text-[15px] font-extrabold leading-tight">¿Hambre? Pide delivery</span>
-              <span className="block truncate text-xs text-text-secondary">Restaurantes de Riberalta, a tu puerta</span>
-            </span>
-            <ChevronRight className="h-5 w-5 shrink-0 text-gold-primary" aria-hidden />
-          </button>
+          <div className="relative pointer-events-auto">
+            {ad && <SeenTracker restaurantId={ad.id} slot="home" />}
+            <button
+              type="button"
+              onClick={() => { haptics.impact(); if (ad) { trackClick(ad.id, 'home'); setPendingRestaurant(ad.id); } setActiveTab('DELIVERY'); }}
+              className="flex min-h-14 w-full items-center gap-3 rounded-2xl border border-gold-primary/40 bg-surface/95 px-3.5 py-2 text-left shadow-[0_10px_24px_-12px_rgba(0,0,0,0.9)] backdrop-blur-md touch-manipulation transition-transform duration-150 ease-out active:scale-[0.98]"
+            >
+              {ad ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={ad.coverUrl} alt="" className="h-12 w-12 shrink-0 rounded-xl object-cover" />
+              ) : (
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold-primary text-background"><UtensilsCrossed className="h-5 w-5" aria-hidden /></span>
+              )}
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-display text-[15px] font-extrabold leading-tight">{ad ? `¿Hambre? Pide en ${ad.name}` : '¿Hambre? Pide delivery'}</span>
+                <span className="block truncate text-xs text-text-secondary">{ad ? (ad.adHeadline || ad.description) : 'Restaurantes de Riberalta, a tu puerta'}</span>
+              </span>
+              {ad && <SponsoredTag className="shrink-0" />}
+              <ChevronRight className="h-5 w-5 shrink-0 text-gold-primary" aria-hidden />
+            </button>
+          </div>
         )}
 
         {locationError && (

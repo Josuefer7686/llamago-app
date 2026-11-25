@@ -14,6 +14,10 @@ export async function POST(req: NextRequest) {
   if (!db) return NextResponse.json({ ok: false }, { status: 503 });
   let body: any;
   try { body = await req.json(); } catch { return NextResponse.json({ ok: false }, { status: 400 }); }
+  if (body?.action === 'prefs') {
+    await db.collection('push_subscriptions').doc(uid).set({ promos: body.promos !== false }, { merge: true });
+    return NextResponse.json({ ok: true });
+  }
   const s = body?.subscription;
   const endpoint = String(s?.endpoint || '');
   const p256dh = String(s?.keys?.p256dh || ''), auth = String(s?.keys?.auth || '');

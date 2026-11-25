@@ -18,11 +18,14 @@ import { useAutoLocation } from '@/hooks/useAutoLocation';
 import { useWalletNotificationListener } from '@/hooks/useWalletNotificationListener';
 import { apiService } from '@/services/apiService';
 import { syncPush } from '@/services/pushClient';
+import { hasPendingRestaurant } from '@/services/adClient';
 import { DriverVerificationGate } from '@/components/driver/DriverVerificationGate';
 
 function MainAppInner() {
   useEffect(() => { void syncPush(); }, []);
   const { role, activeTab, setActiveTab, activeTrip, assignedDriver, passengerState, driverState } = useAppStore();
+  // Un aviso al celular de un restaurante abre directo Delivery
+  useEffect(() => { if (hasPendingRestaurant()) setActiveTab('DELIVERY'); }, [setActiveTab]);
   const [activeToast, setActiveToast] = useState<ToastMessageData | null>(null);
   const { activeBanner, handleCloseBanner } = useWalletNotificationListener();
   const lastProcessedMsgId = useRef<string | null>(null);

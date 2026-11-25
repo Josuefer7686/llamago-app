@@ -7,6 +7,7 @@ import { cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryApi } from '@/services/deliveryService';
 import { enablePush } from '@/services/pushClient';
 import { useDeliveryPromo } from '@/hooks/useDeliveryPromo';
+import { adRefFor } from '@/services/adClient';
 import { bs, deliveryFeeFor, roadKm, isStore, MAX_NOTE, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, GoldButton, Photo, QtyStepper, motion, useStagger } from './ui';
@@ -75,6 +76,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
       items: lines.map((l) => ({ itemId: l.itemId, qty: l.qty, sizeId: l.sizeId, extraIds: l.extraIds, sauceIds: l.sauceIds, notes: l.notes })),
       address: { text: address.trim() || 'Ubicación exacta (GPS)', reference: reference.trim(), lat: here.lat, lng: here.lng },
       paymentMethod: 'CASH',
+      adRef: adRefFor(r.id),
       note: note.trim(),
     });
     setBusy(false);

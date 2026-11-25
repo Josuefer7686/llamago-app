@@ -4,12 +4,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Check, ChevronDown, MessageCircle, Phone, ReceiptText } from 'lucide-react';
 import { deliveryService } from '@/services/deliveryService';
 import { deliveryApi } from '@/services/deliveryService';
-import { MAX_TIP, STATUS_LABEL, TIP_OPTIONS, bs, distanceKm, isActiveOrder, type DeliveryOrder } from '@/lib/delivery';
+import { MAX_TIP, STATUS_LABEL, TIP_OPTIONS, bs, distanceKm, isActiveOrder, type DeliveryOrder, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { audio } from '@/utils/audio';
 import { BackButton, GoldButton, Skeleton, initials, motion } from './ui';
 import { DeliveryMapView } from './DeliveryMapView';
 import { DeliveryChat } from './DeliveryChat';
+import { WaitingAd } from './Ads';
 
 const STEPS = [
   { s: 'PLACED', label: 'Enviado' },
@@ -28,7 +29,7 @@ const SUB: Record<string, string> = {
 
 const waLink = (phone: string, text: string) => `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
 
-export function OrderTracking({ orderId, onBack }: { orderId: string; onBack: () => void }) {
+export function OrderTracking({ orderId, onBack, restaurants, onOpenRestaurant }: { orderId: string; onBack: () => void; restaurants?: Restaurant[] | null; onOpenRestaurant?: (id: string) => void }) {
   const [o, setO] = useState<DeliveryOrder | null | undefined>(undefined);
   const [chat, setChat] = useState(false);
   const [items, setItems] = useState(false);
@@ -160,6 +161,10 @@ export function OrderTracking({ orderId, onBack }: { orderId: string; onBack: ()
 
           {o.status === 'PLACED' && waitedMin >= 8 && (
             <p className="rounded-2xl bg-white/[0.06] px-4 py-3 text-sm leading-snug text-text-secondary">Estamos tardando más de lo normal en encontrar un repartidor. Puedes seguir esperando o cancelar.</p>
+          )}
+
+          {(o.status === 'PLACED' || o.status === 'ACCEPTED') && onOpenRestaurant && (
+            <WaitingAd restaurants={restaurants ?? null} orderId={o.id} exclude={o.restaurantId} onOpen={onOpenRestaurant} />
           )}
 
           {o.driverId && (o.status === 'ACCEPTED' || o.status === 'PICKED_UP' || o.status === 'DELIVERED') && (

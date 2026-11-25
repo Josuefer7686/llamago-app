@@ -11,7 +11,7 @@ import { motion } from 'motion/react';
 import { haptics } from '@/utils/haptics';
 import { audio } from '@/utils/audio';
 import { notifications } from '@/utils/notifications';
-import { enablePush } from '@/services/pushClient';
+import { enablePush, getPromoPref, setPromoPref } from '@/services/pushClient';
 import { usePwa } from '@/utils/pwa';
 import { APP_VERSION } from '@/lib/appVersion';
 import { DriverVehicleModal } from '@/components/modals/DriverVehicleModal';
@@ -21,6 +21,7 @@ import { apiService } from '@/services/apiService';
 export const ProfileView = () => {
   const { user, role, setCurrentView, logout, preferences, setPaymentMethod, toggleNotification, toggleSetting, setShowPwaModal } = useAppStore();
   const [notifPermission, setNotifPermission] = useState<string>(() => notifications.getPermission());
+  const [promosOn, setPromosOn] = useState<boolean>(() => (typeof window === 'undefined' ? true : getPromoPref()));
   const [showVehicleModal, setShowVehicleModal] = useState(false);
   const { isStandalone } = usePwa();
 
@@ -168,6 +169,22 @@ export const ProfileView = () => {
               className="px-3 py-2 rounded-xl bg-gold-primary text-background font-black text-xs hover:bg-gold-light transition shadow-md shadow-gold-primary/20 active:scale-95 whitespace-nowrap"
             >
               Activar
+            </button>
+          </div>
+        )}
+
+        {notifPermission === 'granted' && (
+          <div className="p-4 rounded-2xl bg-surface border border-border-custom flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-white">Ofertas de restaurantes</p>
+              <p className="text-[11px] text-text-secondary">Avisos a la hora de comer, máximo 3 por semana.</p>
+            </div>
+            <button
+              type="button" role="switch" aria-checked={promosOn} aria-label="Ofertas de restaurantes"
+              onClick={() => { const v = !promosOn; setPromosOn(v); void setPromoPref(v); haptics.selection(); }}
+              className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${promosOn ? 'bg-gold-primary' : 'bg-white/20'}`}
+            >
+              <span className={`absolute top-0.5 h-6 w-6 rounded-full bg-white transition-all ${promosOn ? 'left-[22px]' : 'left-0.5'}`} />
             </button>
           </div>
         )}

@@ -4,12 +4,14 @@ import { useMemo, useState } from 'react';
 import { Clock, MapPin, Receipt, Search, Star, Bike, ChevronRight, X, UtensilsCrossed, Store } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import {
-  DELIVERY_CATEGORIES, STATUS_LABEL, bs, deliveryFeeFor, fmtKm, roadKm, isStore,
+  DELIVERY_CATEGORIES, PROMO_ORDERS, STATUS_LABEL, activePlan, bs, deliveryFeeFor, fmtKm, roadKm, isStore,
   type DeliveryOrder, type Restaurant,
 } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { useDeliveryPromo } from '@/hooks/useDeliveryPromo';
 import { Photo, Skeleton, StatusPill, motion, useStagger } from './ui';
+import { LaterChips, RecommendedCarousel, SeenTracker, SponsoredTag } from './Ads';
+import { trackClick } from '@/services/adClient';
 
 interface Props {
   restaurants: Restaurant[] | null;
@@ -36,8 +38,9 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
     return restaurants
       .map((r) => ({ r, km: here ? roadKm(here, { lat: r.lat, lng: r.lng }) : null }))
       .filter(({ r }) => isStore(r) === stores && (stores || cat === 'Todos' || r.category === cat) && (!term || norm(`${r.name} ${r.category} ${r.description}`).includes(term)))
-      // Abiertos primero, luego los más cercanos
-      .sort((a, b) => Number(b.r.open) - Number(a.r.open) || (a.km ?? 0) - (b.km ?? 0));
+      // Los patrocinados primero (Premium, luego Destacado), después abiertos y por último los más cercanos
+      .sort((a, b) => Number(!!activePlan(b.r)) + Number(activePlan(b.r) === 'PREMIUM') - (Number(!!activePlan(a.r)) + Number(activePlan(a.r) === 'PREMIUM'))
+        || Number(b.r.open) - Number(a.r.open) || (a.km ?? 0) - (b.km ?? 0));
   }, [restaurants, q, cat, here, stores]);
 
   return (
@@ -110,7 +113,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
         {promo.active && (
           <div className="flex items-center gap-3 rounded-2xl bg-gold-primary px-4 py-3 text-background">
             <span className="text-2xl" aria-hidden>🎁</span>
-            <p className="font-display text-[15px] font-extrabold leading-tight">Tus primeros {promo.left} pedidos: ¡envío a mitad de precio!</p>
+            <p className="font-display text-[15px] font-extrabold leading-tight">{promo.left === PROMO_ORDERS ? `Tus primeros ${PROMO_ORDERS} pedidos: ¡envío a mitad de precio!` : `Te quedan ${promo.left} pedido${promo.left === 1 ? '' : 's'} con envío a mitad de precio`}</p>
           </div>
         )}
         {activeOrder && (
@@ -133,6 +136,9 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
             <ChevronRight className="h-5 w-5 shrink-0 text-gold-primary" aria-hidden />
           </motion.button>
         )}
+
+        <LaterChips restaurants={restaurants} onOpen={onOpen} />
+        {!stores && cat === 'Todos' && !q && restaurants && <RecommendedCarousel restaurants={restaurants.filter((r) => !isStore(r))} onOpen={onOpen} />}
 
         {restaurants === null && !failed && (
           <div className="space-y-4" aria-busy="true" aria-label="Cargando restaurantes">
@@ -162,15 +168,17 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
               key={r.id}
               type="button"
               {...stagger(i)}
-              onClick={() => { haptics.selection(); onOpen(r.id); }}
+              onClick={() => { haptics.selection(); if (activePlan(r)) trackClick(r.id, 'list'); onOpen(r.id); }}
               className="block w-full overflow-hidden rounded-3xl border border-white/10 bg-surface text-left touch-manipulation transition-transform duration-150 ease-out active:scale-[0.985]"
             >
               <div className="relative">
+                {activePlan(r) && <SeenTracker restaurantId={r.id} slot="list" />}
                 <Photo src={r.coverUrl} alt="" className={`h-40 w-full ${r.open ? '' : 'grayscale'}`} />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
                 <div className="absolute left-3 top-3 flex gap-2">
                   {r.open ? <StatusPill tone="green">Abierto</StatusPill> : <StatusPill tone="gray">Cerrado</StatusPill>}
                   {r.demo && <StatusPill tone="gold">Demo</StatusPill>}
+                  {activePlan(r) && <SponsoredTag />}
                 </div>
                 {r.rating ? (
                   <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold backdrop-blur-md">

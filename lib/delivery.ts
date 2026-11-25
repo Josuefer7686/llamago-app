@@ -5,6 +5,24 @@
 
 export type PlaceKind = 'RESTAURANT' | 'STORE';
 
+/** Planes para que un negocio salga destacado. Se cobran por semana. */
+export type AdPlan = 'DESTACADO' | 'PREMIUM';
+export const AD_PLANS: Record<AdPlan, { label: string; weekly: number; perks: string }> = {
+  DESTACADO: { label: 'Destacado', weekly: 10, perks: 'Etiqueta "Patrocinado", carrusel de recomendados y primero en su categoría' },
+  PREMIUM: { label: 'Premium', weekly: 20, perks: 'Todo lo de Destacado + tarjeta "Mientras esperas" + 1 aviso al celular por semana' },
+};
+/** Dónde se mostró un anuncio (para las estadísticas) */
+export const AD_SLOTS = ['carousel', 'list', 'wait', 'home', 'later', 'push'] as const;
+export type AdSlot = (typeof AD_SLOTS)[number];
+export const MAX_PROMOS_PER_WEEK = 3;
+
+/** Día en Bolivia (UTC-4) como AAAAMMDD, para agrupar las estadísticas. */
+export const dayKey = (ms = Date.now()) => new Date(ms - 4 * 3600 * 1000).toISOString().slice(0, 10).replace(/-/g, '');
+
+/** Plan vigente de un negocio (null si no tiene o ya venció). */
+export const activePlan = (r?: Pick<Restaurant, 'plan' | 'planUntilMs'> | null, now = Date.now()): AdPlan | null =>
+  r?.plan && (r.planUntilMs || 0) > now && r.plan in AD_PLANS ? r.plan : null;
+
 export interface Restaurant {
   id: string;
   /** RESTAURANT = comida preparada; STORE = tienda o pulpería (productos del estante). Sin dato = restaurante. */
@@ -28,6 +46,11 @@ export interface Restaurant {
   minOrder?: number;
   rating?: number;
   demo?: boolean;
+  /** Plan de publicidad pagado (por semana). Vale solo mientras `planUntilMs` sea futuro. */
+  plan?: AdPlan;
+  planUntilMs?: number;
+  /** Texto corto del anuncio (si falta, se usa la descripción) */
+  adHeadline?: string;
 }
 
 export interface ItemOption {
@@ -94,6 +117,8 @@ export interface DeliveryOrder {
   items: OrderItem[];
   subtotal: number;
   /** Lo que gana el repartidor por el envío (siempre el precio normal) */
+  /** De qué anuncio vino el pedido (si lo hizo después de tocar uno) */
+  adRef?: AdSlot;
   deliveryFee: number;
   /** Lo que paga el cliente por el envío (en la promoción de bienvenida es menos que deliveryFee) */
   customerFee?: number;

@@ -13,6 +13,7 @@ import { RestaurantList } from './RestaurantList';
 import { RestaurantMenu } from './RestaurantMenu';
 import { CartCheckout } from './CartCheckout';
 import { OrderTracking } from './OrderTracking';
+import { takePendingRestaurant } from '@/services/adClient';
 
 type View =
   | { name: 'list' }
@@ -72,6 +73,12 @@ export function DeliveryHome() {
   const view: View = picked ?? (active ? { name: 'tracking', id: active.id } : { name: 'list' });
 
   useEffect(() => deliveryService.subscribeRestaurants(setRestaurants, () => setFailed(true)), []);
+  // Venir desde un anuncio del inicio o desde un aviso al celular: abre directo ese restaurante.
+  useEffect(() => {
+    const id = takePendingRestaurant();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- se lee una sola vez al entrar
+    if (id) setView({ name: 'restaurant', id });
+  }, []);
 
   const byId = (id: string) => restaurants?.find((r) => r.id === id) || null;
 
@@ -111,7 +118,7 @@ export function DeliveryHome() {
               onPlaced={(id) => setView({ name: 'tracking', id })}
             />
           )}
-          {view.name === 'tracking' && <OrderTracking orderId={view.id} onBack={() => setView({ name: 'list' })} />}
+          {view.name === 'tracking' && <OrderTracking orderId={view.id} onBack={() => setView({ name: 'list' })} restaurants={restaurants} onOpenRestaurant={(id) => setView({ name: 'restaurant', id })} />}
           {view.name === 'orders' && <OrdersView orders={mine} onBack={() => setView({ name: 'list' })} onOpen={(id) => setView({ name: 'tracking', id })} />}
         </motion.div>
       </AnimatePresence>

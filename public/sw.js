@@ -1,4 +1,4 @@
-const CACHE_NAME = 'llamago-v4.12';
+const CACHE_NAME = 'llamago-v4.14';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
@@ -167,7 +167,7 @@ self.addEventListener('notificationclick', (event) => {
   event.waitUntil((async () => {
     const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     for (const w of wins) {
-      if ('focus' in w) { await w.focus(); return; }
+      if ('focus' in w) { await w.focus(); if (url !== '/' && 'navigate' in w) { try { await w.navigate(url); } catch (e) {} } return; }
     }
     await self.clients.openWindow(url);
   })());
