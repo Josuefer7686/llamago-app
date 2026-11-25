@@ -93,7 +93,12 @@ export interface DeliveryOrder {
   restaurantLoc: { lat: number; lng: number };
   items: OrderItem[];
   subtotal: number;
+  /** Lo que gana el repartidor por el envío (siempre el precio normal) */
   deliveryFee: number;
+  /** Lo que paga el cliente por el envío (en la promoción de bienvenida es menos que deliveryFee) */
+  customerFee?: number;
+  /** Pedido de la promoción de bienvenida: LlamaGO cubre la diferencia */
+  promo?: boolean;
   total: number;
   distanceKm: number;
   address: { text: string; reference: string; lat: number; lng: number };
@@ -125,6 +130,7 @@ export interface OpenOrder {
   itemsSummary: string;
   deliveryFee: number;
   total: number;
+  promo?: boolean;
   paymentMethod: DeliveryPayment;
   distanceKm: number;
   createdAtMs: number;
@@ -169,6 +175,13 @@ export const roadKm = (a: { lat: number; lng: number }, b: { lat: number; lng: n
 export function deliveryFeeFor(km: number): number {
   return Math.min(40, Math.max(6, Math.round(4 + 2 * km)));
 }
+
+/** Promoción de bienvenida: los primeros pedidos del cliente tienen el envío a Bs 1. */
+export const PROMO_ORDERS = 5;
+export const PROMO_CUSTOMER_FEE = 1;
+/** LlamaGO cubre el envío del repartidor hasta este monto (≈ 8 km); si pasa, el cliente paga solo lo que sobra. */
+export const PROMO_COVER_MAX = 20;
+export const promoCustomerFee = (fee: number) => PROMO_CUSTOMER_FEE + Math.max(0, fee - PROMO_COVER_MAX);
 
 export const bs = (n: number) => `Bs ${Number.isInteger(n) ? n : n.toFixed(2)}`;
 

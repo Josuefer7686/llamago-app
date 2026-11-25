@@ -6,6 +6,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { cartSubtotal, useDeliveryStore } from '@/store/useDeliveryStore';
 import { deliveryApi } from '@/services/deliveryService';
 import { enablePush } from '@/services/pushClient';
+import { useDeliveryPromo } from '@/hooks/useDeliveryPromo';
 import { bs, deliveryFeeFor, roadKm, isStore, MAX_NOTE, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
 import { BackButton, GoldButton, Photo, QtyStepper, motion, useStagger } from './ui';
@@ -40,7 +41,9 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
 
   const subtotal = cartSubtotal(lines);
   const km = r && here ? roadKm({ lat: r.lat, lng: r.lng }, here) : null;
-  const fee = km != null ? deliveryFeeFor(km) : null;
+  const promo = useDeliveryPromo();
+  const normalFee = km != null ? deliveryFeeFor(km) : null;
+  const fee = normalFee != null ? promo.customerFee(normalFee) : null;
   const total = fee != null ? Math.round((subtotal + fee) * 100) / 100 : null;
   const belowMin = !!r?.minOrder && subtotal < r.minOrder;
   const far = km != null && km > 12;
@@ -79,6 +82,7 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
     haptics.success();
     try { localStorage.setItem(LAST_KEY, JSON.stringify({ text: address.trim(), reference: reference.trim() })); } catch { /* sin almacenamiento */ }
     clear();
+    void promo.refresh();
     onPlaced(res.id);
   };
 
@@ -157,9 +161,14 @@ export function CartCheckout({ restaurant: r, onBack, onPlaced }: Props) {
             </button>
           )}
 
+          {promo.active && (
+            <p className="rounded-2xl bg-gold-primary/10 px-4 py-3 text-sm font-semibold text-gold-primary">
+              🎁 Regalo de bienvenida: envío a Bs {promo.PROMO_CUSTOMER_FEE}. Te quedan {promo.left} pedido{promo.left === 1 ? '' : 's'} así.
+            </p>
+          )}
           <section className="space-y-2 rounded-3xl bg-surface-2 p-4 text-[15px]" aria-label="Resumen">
             <div className="flex justify-between"><span className="text-text-secondary">Tu pedido</span><span className="font-semibold tabular-nums">{bs(subtotal)}</span></div>
-            <div className="flex justify-between"><span className="text-text-secondary">Traerlo a tu casa</span><span className="font-semibold tabular-nums">{fee != null ? bs(fee) : '…'}</span></div>
+            <div className="flex justify-between"><span className="text-text-secondary">Traerlo a tu casa</span><span className="font-semibold tabular-nums">{fee != null ? <>{normalFee != null && normalFee > fee && <s className="mr-1.5 text-xs font-normal opacity-60">{bs(normalFee)}</s>}{bs(fee)}</> : '…'}</span></div>
             <div className="flex justify-between border-t border-white/10 pt-3 font-display text-xl font-extrabold"><span>Total a pagar</span><span className="tabular-nums text-gold-primary">{total != null ? bs(total) : '…'}</span></div>
           </section>
 

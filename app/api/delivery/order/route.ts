@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebaseAdmin';
 import { verifyCaller } from '@/lib/safety';
 import {
-  acceptOrder, cancelOrder, createOrder, deliverOrder, pickupOrder, releaseOrder, updateDriverLocation,
+  acceptOrder, cancelOrder, createOrder, deliverOrder, pickupOrder, promoLeft, releaseOrder, updateDriverLocation,
 } from '@/lib/deliveryServer';
 
 export const runtime = 'nodejs';
@@ -16,6 +16,8 @@ export async function POST(req: NextRequest) {
   if (!db) return NextResponse.json({ ok: false, error: 'Servicio no disponible.' }, { status: 503 });
   const body = await req.json().catch(() => ({}));
   const orderId = String(body.orderId || '').slice(0, 80);
+
+  if (body.action === 'promo') return NextResponse.json({ ok: true, left: await promoLeft(db, uid) });
 
   let res: { ok: boolean; error?: string; id?: string };
   switch (body.action) {

@@ -15,7 +15,7 @@ export interface DeliveryMessage {
   createdAtMs: number;
 }
 
-type ApiRes = { ok: boolean; error?: string; id?: string };
+type ApiRes = { ok: boolean; error?: string; id?: string; left?: number };
 
 /** Llama al servidor con la sesión actual. Los precios y los estados los decide el servidor. */
 export async function deliveryApi(action: string, payload: Record<string, unknown> = {}): Promise<ApiRes> {

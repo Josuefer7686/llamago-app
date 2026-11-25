@@ -3,7 +3,7 @@ import { FieldValue, type Firestore } from 'firebase-admin/firestore';
 import { notifyAdmin } from '@/lib/safety';
 import { driverUids, sendPush } from '@/lib/push';
 import {
-  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, bs, deliveryFeeFor, roadKm, unitPriceFor,
+  ACTIVE_STATUSES, COMMISSION_BS, MAX_ITEM_QTY, MAX_NOTE, PROMO_ORDERS, promoCustomerFee, bs, deliveryFeeFor, roadKm, unitPriceFor,
   type DeliveryOrder, type MenuItem, type OpenOrder, type Restaurant,
 } from '@/lib/delivery';
 
@@ -15,6 +15,12 @@ const round3 = (n: number) => Math.round(n * 1000) / 1000;
 
 /** Aviso push sin frenar la respuesta más de 4 s (en el servidor, esperar es necesario para que salga). */
 const pushSafe = (p: Promise<unknown>) => Promise.race([p.catch(() => {}), new Promise((r) => setTimeout(r, 4000))]);
+
+/** Cuántos pedidos de la promoción de bienvenida le quedan a esta persona. */
+export async function promoLeft(db: Firestore, uid: string): Promise<number> {
+  const used = Number((await db.collection('delivery_promos').doc(uid).get()).data()?.used || 0);
+  return Math.max(0, PROMO_ORDERS - used);
+}
 
 /** Pedidos que aún no terminan de una persona (cliente o repartidor). */
 async function activeOrdersOf(db: Firestore, field: 'customerId' | 'driverId', uid: string) {
@@ -69,6 +75,8 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
   if (km > 12) return fail('Tu dirección está muy lejos de este restaurante.');
   const fee = deliveryFeeFor(km);
   const payment = body.paymentMethod === 'QR' ? 'QR' : 'CASH';
+  const promo = (await promoLeft(db, uid)) > 0;
+  const customerFee = promo ? promoCustomerFee(fee) : fee;
 
   const id = `del-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   const order: DeliveryOrder = {
@@ -76,7 +84,7 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
     customerPhone: clean(user.phone, 30),
     restaurantId: rest.id, restaurantName: rest.name, restaurantAddress: rest.address,
     restaurantPhone: rest.phone || '', restaurantLoc: { lat: rest.lat, lng: rest.lng },
-    items, subtotal, deliveryFee: fee, total: Math.round((subtotal + fee) * 100) / 100, distanceKm: km,
+    items, subtotal, deliveryFee: fee, customerFee, promo, total: Math.round((subtotal + customerFee) * 100) / 100, distanceKm: km,
     address: { text, reference: clean(a.reference, 120), lat, lng },
     paymentMethod: payment, note: clean(body.note, MAX_NOTE),
     status: 'PLACED', createdAtMs: Date.now(),
@@ -86,11 +94,12 @@ export async function createOrder(db: Firestore, uid: string, body: any): Promis
     addressText: text, destLoc: { lat: round3(lat), lng: round3(lng) },
     itemsCount: items.reduce((t, i) => t + i.qty, 0),
     itemsSummary: items.slice(0, 4).map((i) => `${i.qty}× ${i.name}`).join(', ') + (items.length > 4 ? '…' : ''),
-    deliveryFee: fee, total: order.total, paymentMethod: payment, distanceKm: km, createdAtMs: order.createdAtMs,
+    deliveryFee: fee, total: order.total, promo, paymentMethod: payment, distanceKm: km, createdAtMs: order.createdAtMs,
   };
   const batch = db.batch();
   batch.set(db.collection('delivery_orders').doc(id), order);
   batch.set(db.collection('delivery_open').doc(id), open);
+  if (promo) batch.set(db.collection('delivery_promos').doc(uid), { used: FieldValue.increment(1), updatedAt: FieldValue.serverTimestamp() }, { merge: true });
   await batch.commit();
 
   void notifyAdmin(`🍔 Nuevo pedido de delivery\n${rest.name}\n${order.customerName} · ${bs(order.total)} (${payment === 'QR' ? 'QR' : 'efectivo'})\n${text}`);
@@ -150,7 +159,7 @@ export async function releaseOrder(db: Firestore, uid: string, orderId: string):
         addressText: o.address.text, destLoc: { lat: round3(o.address.lat), lng: round3(o.address.lng) },
         itemsCount: o.items.reduce((t, i) => t + i.qty, 0),
         itemsSummary: o.items.slice(0, 4).map((i) => `${i.qty}× ${i.name}`).join(', '),
-        deliveryFee: o.deliveryFee, total: o.total, paymentMethod: o.paymentMethod, distanceKm: o.distanceKm, createdAtMs: Date.now(),
+        deliveryFee: o.deliveryFee, total: o.total, promo: !!o.promo, paymentMethod: o.paymentMethod, distanceKm: o.distanceKm, createdAtMs: Date.now(),
       } satisfies OpenOrder);
     });
   } catch (e: any) {
@@ -193,7 +202,11 @@ export async function deliverOrder(db: Firestore, uid: string, orderId: string):
 
       const free = Number(user.freeTripsRemaining || 0);
       const balance = Number(user.walletBalance || 0);
-      if (free > 0) tx.update(userRef, { freeTripsRemaining: free - 1 });
+      if (o.promo) {
+        // Promoción de bienvenida: sin comisión, y LlamaGO le acredita la diferencia entre el envío normal y lo que pagó el cliente.
+        const gift = Math.max(0, Math.round((o.deliveryFee - (o.customerFee ?? o.deliveryFee)) * 100) / 100);
+        tx.update(userRef, { walletBalance: Math.round((balance + gift) * 100) / 100 });
+      } else if (free > 0) tx.update(userRef, { freeTripsRemaining: free - 1 });
       else tx.update(userRef, { walletBalance: Math.max(0, Math.round((balance - COMMISSION_BS) * 100) / 100) });
 
       const now = boliviaNow();
@@ -233,6 +246,7 @@ export async function cancelOrder(db: Firestore, uid: string, orderId: string, r
       if (o.status !== 'PLACED' && o.status !== 'ACCEPTED') throw new Error('Este pedido ya terminó.');
       tx.update(ref, { status: 'CANCELLED', cancelledAtMs: Date.now(), cancelReason: clean(reason, 100) || 'Cancelado por el cliente' });
       tx.delete(db.collection('delivery_open').doc(orderId));
+      if (o.promo) tx.set(db.collection('delivery_promos').doc(uid), { used: FieldValue.increment(-1) }, { merge: true });
     });
   } catch (e: any) {
     return fail(e?.message || 'No se pudo cancelar.');

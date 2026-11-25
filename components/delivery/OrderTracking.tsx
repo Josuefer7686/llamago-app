@@ -163,7 +163,7 @@ export function OrderTracking({ orderId, onBack }: { orderId: string; onBack: ()
                     <span className="shrink-0 tabular-nums text-text-secondary">{bs(Math.round(i.unitPrice * i.qty * 100) / 100)}</span>
                   </div>
                 ))}
-                <div className="flex justify-between border-t border-white/10 pt-2 text-text-secondary"><span>Envío</span><span className="tabular-nums">{bs(o.deliveryFee)}</span></div>
+                <div className="flex justify-between border-t border-white/10 pt-2 text-text-secondary"><span>Envío{o.promo ? " (regalo de bienvenida 🎁)" : ""}</span><span className="tabular-nums">{o.promo && (o.customerFee ?? o.deliveryFee) < o.deliveryFee ? <><s className="mr-1.5 text-xs opacity-60">{bs(o.deliveryFee)}</s>{bs(o.customerFee ?? o.deliveryFee)}</> : bs(o.customerFee ?? o.deliveryFee)}</span></div>
                 <div className="flex justify-between font-display text-base font-extrabold"><span>Total en efectivo</span><span className="tabular-nums text-gold-primary">{bs(o.total)}</span></div>
                 <p className="pt-1 text-xs text-text-secondary">Entrega en: {o.address.text}{o.address.reference ? ` (${o.address.reference})` : ''}</p>
               </div>

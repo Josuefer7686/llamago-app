@@ -7,6 +7,7 @@ import { cartCount, cartSubtotal, useDeliveryStore } from '@/store/useDeliverySt
 import { deliveryService } from '@/services/deliveryService';
 import { bs, deliveryFeeFor, isStore, roadKm, unitPriceFor, type CartLine, type MenuItem, type Restaurant } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
+import { useDeliveryPromo } from '@/hooks/useDeliveryPromo';
 import { BackButton, Photo, Skeleton, StatusPill, motion, useStagger } from './ui';
 import { ProductSheet } from './ProductSheet';
 
@@ -27,6 +28,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
   const [toast, setToast] = useState('');
   const scroller = useRef<HTMLDivElement>(null);
   const stagger = useStagger();
+  const promo = useDeliveryPromo();
 
   useEffect(() => deliveryService.subscribeMenu(r.id, setItems, () => setFailed(true)), [r.id]);
 
@@ -89,7 +91,7 @@ export function RestaurantMenu({ restaurant: r, onBack, onCart }: Props) {
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-text-secondary">
               {r.rating ? <span className="flex items-center gap-1"><Star className="h-3.5 w-3.5 fill-gold-primary text-gold-primary" aria-hidden /> {r.rating.toFixed(1)}</span> : null}
               <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" aria-hidden /> {r.prepMinutes + (km != null ? Math.round(km * 4) : 10)} min</span>
-              {km != null && <span className="flex items-center gap-1">Envío {bs(deliveryFeeFor(km))}</span>}
+              {km != null && <span className="flex items-center gap-1">Envío {bs(promo.customerFee(deliveryFeeFor(km)))}{promo.active && <span aria-hidden> 🎁</span>}</span>}
               <span className="flex min-w-0 items-center gap-1"><MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="truncate">{r.address}</span></span>
               {r.hours && <span>{r.hours}</span>}
               {r.minOrder ? <span>Mínimo {bs(r.minOrder)}</span> : null}

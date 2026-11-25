@@ -8,6 +8,7 @@ import {
   type DeliveryOrder, type Restaurant,
 } from '@/lib/delivery';
 import { haptics } from '@/utils/haptics';
+import { useDeliveryPromo } from '@/hooks/useDeliveryPromo';
 import { Photo, Skeleton, StatusPill, motion, useStagger } from './ui';
 
 interface Props {
@@ -27,6 +28,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
   const [cat, setCat] = useState<string>('Todos');
   const [stores, setStores] = useState(false);
   const stagger = useStagger();
+  const promo = useDeliveryPromo();
 
   const list = useMemo(() => {
     if (!restaurants) return [];
@@ -105,6 +107,12 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
       </header>
 
       <div className="mx-auto max-w-[430px] space-y-4 px-4">
+        {promo.active && (
+          <div className="flex items-center gap-3 rounded-2xl bg-gold-primary px-4 py-3 text-background">
+            <span className="text-2xl" aria-hidden>🎁</span>
+            <p className="font-display text-[15px] font-extrabold leading-tight">Tus primeros {promo.left} pedidos: envío a Bs {promo.PROMO_CUSTOMER_FEE}, sin importar la distancia</p>
+          </div>
+        )}
         {activeOrder && (
           <motion.button
             type="button"
@@ -148,7 +156,7 @@ export function RestaurantList({ restaurants, failed, activeOrder, onOpen, onTra
         )}
 
         {list.map(({ r, km }, i) => {
-          const fee = km != null ? bs(deliveryFeeFor(km)) : null;
+          const fee = km != null ? bs(promo.customerFee(deliveryFeeFor(km))) : null;
           return (
             <motion.button
               key={r.id}

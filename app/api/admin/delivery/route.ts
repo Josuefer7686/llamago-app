@@ -1,3 +1,4 @@
+import { FieldValue } from 'firebase-admin/firestore';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebaseAdmin';
 import { isAdminRequest } from '@/lib/adminAuth';
@@ -124,6 +125,7 @@ export async function POST(req: NextRequest) {
       if (!o || !['PLACED', 'ACCEPTED', 'PICKED_UP'].includes(o.status)) return bad('Ese pedido ya terminó.');
       await ref.update({ status: 'CANCELLED', cancelledAtMs: Date.now(), cancelReason: text(b.reason, 100) || 'Cancelado por el administrador' });
       await db.collection('delivery_open').doc(id).delete();
+      if (o.promo && o.customerId) await db.collection('delivery_promos').doc(o.customerId).set({ used: FieldValue.increment(-1) }, { merge: true });
       return NextResponse.json({ ok: true });
     }
     default:
